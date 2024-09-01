@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/ffuf/ffuf/v2/pkg/ffuf"
@@ -51,7 +52,7 @@ func (m *wordlistFlag) Set(value string) error {
 // ParseFlags parses the command line flags and (re)populates the ConfigOptions struct
 func ParseFlags(opts *ffuf.ConfigOptions, flagrun bool) *ffuf.ConfigOptions {
 	var ignored bool
-
+	var mu sync.Mutex
 	var cookies, autocalibrationstrings, autocalibrationstrategies, headers, inputcommands multiStringFlag
 	var wordlists, encoders wordlistFlag
 
@@ -62,6 +63,8 @@ func ParseFlags(opts *ffuf.ConfigOptions, flagrun bool) *ffuf.ConfigOptions {
 	wordlists = opts.Input.Wordlists
 	encoders = opts.Input.Encoders
 	if flagrun {
+		mu.Lock()
+		defer mu.Unlock()
 		flag.BoolVar(&ignored, "compressed", true, "Dummy flag for copy as curl functionality (ignored)")
 		flag.BoolVar(&ignored, "i", true, "Dummy flag for copy as curl functionality (ignored)")
 		flag.BoolVar(&ignored, "k", false, "Dummy flag for backwards compatibility")
@@ -183,7 +186,7 @@ func Ffuf(domain string, size string, outputfile string, mode string, flagrun bo
 		opts.Input.Wordlists = []string{"C:/Users/minhl/recon/src/data/namelist.txt"}
 		opts.Filter.Size = size
 		opts.Output.OutputFile = outputfile
-		// opts.General.MaxTime = maxtime
+		opts.General.MaxTime = maxtime
 	}
 	if mode == "dir" {
 		opts.HTTP.URL = "https://" + domain + "/FUZZ"

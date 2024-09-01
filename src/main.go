@@ -1,12 +1,23 @@
 package main
 
 import (
-	"fmt"
-	"recon/utils"
+	"recon/collector/dir"
+	"recon/collector/domain"
+	"sync"
 )
 
 func main() {
-	//dir.DirFfuf("gumac.vn")
-	// domain.DomainFfuf("gumac.vn")
-	fmt.Print(utils.LengthResponse("gumac.vn"))
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		domain.DomainFfuf("dichvucong.gov.vn")
+		wg.Done()
+	}()
+	wg.Add(1)
+	go func() {
+		dir.DirFfuf("dichvucong.gov.vn")
+		wg.Done()
+	}()
+	wg.Wait()
 }
