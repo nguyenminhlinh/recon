@@ -2,8 +2,11 @@ package domain
 
 import (
 	"recon/utils"
+	"strconv"
 )
 
 func DomainFfuf(domain string) {
-	utils.FfufWithMulFunc(domain, "C:/Users/minhl/recon/src/data/output_domain.json", "domain", true)
+	//Using the wrong host to get web content
+	lengthResponse := utils.LengthResponse(domain, "abcdefghiklm."+domain)
+	utils.Ffuf(domain, strconv.Itoa(lengthResponse), "C:/Users/minhl/recon/src/data/output_domain.json", "domain", false, 0)
 }

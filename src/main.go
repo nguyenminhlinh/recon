@@ -19,5 +19,6 @@ func main() {
 		dir.DirFfuf("dichvucong.gov.vn")
 		wg.Done()
 	}()
+	//fmt.Print(utils.LengthResponse("gumac.vn/dsads", ""))
 	wg.Wait()
 }
