@@ -173,7 +173,7 @@ func ReadFile(filename string) map[string]interface{} {
 	}
 	return data
 }
-func Ffuf(domain string, size string, outputfile string, mode string, flagrun bool, maxtime int) {
+func Ffuf(domain string, size string, outputfile string, mode string, flagrun bool, maxtime int, wordlist string) {
 	var err, optserr error
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -183,14 +183,14 @@ func Ffuf(domain string, size string, outputfile string, mode string, flagrun bo
 	if mode == "domain" {
 		opts.HTTP.URL = "https://" + domain
 		opts.HTTP.Headers = []string{"Host: FUZZ." + domain}
-		opts.Input.Wordlists = []string{"C:/Users/minhl/recon/src/data/namelist.txt"}
+		opts.Input.Wordlists = []string{wordlist}
 		opts.Filter.Size = size
 		opts.Output.OutputFile = outputfile
 		opts.General.MaxTime = maxtime
 	}
 	if mode == "dir" {
 		opts.HTTP.URL = "https://" + domain + "/FUZZ"
-		opts.Input.Wordlists = []string{"C:/Users/minhl/recon/src/data/common.txt"}
+		opts.Input.Wordlists = []string{wordlist}
 		opts.Filter.Size = size
 		opts.Output.OutputFile = outputfile
 		opts.General.MaxTime = maxtime
