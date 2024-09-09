@@ -2,7 +2,6 @@ package utils
 
 import (
 	"context"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -161,18 +160,19 @@ func ParseFlags(opts *ffuf.ConfigOptions, flagrun bool) *ffuf.ConfigOptions {
 	opts.Input.Encoders = encoders
 	return opts
 }
-func ReadFile(filename string) map[string]interface{} {
-	file, eer := os.ReadFile(filename)
-	if eer != nil {
-		fmt.Println("Error when readfile", eer)
-	}
-	var data map[string]interface{}
-	err := json.Unmarshal(file, &data)
-	if err != nil {
-		fmt.Println("Error when extra file", err)
-	}
-	return data
-}
+
+//	func ReadFile(filename string) map[string]interface{} {
+//		file, eer := os.ReadFile(filename)
+//		if eer != nil {
+//			fmt.Println("Error when readfile", eer)
+//		}
+//		var data map[string]interface{}
+//		err := json.Unmarshal(file, &data)
+//		if err != nil {
+//			fmt.Println("Error when extra file", err)
+//		}
+//		return data
+//	}
 func Ffuf(domain string, size string, outputfile string, mode string, flagrun bool, maxtime int, wordlist string) {
 	var err, optserr error
 	ctx, cancel := context.WithCancel(context.Background())
