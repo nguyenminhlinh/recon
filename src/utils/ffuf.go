@@ -304,7 +304,7 @@ func prepareJob(conf *ffuf.Config) (*ffuf.Job, error) {
 		job.ReplayRunner = runner.NewRunnerByName("http", conf, true)
 	}
 	// We only have stdout outputprovider right now
-	job.Output = output.NewOutputProviderByName("stdout", conf)
+	job.Output = output.NewOutputProviderByName("C:\\Users\\minhl\\recon\\src\\data\\output\\output_dir.txt", conf)
 
 	// Initialize scraper
 	newscraper, scraper_err := scraper.FromDir(ffuf.SCRAPERDIR, conf.Scrapers)
