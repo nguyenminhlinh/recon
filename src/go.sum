@@ -9,12 +9,15 @@ github.com/andybalholm/cascadia v1.3.1/go.mod h1:R4bJ1UQfqADjvDa4P6HZHLh/3OxWWEq
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/ffuf/ffuf v1.5.0 h1:waa7VGYB2KtCiqy6ZOhWt47yrbUhxGIhzmsyXKadnoQ=
+github.com/ffuf/ffuf v1.5.0/go.mod h1:7lvkRaMYZLTgnbc9qsaC3ZC+5FSQ/IK2MV0rzKiqBsU=
 github.com/ffuf/ffuf/v2 v2.1.0 h1:0w+MBVMhc52tb5y5onzdkNJVt+hkStH6rVGRdorxd+o=
 github.com/ffuf/ffuf/v2 v2.1.0/go.mod h1:R+WpzI2JMHxiWtq8f/lGy72rOgmWC1O+OoxfEeg0yOc=
 github.com/ffuf/pencode v0.0.0-20230421231718-2cea7e60a693 h1:fdlgw33oLPzRpoHa4ppDFX5EcmzHHychPrO5xXmzxqc=
 github.com/ffuf/pencode v0.0.0-20230421231718-2cea7e60a693/go.mod h1:Qmgn2URTRtZ5wMntUke1+/G7z8rofTFHG1EvN3addNY=
 github.com/miekg/dns v1.1.62 h1:cN8OuEF1/x5Rq6Np+h1epln8OiyPWV+lROx9LxcGgIQ=
 github.com/miekg/dns v1.1.62/go.mod h1:mvDlcItzm+br7MToIKqkglaGhlFMHJ9DTNNWONWXbNQ=
+github.com/pelletier/go-toml v1.8.1/go.mod h1:T2/BmBdy8dvIRq1a/8aqjN41wvWlN4lrapLU/GW4pbc=
 github.com/pelletier/go-toml v1.9.5 h1:4yBQzkHv+7BHq2PQUZF3Mx0IYxG7LsP222s7Agd3ve8=
 github.com/pelletier/go-toml v1.9.5/go.mod h1:u1nR/EPcESfeI/szUZKdtJ0xRNbUoANCkoOuaOx1Y+c=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

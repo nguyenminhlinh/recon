@@ -1,27 +1,62 @@
 package domain
 
 import (
-	"bufio"
 	"context"
 	"fmt"
-	"net"
 	"os"
 	"recon/utils"
 	"strconv"
 	"sync"
+	"time"
+
+	"github.com/miekg/dns"
 )
 
 const maxGoroutines = 10    // Limit the number of concurrent goroutines
 const maxChanSemaphore = 10 // Limit the number of elements in the chan semaphore
 const maxChanResults = 10   // Limit the number of elements in chan results
 
-func FuffDomainHttp(ctx context.Context, cancel context.CancelFunc, domain string, wordlist string) {
+func FuffDomainHttp(ctx context.Context, cancel context.CancelFunc, domain string, wordlist string, WorkDirectory string) {
 	//Using the wrong host to get length web content "C:/Users/minhl/recon/src/data/common.txt"
 	lengthResponse := utils.LengthResponse(domain, "abcdefghiklm."+domain)
-	utils.Ffuf(ctx, cancel, domain, strconv.Itoa(lengthResponse), "C:/Users/minhl/recon/src/data/output/output_domain.json", "domain", true, 0, wordlist)
+	utils.Ffuf(ctx, cancel, domain, strconv.Itoa(lengthResponse), WorkDirectory+"/data/output/FuffDomainHttp.json", "domain", true, 0, wordlist)
 }
 
-func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string, results chan<- string, ips_real string, domain string, count *int, mu *sync.Mutex) {
+func dig(domain string, qtype uint16) []dns.RR {
+	// Create a DNS message
+	msg := new(dns.Msg)
+	msg.SetQuestion(dns.Fqdn(domain), qtype)
+	msg.RecursionDesired = true
+
+	// Select the DNS server to query
+	dnsServer := "8.8.8.8:53" //Use Google DNS
+
+	// Create a client to send DNS requests
+	client := new(dns.Client)
+	client.Timeout = 5 * time.Second
+
+	// Send DNS requests
+	response, _, err := client.Exchange(msg, dnsServer)
+	if err != nil {
+		fmt.Printf("Error: %v at domain %s \n", err, domain)
+		return []dns.RR{}
+	}
+	return response.Answer
+	// // Check DNS status code (Rcode)
+	// fmt.Printf(";; ->>HEADER<<- opcode: QUERY, status: %s, id: %d\n", dns.RcodeToString[response.Rcode], response.Id)
+	// fmt.Printf(";; query time: %v msec\n", rtt.Milliseconds())
+
+	// // Print the response if the status is NOERROR
+	// if response.Rcode == dns.RcodeSuccess {
+	// 	for _, answer := range response.Answer {
+	// 		fmt.Println(answer.String())
+	// 	}
+	// } else {
+	// 	fmt.Printf("Query failed with status: %s\n", dns.RcodeToString[response.Rcode])
+	// }
+}
+
+func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string, results chan<- string, domain string, count *int, mu *sync.Mutex) {
 	defer wg.Done()
 	for {
 		select {
@@ -48,100 +83,40 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 				}
 				return
 			} else {
-				ips, err := net.LookupHost(subdomain + "." + domain)
-				if err == nil {
-					fmt.Println(ips)
-					if ips[0][0:6] == ips_real {
-						fmt.Fprintf(os.Stdout, "Subdomain tồn tại:: %-35s : %-16s : %s\n", subdomain, err, ips)
-						results <- subdomain + "\n"
-					}
+				responseAnswer := dig(subdomain+"."+domain, dns.TypeA)
+				fmt.Println(responseAnswer, subdomain)
+				if len(responseAnswer) != 0 {
+					fmt.Fprintf(os.Stdout, "Subdomain tồn tại:: %-35s \n", subdomain)
+					results <- subdomain + "\n"
 				}
 			}
 		}
-
 	}
 }
 
-func readFiles(ctx context.Context, wg *sync.WaitGroup, wordlist string, semaphore chan<- string) {
-	defer wg.Done()
-	defer close(semaphore)
-	inputFile, err := os.Open(wordlist)
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
-	}
-	defer inputFile.Close()
-
-	scanner := bufio.NewScanner(inputFile)
-
-	for {
-		select {
-		case <-ctx.Done():
-			return //Context cancelled, stopping file read.
-		default:
-			if !scanner.Scan() {
-				if err := scanner.Err(); err != nil {
-					fmt.Println("Error reading file:", err)
-				}
-				return //Read file finish
-			}
-			domain := scanner.Text()
-			semaphore <- domain
-		}
-	}
-}
-
-func writeFiles(ctx context.Context, wg *sync.WaitGroup, results <-chan string, ouputFile string) {
-	defer wg.Done()
-	file, err := os.OpenFile(ouputFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		fmt.Println("Error opening output file:", err)
-		return
-	}
-	defer file.Close()
-
-	for {
-		select {
-		case result, ok := <-results:
-			if !ok {
-				return
-			}
-			_, err := file.Write([]byte(result))
-			fmt.Println("write", result)
-			if err != nil {
-				fmt.Println("Error writing to file:", err)
-			}
-		case <-ctx.Done():
-			return //Context cancelled, stopping file write.
-		}
-	}
-}
-
-func BruteDomainDNS(ctx context.Context, cancel context.CancelFunc, domain string, wordlist string) {
-	ips_reals, _ := net.LookupHost(domain)
-	ips_real := ips_reals[0][0:6]
-	fmt.Println(ips_reals)
+func BruteDomainDNS(ctx context.Context, cancel context.CancelFunc, domain string, wordlist string, WorkDirectory string) {
 	var wg sync.WaitGroup
 	var count int
 	var mu sync.Mutex
 
-	// Tạo semaphore và channel để nhận kết quả
+	// Create semaphore channel to receive info from file and sen to checkDomain
 	semaphore := make(chan string, maxChanSemaphore)
+	// Create semaphore channel to receive info from checkDomain and send to writeFiles
 	results := make(chan string, maxChanResults)
 
-	// Khởi động goroutine để đọc file vào chan
+	// Start the goroutine to read the file into chan
 	wg.Add(1)
-	go readFiles(ctx, &wg, wordlist, semaphore)
+	go utils.ReadFiles(ctx, &wg, wordlist, semaphore)
 
-	// Khởi động các goroutines để kiểm tra domain
+	// Start goroutines to check the domain
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
-		go checkDomain(ctx, &wg, semaphore, results, ips_real, domain, &count, &mu)
+		go checkDomain(ctx, &wg, semaphore, results, domain, &count, &mu)
 	}
 
-	// Khởi động goroutine để ghi kết quả vào file output
+	// Start the goroutine to write the results to the output file
 	wg.Add(1)
-	go writeFiles(ctx, &wg, results, "C:/Users/minhl/recon/src/data/output/output_domaindns.txt")
+	go utils.WriteFiles(ctx, &wg, results, WorkDirectory+"/data/output/BruteDomainDNS.txt")
 
 	// Chờ tất cả các goroutines hoàn thành
 	wg.Wait()

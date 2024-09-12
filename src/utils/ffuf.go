@@ -11,11 +11,12 @@ import (
 	"sync"
 	"time"
 
+	"recon/utils/output"
+
 	"github.com/ffuf/ffuf/v2/pkg/ffuf"
 	"github.com/ffuf/ffuf/v2/pkg/filter"
 	"github.com/ffuf/ffuf/v2/pkg/input"
 	"github.com/ffuf/ffuf/v2/pkg/interactive"
-	"github.com/ffuf/ffuf/v2/pkg/output"
 	"github.com/ffuf/ffuf/v2/pkg/runner"
 	"github.com/ffuf/ffuf/v2/pkg/scraper"
 )
@@ -161,22 +162,11 @@ func ParseFlags(opts *ffuf.ConfigOptions, flagrun bool) *ffuf.ConfigOptions {
 	return opts
 }
 
-//	func ReadFile(filename string) map[string]interface{} {
-//		file, eer := os.ReadFile(filename)
-//		if eer != nil {
-//			fmt.Println("Error when readfile", eer)
-//		}
-//		var data map[string]interface{}
-//		err := json.Unmarshal(file, &data)
-//		if err != nil {
-//			fmt.Println("Error when extra file", err)
-//		}
-//		return data
-//	}
 func Ffuf(ctx context.Context, cancel context.CancelFunc, domain string, size string, outputfile string, mode string, flagrun bool, maxtime int, wordlist string) {
 	var err, optserr error
 	// prepare the default config options from default config file
 	var opts *ffuf.ConfigOptions
+
 	opts, optserr = ffuf.ReadDefaultConfig()
 	if mode == "domain" {
 		opts.HTTP.URL = "https://" + domain
