@@ -173,10 +173,8 @@ func ParseFlags(opts *ffuf.ConfigOptions, flagrun bool) *ffuf.ConfigOptions {
 //		}
 //		return data
 //	}
-func Ffuf(domain string, size string, outputfile string, mode string, flagrun bool, maxtime int, wordlist string) {
+func Ffuf(ctx context.Context, cancel context.CancelFunc, domain string, size string, outputfile string, mode string, flagrun bool, maxtime int, wordlist string) {
 	var err, optserr error
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
 	// prepare the default config options from default config file
 	var opts *ffuf.ConfigOptions
 	opts, optserr = ffuf.ReadDefaultConfig()
@@ -304,7 +302,7 @@ func prepareJob(conf *ffuf.Config) (*ffuf.Job, error) {
 		job.ReplayRunner = runner.NewRunnerByName("http", conf, true)
 	}
 	// We only have stdout outputprovider right now
-	job.Output = output.NewOutputProviderByName("C:\\Users\\minhl\\recon\\src\\data\\output\\output_dir.txt", conf)
+	job.Output = output.NewOutputProviderByName("", conf)
 
 	// Initialize scraper
 	newscraper, scraper_err := scraper.FromDir(ffuf.SCRAPERDIR, conf.Scrapers)
