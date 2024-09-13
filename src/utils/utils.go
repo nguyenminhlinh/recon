@@ -7,8 +7,10 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"sync"
+	"syscall"
 )
 
 func LengthResponse(domain string, host string) int {
@@ -95,4 +97,14 @@ func Getwd() string {
 		return ""
 	}
 	return filepath.ToSlash(cwd)
+}
+func CancelRun(cancel context.CancelFunc) bool {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		fmt.Println("[WARN] Caught keyboard interrupt (Ctrl-C)\n")
+		cancel() // Cancel all running goroutines
+	}()
+	return true
 }

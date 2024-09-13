@@ -162,11 +162,12 @@ func ParseFlags(opts *ffuf.ConfigOptions, flagrun bool) *ffuf.ConfigOptions {
 	return opts
 }
 
-func Ffuf(ctx context.Context, cancel context.CancelFunc, domain string, size string, outputfile string, mode string, flagrun bool, maxtime int, wordlist string) {
+func Ffuf(domain string, size string, outputfile string, mode string, flagrun bool, maxtime int, wordlist string) {
 	var err, optserr error
 	// prepare the default config options from default config file
 	var opts *ffuf.ConfigOptions
-
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	opts, optserr = ffuf.ReadDefaultConfig()
 	if mode == "domain" {
 		opts.HTTP.URL = "https://" + domain

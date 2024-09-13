@@ -98,15 +98,15 @@ func (s *Stdoutput) Error(errstring string) {
 }
 
 func (s *Stdoutput) Warning(warnstring string) {
-	if s.config.Quiet {
-		fmt.Fprintf(os.Stderr, "%s", warnstring)
-	} else {
-		if !s.config.Colors {
-			fmt.Fprintf(os.Stderr, "%s[WARN] %s\n", TERMINAL_CLEAR_LINE, warnstring)
-		} else {
-			fmt.Fprintf(os.Stderr, "%s[%sWARN%s] %s\n", TERMINAL_CLEAR_LINE, ANSI_RED, ANSI_CLEAR, warnstring)
-		}
-	}
+	// if s.config.Quiet {
+	// 	fmt.Fprintf(os.Stderr, "%s", warnstring)
+	// } else {
+	// 	if !s.config.Colors {
+	// 		fmt.Fprintf(os.Stderr, "%s[WARN] %s\n", TERMINAL_CLEAR_LINE, warnstring)
+	// 	} else {
+	// 		fmt.Fprintf(os.Stderr, "%s[%sWARN%s] %s\n", TERMINAL_CLEAR_LINE, ANSI_RED, ANSI_CLEAR, warnstring)
+	// 	}
+	// }
 }
 
 func (s *Stdoutput) Raw(output string) {

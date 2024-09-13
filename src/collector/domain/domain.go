@@ -2,8 +2,6 @@ package domain
 
 import (
 	"context"
-	"fmt"
-	"os"
 	"recon/utils"
 	"strconv"
 	"sync"
@@ -16,10 +14,10 @@ const maxGoroutines = 10    // Limit the number of concurrent goroutines
 const maxChanSemaphore = 10 // Limit the number of elements in the chan semaphore
 const maxChanResults = 10   // Limit the number of elements in chan results
 
-func FuffDomainHttp(ctx context.Context, cancel context.CancelFunc, domain string, wordlist string, WorkDirectory string) {
+func FuffDomainHttp(domain string, wordlist string, WorkDirectory string) {
 	//Using the wrong host to get length web content "C:/Users/minhl/recon/src/data/common.txt"
 	lengthResponse := utils.LengthResponse(domain, "abcdefghiklm."+domain)
-	utils.Ffuf(ctx, cancel, domain, strconv.Itoa(lengthResponse), WorkDirectory+"/data/output/FuffDomainHttp.json", "domain", true, 0, wordlist)
+	utils.Ffuf(domain, strconv.Itoa(lengthResponse), WorkDirectory+"/data/output/FuffDomainHttp.json", "domain", true, 0, wordlist)
 }
 
 func dig(domain string, qtype uint16) []dns.RR {
@@ -38,7 +36,7 @@ func dig(domain string, qtype uint16) []dns.RR {
 	// Send DNS requests
 	response, _, err := client.Exchange(msg, dnsServer)
 	if err != nil {
-		fmt.Printf("Error: %v at domain %s \n", err, domain)
+		//	fmt.Printf("Error: %v at domain %s \n", err, domain)
 		return []dns.RR{}
 	}
 	return response.Answer
@@ -61,6 +59,7 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 	for {
 		select {
 		case <-ctx.Done(): //If a cancel signal is received from context
+			//fmt.Println("<-ctx.Done()")
 			mu.Lock()
 			(*count)++
 			if *count == maxChanSemaphore {
@@ -81,12 +80,13 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 					}
 					close(results) //Close the results channel after the goroutines complete
 				}
+				//fmt.Println(*count)
 				return
 			} else {
 				responseAnswer := dig(subdomain+"."+domain, dns.TypeA)
-				fmt.Println(responseAnswer, subdomain)
+				//fmt.Println(responseAnswer, subdomain)
 				if len(responseAnswer) != 0 {
-					fmt.Fprintf(os.Stdout, "Subdomain tồn tại:: %-35s \n", subdomain)
+					//fmt.Fprintf(os.Stdout, "Subdomain tồn tại:: %-35s \n", subdomain)
 					results <- subdomain + "\n"
 				}
 			}
@@ -98,7 +98,6 @@ func BruteDomainDNS(ctx context.Context, cancel context.CancelFunc, domain strin
 	var wg sync.WaitGroup
 	var count int
 	var mu sync.Mutex
-
 	// Create semaphore channel to receive info from file and sen to checkDomain
 	semaphore := make(chan string, maxChanSemaphore)
 	// Create semaphore channel to receive info from checkDomain and send to writeFiles
