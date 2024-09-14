@@ -1,13 +1,17 @@
 package domain
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"os"
+	"os/signal"
 	"recon/utils"
 	"strconv"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/caffix/netmap"
@@ -20,6 +24,8 @@ import (
 	"github.com/owasp-amass/asset-db/types"
 	"github.com/owasp-amass/config/config"
 	oam "github.com/owasp-amass/open-asset-model"
+
+	"github.com/projectdiscovery/subfinder/v2/pkg/runner"
 )
 
 const maxGoroutines = 10    // Limit the number of concurrent goroutines
@@ -169,7 +175,7 @@ func NewOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, filter
 	return output
 }
 
-func processOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, outputs chan string, wg *sync.WaitGroup) {
+func processOutput(ctx context.Context, ctxTimeout context.Context, g *netmap.Graph, e *enum.Enumeration, outputs chan string, wg *sync.WaitGroup) {
 	defer wg.Done()
 	defer close(outputs)
 
@@ -189,6 +195,9 @@ func processOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, ou
 	last := e.Config.CollectionStartTime
 	for {
 		select {
+		case <-ctxTimeout.Done():
+			extract(last)
+			return
 		case <-ctx.Done():
 			extract(last)
 			return
@@ -222,27 +231,81 @@ func AmassDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain str
 		os.Exit(1)
 	}
 
+	// Set the timeout by configuring the time for the context
+	timeout := 1 * time.Minute
+	ctxTimeout, cancelTimeout := context.WithTimeout(ctx, timeout)
+	defer cancelTimeout()
+
 	// Setup the new enumeration
 	e := enum.NewEnumeration(cfg, sys, sys.GraphDatabases()[0])
 	if e == nil {
 		fmt.Fprintf(color.Error, "%s\n", "Failed to setup the enumeration")
 		os.Exit(1)
 	}
+
 	var wg sync.WaitGroup
 	outChans := make(chan string, 50)
 
 	// Run the enumeration process and send the results to the channel
 	wg.Add(1)
-	go processOutput(ctx, sys.GraphDatabases()[0], e, outChans, &wg)
+	go processOutput(ctx, ctxTimeout, sys.GraphDatabases()[0], e, outChans, &wg)
 
 	// Start the goroutine to write the results to the output file
 	wg.Add(1)
 	go utils.WriteFiles(ctx, &wg, outChans, WorkDirectory+"/data/output/AmassDomainOSINT.txt")
 
-	// Start Amass enumeration
-	if err := e.Start(ctx); err != nil {
+	// Monitor for cancellation by the user
+	go func(c context.Context, f context.CancelFunc) {
+		quit := make(chan os.Signal, 1)
+		signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+		defer signal.Stop(quit)
+		select {
+		case <-quit:
+			f()
+		case <-c.Done():
+		}
+	}(ctx, cancel)
+
+	// Start the enumeration process
+	if err := e.Start(ctxTimeout); err != nil {
 		log.Fatalf("Failed to start Amass enumeration: %v", err)
 	}
 
+}
+
+func SubfinderDomainOSINT(ctx context.Context, domain string, WorkDirectory string) {
+	subfinderOpts := &runner.Options{
+		Threads:            10, // Thread controls the number of threads to use for active enumerations
+		Timeout:            30, // Timeout is the seconds to wait for sources to respond
+		MaxEnumerationTime: 10, // MaxEnumerationTime is the maximum amount of time in mins to wait for enumeration
+		Silent:             true,
+		// ResultCallback: func(s *resolve.HostEntry) {
+		// callback function executed after each unique subdomain is found
+		// },
+		ProviderConfig: WorkDirectory + "/data/input/provider-config.yaml",
+		// and other config related options
+	}
+
+	// disable timestamps in logs / configure logger
+	log.SetFlags(0)
+
+	subfinder, err := runner.NewRunner(subfinderOpts)
+	if err != nil {
+		log.Fatalf("failed to create subfinder runner: %v", err)
+	}
+
+	output := &bytes.Buffer{}
+	// To run subdomain enumeration on a single domain
+	if err = subfinder.EnumerateSingleDomainWithCtx(context.Background(), domain, []io.Writer{output}); err != nil {
+		log.Fatalf("failed to enumerate single domain: %v", err)
+	}
+
+	var wg sync.WaitGroup
+	outChans := make(chan string, 50)
+	outChans <- output.String()
+	close(outChans)
+	// Start the goroutine to write the results to the output file
+	wg.Add(1)
+	go utils.WriteFiles(ctx, &wg, outChans, WorkDirectory+"/data/output/SubfinderDomainOSINT.txt")
 	wg.Wait()
 }

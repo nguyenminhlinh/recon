@@ -15,8 +15,9 @@ import (
 
 var (
 	// Colors used to ease the reading of program output
-	green = color.New(color.FgHiGreen).SprintFunc()
-	red   = color.New(color.FgHiRed).SprintFunc()
+	green  = color.New(color.FgHiGreen).SprintFunc()
+	red    = color.New(color.FgHiRed).SprintFunc()
+	yellow = color.New(color.FgHiYellow).SprintFunc()
 )
 
 const (
@@ -45,22 +46,22 @@ func main() {
 	domainName := os.Args[1]
 
 	fmt.Fprintf(os.Stderr, "%s\n       %+60s\n%s\n", BANNER_HEADER, "Made by MinhLinh", BANNER_SEP)
-	fmt.Fprintf(os.Stderr, "[*] %-16s : %s\n", "Scanning target", domainName)
+	fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "Scanning target", yellow(domainName))
 	WorkDirectory := utils.Getwd()
 
 	wg.Add(1)
 	go func() {
 		startBruteDomainDNS := time.Now()
-		fmt.Fprintf(os.Stderr, "[*] %-16s : %s\n", "BruteDomainDNS", "Running....")
-		domain.BruteDomainDNS(ctx, cancel, domainName, WorkDirectory+"/data/input/combined_subdomains.txt", WorkDirectory) //combined_subdomains
+		fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "BruteDomainDNS", "Running....")
+		domain.BruteDomainDNS(ctx, cancel, domainName, WorkDirectory+"/data/input/subdomains-top1mil-110000.txt", WorkDirectory) //combined_subdomains
 		elapsedBruteDomainDNS := time.Since(startBruteDomainDNS)
 		select {
 		case <-ctx.Done():
 			// If a signal is received from the context
-			fmt.Fprintf(os.Stderr, "[*] %-16s : %s%v\n", "BruteDomainDNS", red("Finished due to cancellation in "), elapsedBruteDomainDNS)
+			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "BruteDomainDNS", red("Finished due to cancellation in "), elapsedBruteDomainDNS)
 		default:
 			// If there is no cancel signal, take another action
-			fmt.Fprintf(os.Stderr, "[*] %-16s : %s%v\n", "BruteDomainDNS", green("Finished successfully in "), elapsedBruteDomainDNS)
+			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "BruteDomainDNS", green("Finished successfully in "), elapsedBruteDomainDNS)
 		}
 		wg.Done()
 	}()
@@ -68,16 +69,16 @@ func main() {
 	wg.Add(1)
 	go func() {
 		startFuffDomainHttp := time.Now()
-		fmt.Fprintf(os.Stderr, "[*] %-16s : %s\n", "FuffDomainHttp", "Running....")
+		fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "FuffDomainHttp", "Running....")
 		domain.FuffDomainHttp(domainName, WorkDirectory+"/data/input/namelist.txt", WorkDirectory)
 		elapsedFuffDomainHttp := time.Since(startFuffDomainHttp)
 		select {
 		case <-ctx.Done():
 			// If a signal is received from the context
-			fmt.Fprintf(os.Stderr, "[*] %-16s : %s%v\n", "FuffDomainHttp", red("Finished due to cancellation in "), elapsedFuffDomainHttp)
+			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "FuffDomainHttp", red("Finished due to cancellation in "), elapsedFuffDomainHttp)
 		default:
 			// If there is no cancel signal, take another action
-			fmt.Fprintf(os.Stderr, "[*] %-16s : %s%v\n", "FuffDomainHttp", green("Finished successfully in "), elapsedFuffDomainHttp)
+			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "FuffDomainHttp", green("Finished successfully in "), elapsedFuffDomainHttp)
 		}
 		wg.Done()
 	}()
@@ -85,16 +86,16 @@ func main() {
 	wg.Add(1)
 	go func() {
 		startFuffDirAndFile := time.Now()
-		fmt.Fprintf(os.Stderr, "[*] %-16s : %s\n", "FuffDirAndFile", "Running....")
+		fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "FuffDirAndFile", "Running....")
 		dir.FuffDirAndFile(domainName, WorkDirectory+"/data/input/common.txt", WorkDirectory)
 		elapsedFuffDirAndFile := time.Since(startFuffDirAndFile)
 		select {
 		case <-ctx.Done():
 			// If a signal is received from the context
-			fmt.Fprintf(os.Stderr, "[*] %-16s : %s%v\n", "FuffDirAndFile", red("Finished due to cancellation in "), elapsedFuffDirAndFile)
+			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "FuffDirAndFile", red("Finished due to cancellation in "), elapsedFuffDirAndFile)
 		default:
 			// If there is no cancel signal, take another action
-			fmt.Fprintf(os.Stderr, "[*] %-16s : %s%v\n", "FuffDirAndFile", green("Finished successfully in "), elapsedFuffDirAndFile)
+			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "FuffDirAndFile", green("Finished successfully in "), elapsedFuffDirAndFile)
 		}
 		wg.Done()
 	}()
@@ -102,16 +103,33 @@ func main() {
 	wg.Add(1)
 	go func() {
 		startAmassDomainOSINT := time.Now()
-		fmt.Fprintf(os.Stderr, "[*] %-16s : %s\n", "AmassDomainOSINT", "Running....")
+		fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "AmassDomainOSINT", "Running....")
 		domain.AmassDomainOSINT(ctx, cancel, domainName, WorkDirectory)
 		elapsedAmassDomainOSINT := time.Since(startAmassDomainOSINT)
 		select {
 		case <-ctx.Done():
 			// If a signal is received from the context
-			fmt.Fprintf(os.Stderr, "[*] %-16s : %s%v\n", "AmassDomainOSINT", red("Finished due to cancellation in "), elapsedAmassDomainOSINT)
+			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "AmassDomainOSINT", red("Finished due to cancellation in "), elapsedAmassDomainOSINT)
 		default:
 			// If there is no cancel signal, take another action
-			fmt.Fprintf(os.Stderr, "[*] %-16s : %s%v\n", "AmassDomainOSINT", green("Finished successfully in "), elapsedAmassDomainOSINT)
+			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "AmassDomainOSINT", green("Finished successfully in "), elapsedAmassDomainOSINT)
+		}
+		wg.Done()
+	}()
+
+	wg.Add(1)
+	go func() {
+		startSubfinderDomainOSINT := time.Now()
+		fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "SubfinderDomainOSINT", "Running....")
+		domain.SubfinderDomainOSINT(ctx, domainName, WorkDirectory)
+		elapsedSubfinderDomainOSINT := time.Since(startSubfinderDomainOSINT)
+		select {
+		case <-ctx.Done():
+			// If a signal is received from the context
+			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "SubfinderDomainOSINT", red("Finished due to cancellation in "), elapsedSubfinderDomainOSINT)
+		default:
+			// If there is no cancel signal, take another action
+			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "SubfinderDomainOSINT", green("Finished successfully in "), elapsedSubfinderDomainOSINT)
 		}
 		wg.Done()
 	}()
