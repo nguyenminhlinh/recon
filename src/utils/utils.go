@@ -103,7 +103,7 @@ func CancelRun(cancel context.CancelFunc) bool {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		fmt.Println("[WARN] Caught keyboard interrupt (Ctrl-C)\n")
+		fmt.Println("[WARN] Caught keyboard interrupt (Ctrl-C)")
 		cancel() // Cancel all running goroutines
 	}()
 	return true

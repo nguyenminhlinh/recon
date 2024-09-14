@@ -2,12 +2,24 @@ package domain
 
 import (
 	"context"
+	"fmt"
+	"log"
+	"os"
 	"recon/utils"
 	"strconv"
 	"sync"
 	"time"
 
+	"github.com/caffix/netmap"
+	"github.com/caffix/stringset"
+	"github.com/fatih/color"
 	"github.com/miekg/dns"
+	"github.com/owasp-amass/amass/v4/datasrcs"
+	"github.com/owasp-amass/amass/v4/enum"
+	"github.com/owasp-amass/amass/v4/systems"
+	"github.com/owasp-amass/asset-db/types"
+	"github.com/owasp-amass/config/config"
+	oam "github.com/owasp-amass/open-asset-model"
 )
 
 const maxGoroutines = 10    // Limit the number of concurrent goroutines
@@ -117,6 +129,120 @@ func BruteDomainDNS(ctx context.Context, cancel context.CancelFunc, domain strin
 	wg.Add(1)
 	go utils.WriteFiles(ctx, &wg, results, WorkDirectory+"/data/output/BruteDomainDNS.txt")
 
-	// Chờ tất cả các goroutines hoàn thành
+	// Wait for all goroutines to complete
+	wg.Wait()
+}
+
+func NewOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, filter *stringset.Set, since time.Time) []string {
+	var output []string
+
+	// Make sure a filter has been created
+	if filter == nil {
+		filter = stringset.New()
+		defer filter.Close()
+	}
+
+	var assets []*types.Asset
+	for _, atype := range []oam.AssetType{oam.FQDN, oam.IPAddress, oam.Netblock, oam.ASN} {
+		if a, err := g.DB.FindByType(atype, since.UTC()); err == nil {
+			assets = append(assets, a...)
+		}
+	}
+	start := e.Config.CollectionStartTime.UTC()
+	for _, from := range assets {
+		fromstr := fmt.Sprintf("%v", from.Asset.AssetType()) + "" + fmt.Sprintf("%v", from.Asset)
+		if rels, err := g.DB.OutgoingRelations(from, start); err == nil {
+			for _, rel := range rels {
+				lineid := from.ID + rel.ID + rel.ToAsset.ID
+				if filter.Has(lineid) {
+					continue
+				}
+				if to, err := g.DB.FindById(rel.ToAsset.ID, start); err == nil {
+					tostr := fmt.Sprintf("%v", to.Asset.AssetType()) + " " + fmt.Sprintf("%v", to.Asset)
+					output = append(output, fmt.Sprintf("%s %s %s %s %s", fromstr, "-->", rel.Type, "-->", tostr))
+					filter.Insert(lineid)
+				}
+			}
+		}
+	}
+
+	return output
+}
+
+func processOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, outputs chan string, wg *sync.WaitGroup) {
+	defer wg.Done()
+	defer close(outputs)
+
+	// This filter ensures that we only get new names
+	known := stringset.New()
+	defer known.Close()
+
+	// The function that obtains output from the enum and puts it on the channel
+	extract := func(since time.Time) {
+		for _, output := range NewOutput(ctx, g, e, known, since) {
+			outputs <- output + "\n"
+		}
+	}
+
+	t := time.NewTimer(10 * time.Second)
+	defer t.Stop()
+	last := e.Config.CollectionStartTime
+	for {
+		select {
+		case <-ctx.Done():
+			extract(last)
+			return
+		case <-t.C:
+			next := time.Now()
+			extract(last)
+			t.Reset(10 * time.Second)
+			last = next
+		}
+	}
+}
+
+func AmassDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain string, WorkDirectory string) {
+	// Create configuration for Amass
+	cfg := config.NewConfig()
+
+	// Check if a configuration file was provided, and if so, load the settings
+	if err := config.AcquireConfig(WorkDirectory+"/data/output", WorkDirectory+"/data/input/config.yaml", cfg); err != nil {
+		log.Fatalf("Failed to configuration file: %v", err)
+	}
+	cfg.AddDomain(domain) // Add domains to check
+
+	sys, err := systems.NewLocalSystem(cfg)
+	if err != nil {
+		log.Fatalf("Failed to create system: %v", err)
+	}
+	defer func() { _ = sys.Shutdown() }()
+
+	if err := sys.SetDataSources(datasrcs.GetAllSources(sys)); err != nil {
+		fmt.Fprintf(color.Error, "%v\n", err)
+		os.Exit(1)
+	}
+
+	// Setup the new enumeration
+	e := enum.NewEnumeration(cfg, sys, sys.GraphDatabases()[0])
+	if e == nil {
+		fmt.Fprintf(color.Error, "%s\n", "Failed to setup the enumeration")
+		os.Exit(1)
+	}
+	var wg sync.WaitGroup
+	outChans := make(chan string, 50)
+
+	// Run the enumeration process and send the results to the channel
+	wg.Add(1)
+	go processOutput(ctx, sys.GraphDatabases()[0], e, outChans, &wg)
+
+	// Start the goroutine to write the results to the output file
+	wg.Add(1)
+	go utils.WriteFiles(ctx, &wg, outChans, WorkDirectory+"/data/output/AmassDomainOSINT.txt")
+
+	// Start Amass enumeration
+	if err := e.Start(ctx); err != nil {
+		log.Fatalf("Failed to start Amass enumeration: %v", err)
+	}
+
 	wg.Wait()
 }
