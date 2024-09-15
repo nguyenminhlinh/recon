@@ -70,7 +70,7 @@ func main() {
 	go func() {
 		startFuffDomainHttp := time.Now()
 		fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "FuffDomainHttp", "Running....")
-		domain.FuffDomainHttp(domainName, WorkDirectory+"/data/input/namelist.txt", WorkDirectory)
+		domain.FuffDomainHttp(domainName, WorkDirectory+"/data/input/subdomains-top1mil-110000.txt", WorkDirectory)
 		elapsedFuffDomainHttp := time.Since(startFuffDomainHttp)
 		select {
 		case <-ctx.Done():
@@ -87,7 +87,7 @@ func main() {
 	go func() {
 		startFuffDirAndFile := time.Now()
 		fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "FuffDirAndFile", "Running....")
-		dir.FuffDirAndFile(domainName, WorkDirectory+"/data/input/common.txt", WorkDirectory)
+		dir.FuffDirAndFile(ctx, domainName, WorkDirectory+"/data/input/common.txt", WorkDirectory)
 		elapsedFuffDirAndFile := time.Since(startFuffDirAndFile)
 		select {
 		case <-ctx.Done():
@@ -121,7 +121,7 @@ func main() {
 	go func() {
 		startSubfinderDomainOSINT := time.Now()
 		fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "SubfinderDomainOSINT", "Running....")
-		domain.SubfinderDomainOSINT(ctx, domainName, WorkDirectory)
+		domain.SubfinderDomainOSINT(ctx, cancel, domainName, WorkDirectory)
 		elapsedSubfinderDomainOSINT := time.Since(startSubfinderDomainOSINT)
 		select {
 		case <-ctx.Done():
@@ -135,6 +135,7 @@ func main() {
 	}()
 
 	wg.Wait()
+	utils.AllDomain(ctx, WorkDirectory, domainName)
 	elapsed := time.Since(start)
 	fmt.Println("\nComplete all missions within time", elapsed)
 }

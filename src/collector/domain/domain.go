@@ -10,13 +10,13 @@ import (
 	"os/signal"
 	"recon/utils"
 	"strconv"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
 
 	"github.com/caffix/netmap"
 	"github.com/caffix/stringset"
-	"github.com/fatih/color"
 	"github.com/miekg/dns"
 	"github.com/owasp-amass/amass/v4/datasrcs"
 	"github.com/owasp-amass/amass/v4/enum"
@@ -77,7 +77,6 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 	for {
 		select {
 		case <-ctx.Done(): //If a cancel signal is received from context
-			//fmt.Println("<-ctx.Done()")
 			mu.Lock()
 			(*count)++
 			if *count == maxChanSemaphore {
@@ -105,7 +104,7 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 				//fmt.Println(responseAnswer, subdomain)
 				if len(responseAnswer) != 0 {
 					//fmt.Fprintf(os.Stdout, "Subdomain tồn tại:: %-35s \n", subdomain)
-					results <- subdomain + "\n"
+					results <- subdomain + "." + domain
 				}
 			}
 		}
@@ -116,6 +115,8 @@ func BruteDomainDNS(ctx context.Context, cancel context.CancelFunc, domain strin
 	var wg sync.WaitGroup
 	var count int
 	var mu sync.Mutex
+	var countReadFiles int
+	var muReadFiles sync.Mutex
 	// Create semaphore channel to receive info from file and sen to checkDomain
 	semaphore := make(chan string, maxChanSemaphore)
 	// Create semaphore channel to receive info from checkDomain and send to writeFiles
@@ -123,7 +124,7 @@ func BruteDomainDNS(ctx context.Context, cancel context.CancelFunc, domain strin
 
 	// Start the goroutine to read the file into chan
 	wg.Add(1)
-	go utils.ReadFiles(ctx, &wg, wordlist, semaphore)
+	go utils.ReadFiles(ctx, &wg, wordlist, semaphore, &countReadFiles, &muReadFiles, 1)
 
 	// Start goroutines to check the domain
 	for i := 0; i < maxGoroutines; i++ {
@@ -139,7 +140,7 @@ func BruteDomainDNS(ctx context.Context, cancel context.CancelFunc, domain strin
 	wg.Wait()
 }
 
-func NewOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, filter *stringset.Set, since time.Time) []string {
+func NewOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, filter *stringset.Set, since time.Time, domain string) []string {
 	var output []string
 
 	// Make sure a filter has been created
@@ -156,7 +157,10 @@ func NewOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, filter
 	}
 	start := e.Config.CollectionStartTime.UTC()
 	for _, from := range assets {
-		fromstr := fmt.Sprintf("%v", from.Asset.AssetType()) + "" + fmt.Sprintf("%v", from.Asset)
+		fromstr := fmt.Sprintf("%v", from.Asset)
+		if strings.Contains(fromstr, domain) {
+			output = append(output, fromstr[2:len(fromstr)-1])
+		}
 		if rels, err := g.DB.OutgoingRelations(from, start); err == nil {
 			for _, rel := range rels {
 				lineid := from.ID + rel.ID + rel.ToAsset.ID
@@ -164,8 +168,10 @@ func NewOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, filter
 					continue
 				}
 				if to, err := g.DB.FindById(rel.ToAsset.ID, start); err == nil {
-					tostr := fmt.Sprintf("%v", to.Asset.AssetType()) + " " + fmt.Sprintf("%v", to.Asset)
-					output = append(output, fmt.Sprintf("%s %s %s %s %s", fromstr, "-->", rel.Type, "-->", tostr))
+					tostr := fmt.Sprintf("%v", to.Asset)
+					if strings.Contains(tostr, domain) {
+						output = append(output, tostr[2:len(tostr)-1])
+					}
 					filter.Insert(lineid)
 				}
 			}
@@ -175,7 +181,7 @@ func NewOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, filter
 	return output
 }
 
-func processOutput(ctx context.Context, ctxTimeout context.Context, g *netmap.Graph, e *enum.Enumeration, outputs chan string, wg *sync.WaitGroup) {
+func processOutput(ctx context.Context, ctxTimeout context.Context, g *netmap.Graph, e *enum.Enumeration, outputs chan string, wg *sync.WaitGroup, domain string) {
 	defer wg.Done()
 	defer close(outputs)
 
@@ -185,8 +191,8 @@ func processOutput(ctx context.Context, ctxTimeout context.Context, g *netmap.Gr
 
 	// The function that obtains output from the enum and puts it on the channel
 	extract := func(since time.Time) {
-		for _, output := range NewOutput(ctx, g, e, known, since) {
-			outputs <- output + "\n"
+		for _, output := range NewOutput(ctx, g, e, known, since, domain) {
+			outputs <- output
 		}
 	}
 
@@ -196,10 +202,10 @@ func processOutput(ctx context.Context, ctxTimeout context.Context, g *netmap.Gr
 	for {
 		select {
 		case <-ctxTimeout.Done():
-			extract(last)
+			//extract(last)
 			return
 		case <-ctx.Done():
-			extract(last)
+			//extract(last)
 			return
 		case <-t.C:
 			next := time.Now()
@@ -227,19 +233,19 @@ func AmassDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain str
 	defer func() { _ = sys.Shutdown() }()
 
 	if err := sys.SetDataSources(datasrcs.GetAllSources(sys)); err != nil {
-		fmt.Fprintf(color.Error, "%v\n", err)
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
 	// Set the timeout by configuring the time for the context
-	timeout := 1 * time.Minute
+	timeout := 10 * time.Minute
 	ctxTimeout, cancelTimeout := context.WithTimeout(ctx, timeout)
 	defer cancelTimeout()
 
 	// Setup the new enumeration
 	e := enum.NewEnumeration(cfg, sys, sys.GraphDatabases()[0])
 	if e == nil {
-		fmt.Fprintf(color.Error, "%s\n", "Failed to setup the enumeration")
+		fmt.Println("Failed to setup the enumeration")
 		os.Exit(1)
 	}
 
@@ -248,7 +254,7 @@ func AmassDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain str
 
 	// Run the enumeration process and send the results to the channel
 	wg.Add(1)
-	go processOutput(ctx, ctxTimeout, sys.GraphDatabases()[0], e, outChans, &wg)
+	go processOutput(ctx, ctxTimeout, sys.GraphDatabases()[0], e, outChans, &wg, domain)
 
 	// Start the goroutine to write the results to the output file
 	wg.Add(1)
@@ -270,10 +276,9 @@ func AmassDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain str
 	if err := e.Start(ctxTimeout); err != nil {
 		log.Fatalf("Failed to start Amass enumeration: %v", err)
 	}
-
 }
 
-func SubfinderDomainOSINT(ctx context.Context, domain string, WorkDirectory string) {
+func SubfinderDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain string, WorkDirectory string) {
 	subfinderOpts := &runner.Options{
 		Threads:            10, // Thread controls the number of threads to use for active enumerations
 		Timeout:            30, // Timeout is the seconds to wait for sources to respond
@@ -304,8 +309,21 @@ func SubfinderDomainOSINT(ctx context.Context, domain string, WorkDirectory stri
 	outChans := make(chan string, 50)
 	outChans <- output.String()
 	close(outChans)
+
 	// Start the goroutine to write the results to the output file
 	wg.Add(1)
 	go utils.WriteFiles(ctx, &wg, outChans, WorkDirectory+"/data/output/SubfinderDomainOSINT.txt")
+
+	// Monitor for cancellation by the user
+	go func(c context.Context, f context.CancelFunc) {
+		quit := make(chan os.Signal, 1)
+		signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+		defer signal.Stop(quit)
+		select {
+		case <-quit:
+			f()
+		case <-c.Done():
+		}
+	}(ctx, cancel)
 	wg.Wait()
 }
