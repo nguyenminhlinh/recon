@@ -55,22 +55,6 @@ func (s *Stdoutput) SetCurrentResults(results []ffuf.Result) {
 }
 
 func (s *Stdoutput) Progress(status ffuf.Progress) {
-	// dur := time.Since(status.StartedAt)
-	// runningSecs := int(dur / time.Second)
-	// var reqRate int64
-	// if runningSecs > 0 {
-	// 	reqRate = status.ReqSec
-	// } else {
-	// 	reqRate = 0
-	// }
-
-	// hours := dur / time.Hour
-	// dur -= hours * time.Hour
-	// mins := dur / time.Minute
-	// dur -= mins * time.Minute
-	// secs := dur / time.Second
-
-	// fmt.Fprintf(os.Stderr, "%s:: Progress: [%d/%d] :: Job [%d/%d] :: %d req/sec :: Duration: [%d:%02d:%02d] :: Errors: %d ::", TERMINAL_CLEAR_LINE, status.ReqCount, status.ReqTotal, status.QueuePos, status.QueueTotal, reqRate, hours, mins, secs, status.ErrorCount)
 }
 
 func (s *Stdoutput) Info(infostring string) {
@@ -98,15 +82,6 @@ func (s *Stdoutput) Error(errstring string) {
 }
 
 func (s *Stdoutput) Warning(warnstring string) {
-	// if s.config.Quiet {
-	// 	fmt.Fprintf(os.Stderr, "%s", warnstring)
-	// } else {
-	// 	if !s.config.Colors {
-	// 		fmt.Fprintf(os.Stderr, "%s[WARN] %s\n", TERMINAL_CLEAR_LINE, warnstring)
-	// 	} else {
-	// 		fmt.Fprintf(os.Stderr, "%s[%sWARN%s] %s\n", TERMINAL_CLEAR_LINE, ANSI_RED, ANSI_CLEAR, warnstring)
-	// 	}
-	// }
 }
 
 func (s *Stdoutput) Raw(output string) {
@@ -122,7 +97,7 @@ func (s *Stdoutput) SaveFile(filename, format string) error {
 	}
 	switch format {
 	case "json":
-		err = write(filename, s.config, append(s.Results, s.CurrentResults...))
+		err = writeTxt(filename, s.config.OutputFile, append(s.Results, s.CurrentResults...))
 	}
 	return err
 }

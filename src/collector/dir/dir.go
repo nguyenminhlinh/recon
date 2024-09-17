@@ -2,39 +2,43 @@ package dir
 
 import (
 	"context"
-	"log"
 	"recon/utils"
 	"strconv"
+	"sync"
 )
 
-func FuffDirAndFile(ctx context.Context, domain string, wordlist string, WorkDirectory string) {
-	utils.Ffuf(domain, "", WorkDirectory+"/data/output/FuffDirAndFile.json", "dir", false, 1, wordlist)
-	//Using the wrong tail to get web content
-	// lengthResponse := utils.LengthResponse(domain+"/abcdefghiklm", "")
-	data := utils.ReadJSONFile(WorkDirectory + "/data/output/FuffDirAndFile.json")
-
-	results, ok := data["results"].([]interface{})
-	if !ok {
-		log.Fatalf("Error: 'results' is not a valid array")
+func DirAndFileBruteForce(ctx context.Context, domain string, wordList string, workDirectory string) {
+	utils.Ffuf(domain, "", workDirectory+"/data/output/DirAndFileBruteForce.txt", "dir", false, 2, wordList)
+	var wg sync.WaitGroup
+	outputChan := make(chan string, 20)
+	var count int
+	var mu sync.Mutex
+	wg.Add(1)
+	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DirAndFileBruteForce.txt", outputChan, &count, &mu, 1)
+	var lengths []int
+	flagOdd := false //get the item in odd position, start =0
+	// domain 0
+	// length 1
+	// domain 2
+	// length 3
+	for result := range outputChan {
+		if flagOdd {
+			length, _ := strconv.Atoi(result)
+			lengths = append(lengths, length)
+			flagOdd = false
+		} else {
+			flagOdd = true
+		}
 	}
-	var lengths []float64
-	var maxlength int
-	if len(results) > 10 { //Get only 10 item firstly for check length of fake domain
-		maxlength = 10
-	} else {
-		maxlength = len(results)
-	}
-
-	for _, result := range results[:maxlength] {
-		resultMap := result.(map[string]interface{})
-		lengths = append(lengths, resultMap["length"].(float64))
-	}
-	utils.Ffuf(domain, FindMostFrequentElement(lengths), WorkDirectory+"/data/output/FuffDirAndFile.json", "dir", false, 0, wordlist)
+	length := FindMostFrequentElement(lengths)
+	wg.Wait()
+	// Get the length of the first 10 entries to check the most repeated length of the wrong domain then filter by length
+	utils.Ffuf(domain, length, workDirectory+"/data/output/DirAndFileBruteForce.txt", "dir", false, 0, wordList)
 }
 
-func FindMostFrequentElement(slice []float64) string {
-	countMap := make(map[float64]int)
-	var mostFrequent float64
+func FindMostFrequentElement(slice []int) string {
+	countMap := make(map[int]int)
+	var mostFrequent int
 	maxCount := 0
 	if len(slice) == 0 {
 		return ""
@@ -46,9 +50,5 @@ func FindMostFrequentElement(slice []float64) string {
 			mostFrequent = value
 		}
 	}
-	if maxCount < 5 {
-		return ""
-	}
-
-	return strconv.Itoa(int(mostFrequent))
+	return strconv.Itoa(mostFrequent)
 }

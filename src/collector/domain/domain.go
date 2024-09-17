@@ -32,10 +32,10 @@ const maxGoroutines = 10    // Limit the number of concurrent goroutines
 const maxChanSemaphore = 10 // Limit the number of elements in the chan semaphore
 const maxChanResults = 10   // Limit the number of elements in chan results
 
-func FuffDomainHttp(domain string, wordlist string, WorkDirectory string) {
+func DomainBruteForceHttp(domain string, wordList string, workDirectory string) {
 	//Using the wrong host to get length web content "C:/Users/minhl/recon/src/data/common.txt"
 	lengthResponse := utils.LengthResponse(domain, "abcdefghiklm."+domain)
-	utils.Ffuf(domain, strconv.Itoa(lengthResponse), WorkDirectory+"/data/output/FuffDomainHttp.txt", "domain", true, 0, wordlist)
+	utils.Ffuf(domain, strconv.Itoa(lengthResponse), workDirectory+"/data/output/DomainBruteForceHttp.txt", "domain", true, 0, wordList)
 }
 
 func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string, results chan<- string, domain string, count *int, mu *sync.Mutex) {
@@ -77,7 +77,7 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 	}
 }
 
-func BruteDomainDNS(ctx context.Context, cancel context.CancelFunc, domain string, wordlist string, WorkDirectory string) {
+func DomainBruteForceDNS(ctx context.Context, cancel context.CancelFunc, domain string, wordList string, workDirectory string) {
 	var wg sync.WaitGroup
 	var count int
 	var mu sync.Mutex
@@ -90,7 +90,7 @@ func BruteDomainDNS(ctx context.Context, cancel context.CancelFunc, domain strin
 
 	// Start the goroutine to read the file into chan
 	wg.Add(1)
-	go utils.ReadFiles(ctx, &wg, wordlist, semaphore, &countReadFiles, &muReadFiles, 1)
+	go utils.ReadFiles(ctx, &wg, wordList, semaphore, &countReadFiles, &muReadFiles, 1)
 
 	// Start goroutines to check the domain
 	for i := 0; i < maxGoroutines; i++ {
@@ -100,7 +100,7 @@ func BruteDomainDNS(ctx context.Context, cancel context.CancelFunc, domain strin
 
 	// Start the goroutine to write the results to the output file
 	wg.Add(1)
-	go utils.WriteFiles(ctx, &wg, results, WorkDirectory+"/data/output/BruteDomainDNS.txt")
+	go utils.WriteFiles(ctx, &wg, results, workDirectory+"/data/output/DomainBruteForceDNS.txt")
 
 	// Wait for all goroutines to complete
 	wg.Wait()
@@ -136,7 +136,7 @@ func NewOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, filter
 				if to, err := g.DB.FindById(rel.ToAsset.ID, start); err == nil {
 					tostr := fmt.Sprintf("%v", to.Asset)
 					if strings.Contains(tostr, domain) {
-						fmt.Println(fromstr, "-->", rel.Type, "-->", tostr)
+						// fmt.Println(fromstr, "-->", rel.Type, "-->", tostr)
 						output = append(output, tostr[2:len(tostr)-1])
 					}
 					filter.Insert(lineid)
@@ -183,12 +183,12 @@ func processOutput(ctx context.Context, ctxTimeout context.Context, g *netmap.Gr
 	}
 }
 
-func AmassDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain string, WorkDirectory string) {
+func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain string, workDirectory string) {
 	// Create configuration for Amass
 	cfg := config.NewConfig()
 
 	// Check if a configuration file was provided, and if so, load the settings
-	if err := config.AcquireConfig(WorkDirectory+"/data/output", WorkDirectory+"/data/input/config.yaml", cfg); err != nil {
+	if err := config.AcquireConfig(workDirectory+"/data/output", workDirectory+"/data/input/config.yaml", cfg); err != nil {
 		log.Fatalf("Failed to configuration file: %v", err)
 	}
 	cfg.AddDomain(domain) // Add domains to check
@@ -225,7 +225,7 @@ func AmassDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain str
 
 	// Start the goroutine to write the results to the output file
 	wg.Add(1)
-	go utils.WriteFiles(ctx, &wg, outChans, WorkDirectory+"/data/output/AmassDomainOSINT.txt")
+	go utils.WriteFiles(ctx, &wg, outChans, workDirectory+"/data/output/DomainOSINTAmass.txt")
 
 	// Monitor for cancellation by the user
 	go func(c context.Context, f context.CancelFunc) {
@@ -245,7 +245,7 @@ func AmassDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain str
 	}
 }
 
-func SubfinderDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain string, WorkDirectory string) {
+func DomainOSINTSubfinder(ctx context.Context, cancel context.CancelFunc, domain string, WorkDirectory string) {
 	subfinderOpts := &runner.Options{
 		Threads:            10, // Thread controls the number of threads to use for active enumerations
 		Timeout:            30, // Timeout is the seconds to wait for sources to respond
@@ -279,7 +279,7 @@ func SubfinderDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain
 
 	// Start the goroutine to write the results to the output file
 	wg.Add(1)
-	go utils.WriteFiles(ctx, &wg, outChans, WorkDirectory+"/data/output/SubfinderDomainOSINT.txt")
+	go utils.WriteFiles(ctx, &wg, outChans, WorkDirectory+"/data/output/DomainOSINTSubfinder.txt")
 
 	// Monitor for cancellation by the user
 	go func(c context.Context, f context.CancelFunc) {
@@ -292,5 +292,6 @@ func SubfinderDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain
 		case <-c.Done():
 		}
 	}(ctx, cancel)
+
 	wg.Wait()
 }

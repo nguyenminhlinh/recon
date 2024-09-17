@@ -19,66 +19,6 @@ import (
 	"github.com/miekg/dns"
 )
 
-// func LengthResponse(domain string, host string) int {
-// 	req, err := http.NewRequest("GET", "https://"+domain, nil)
-// 	if err != nil {
-// 		fmt.Println("Error creating request:", err)
-// 		os.Exit(1)
-// 	}
-// 	req.Host = host
-// 	client := &http.Client{}
-// 	resp, err := client.Do(req)
-// 	if err != nil {
-// 		fmt.Println("Error sending request:", err)
-// 		os.Exit(1)
-// 	}
-// 	defer resp.Body.Close()
-
-// 	// Đọc header Content-Length
-// 	contentLength := resp.Header.Get("Content-Length")
-// 	if contentLength != "" {
-// 		fmt.Println("Content-Length from header:", contentLength)
-// 	}
-
-// 	body, err := io.ReadAll(resp.Body)
-// 	if err != nil {
-// 		fmt.Println("Error reading response body:", err)
-// 		os.Exit(1)
-// 	}
-
-//		return len(body)
-//	}
-// func LengthResponse(domain string, host string) int {
-// 	req, err := http.NewRequest("GET", "https://"+domain, nil)
-// 	if err != nil {
-// 		fmt.Println("Error creating request:", err)
-// 		os.Exit(1)
-// 	}
-// 	req.Host = host
-// 	client := &http.Client{}
-// 	resp, err := client.Do(req)
-// 	if err != nil {
-// 		fmt.Println("Error sending request:", err)
-// 		os.Exit(1)
-// 	}
-// 	defer resp.Body.Close()
-
-// 	body, err := io.ReadAll(resp.Body)
-// 	if err != nil {
-// 		fmt.Println("Error reading response body:", err)
-// 		os.Exit(1)
-// 	}
-
-// 	// Lưu nội dung response vào file để kiểm tra
-// 	err = os.WriteFile("response_body.txt", body, 0644)
-// 	if err != nil {
-// 		fmt.Println("Error writing response body to file:", err)
-// 		os.Exit(1)
-// 	}
-
-// 	return len(body)
-// }
-
 func LengthResponse(domain string, host string) int {
 	req, err := http.NewRequest("GET", "https://"+domain, nil)
 	if err != nil {
@@ -138,7 +78,6 @@ func ReadFiles(ctx context.Context, wg *sync.WaitGroup, file string, semaphore c
 			}
 			domain := scanner.Text()
 			semaphore <- domain
-			fmt.Println(domain)
 		}
 	}
 }
@@ -201,6 +140,7 @@ func Getwd() string {
 	}
 	return filepath.ToSlash(cwd)
 }
+
 func CancelRun(cancel context.CancelFunc) bool {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
@@ -258,7 +198,7 @@ func UniqueLine(inputFile string, outputFile string) {
 }
 
 func AllDomain(ctx context.Context, WorkDirectory string, Domain string) {
-	data := ReadJSONFile(WorkDirectory + "/data/output/FuffDomainHttp.json")
+	data := ReadJSONFile(WorkDirectory + "/data/output/DomainBruteForceHttp.json")
 
 	results, ok := data["results"].([]interface{})
 	if !ok {
@@ -275,11 +215,11 @@ func AllDomain(ctx context.Context, WorkDirectory string, Domain string) {
 		outputChan <- resultMap["input"].(map[string]interface{})["FUZZ"].(string) + "." + Domain
 	}
 	wg.Add(1)
-	go ReadFiles(ctx, &wg, WorkDirectory+"/data/output/SubfinderDomainOSINT.txt", outputChan, &count, &mu, 3)
+	go ReadFiles(ctx, &wg, WorkDirectory+"/data/output/DomainOSINTSubfinder.txt", outputChan, &count, &mu, 3)
 	wg.Add(1)
-	go ReadFiles(ctx, &wg, WorkDirectory+"/data/output/BruteDomainDNS.txt", outputChan, &count, &mu, 3)
+	go ReadFiles(ctx, &wg, WorkDirectory+"/data/output/DomainBruteForceDNS.txt", outputChan, &count, &mu, 3)
 	wg.Add(1)
-	go ReadFiles(ctx, &wg, WorkDirectory+"/data/output/AmassDomainOSINT.txt", outputChan, &count, &mu, 3)
+	go ReadFiles(ctx, &wg, WorkDirectory+"/data/output/DomainOSINTAmass.txt", outputChan, &count, &mu, 3)
 	wg.Wait()
 	UniqueLine(WorkDirectory+"/data/output/AllDomain.txt", WorkDirectory+"/data/output/AllDomainUnique.txt")
 	AllDomainHaveIp(ctx, WorkDirectory)
