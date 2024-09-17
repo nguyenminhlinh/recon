@@ -14,6 +14,9 @@ import (
 	"strings"
 	"sync"
 	"syscall"
+	"time"
+
+	"github.com/miekg/dns"
 )
 
 // func LengthResponse(domain string, host string) int {
@@ -135,6 +138,7 @@ func ReadFiles(ctx context.Context, wg *sync.WaitGroup, file string, semaphore c
 			}
 			domain := scanner.Text()
 			semaphore <- domain
+			fmt.Println(domain)
 		}
 	}
 }
@@ -278,4 +282,61 @@ func AllDomain(ctx context.Context, WorkDirectory string, Domain string) {
 	go ReadFiles(ctx, &wg, WorkDirectory+"/data/output/AmassDomainOSINT.txt", outputChan, &count, &mu, 3)
 	wg.Wait()
 	UniqueLine(WorkDirectory+"/data/output/AllDomain.txt", WorkDirectory+"/data/output/AllDomainUnique.txt")
+	AllDomainHaveIp(ctx, WorkDirectory)
+}
+
+func Dig(domain string, qtype uint16) []dns.RR {
+	// Create a DNS message
+	msg := new(dns.Msg)
+	msg.SetQuestion(dns.Fqdn(domain), qtype)
+	msg.RecursionDesired = true
+
+	// Select the DNS server to query
+	dnsServer := "8.8.8.8:53" //Use Google DNS
+
+	// Create a client to send DNS requests
+	client := new(dns.Client)
+	client.Timeout = 5 * time.Second
+
+	// Send DNS requests
+	response, _, err := client.Exchange(msg, dnsServer)
+	if err != nil {
+		//	fmt.Printf("Error: %v at domain %s \n", err, domain)
+		return []dns.RR{}
+	}
+	return response.Answer
+}
+
+func AllDomainHaveIp(ctx context.Context, WorkDirectory string) {
+	var wg sync.WaitGroup
+	var count int
+	var mu sync.Mutex
+	outputChan := make(chan string, 50)
+	intputChanHaveIP := make(chan string, 50)
+	intputChanNoIP := make(chan string, 50)
+	wg.Add(1)
+	go ReadFiles(ctx, &wg, WorkDirectory+"/data/output/AllDomainUnique.txt", outputChan, &count, &mu, 1)
+	wg.Add(1)
+	go func() {
+		for domain := range outputChan {
+			DomainHaveIPs := Dig(domain, dns.TypeA)
+			if len(DomainHaveIPs) != 0 {
+				for _, DomainHaveIP := range DomainHaveIPs {
+					intputChanHaveIP <- DomainHaveIP.String()
+				}
+			} else {
+				intputChanNoIP <- domain
+			}
+		}
+		close(intputChanHaveIP)
+		close(intputChanNoIP)
+		wg.Done()
+	}()
+
+	wg.Add(1)
+	go WriteFiles(ctx, &wg, intputChanHaveIP, WorkDirectory+"/data/output/AllDomainHaveIp.txt")
+
+	wg.Add(1)
+	go WriteFiles(ctx, &wg, intputChanNoIP, WorkDirectory+"/data/output/AllDomainNoIp.txt")
+	wg.Wait()
 }

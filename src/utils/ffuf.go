@@ -7,11 +7,10 @@ import (
 	"io"
 	"log"
 	"os"
+	"recon/utils/output"
 	"strings"
 	"sync"
 	"time"
-
-	"recon/utils/output"
 
 	"github.com/ffuf/ffuf/v2/pkg/ffuf"
 	"github.com/ffuf/ffuf/v2/pkg/filter"

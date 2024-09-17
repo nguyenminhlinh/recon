@@ -122,7 +122,7 @@ func (s *Stdoutput) SaveFile(filename, format string) error {
 	}
 	switch format {
 	case "json":
-		err = writeJSON(filename, s.config, append(s.Results, s.CurrentResults...))
+		err = write(filename, s.config, append(s.Results, s.CurrentResults...))
 	}
 	return err
 }

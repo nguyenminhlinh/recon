@@ -35,41 +35,7 @@ const maxChanResults = 10   // Limit the number of elements in chan results
 func FuffDomainHttp(domain string, wordlist string, WorkDirectory string) {
 	//Using the wrong host to get length web content "C:/Users/minhl/recon/src/data/common.txt"
 	lengthResponse := utils.LengthResponse(domain, "abcdefghiklm."+domain)
-	utils.Ffuf(domain, strconv.Itoa(lengthResponse), WorkDirectory+"/data/output/FuffDomainHttp.json", "domain", true, 0, wordlist)
-}
-
-func dig(domain string, qtype uint16) []dns.RR {
-	// Create a DNS message
-	msg := new(dns.Msg)
-	msg.SetQuestion(dns.Fqdn(domain), qtype)
-	msg.RecursionDesired = true
-
-	// Select the DNS server to query
-	dnsServer := "8.8.8.8:53" //Use Google DNS
-
-	// Create a client to send DNS requests
-	client := new(dns.Client)
-	client.Timeout = 5 * time.Second
-
-	// Send DNS requests
-	response, _, err := client.Exchange(msg, dnsServer)
-	if err != nil {
-		//	fmt.Printf("Error: %v at domain %s \n", err, domain)
-		return []dns.RR{}
-	}
-	return response.Answer
-	// // Check DNS status code (Rcode)
-	// fmt.Printf(";; ->>HEADER<<- opcode: QUERY, status: %s, id: %d\n", dns.RcodeToString[response.Rcode], response.Id)
-	// fmt.Printf(";; query time: %v msec\n", rtt.Milliseconds())
-
-	// // Print the response if the status is NOERROR
-	// if response.Rcode == dns.RcodeSuccess {
-	// 	for _, answer := range response.Answer {
-	// 		fmt.Println(answer.String())
-	// 	}
-	// } else {
-	// 	fmt.Printf("Query failed with status: %s\n", dns.RcodeToString[response.Rcode])
-	// }
+	utils.Ffuf(domain, strconv.Itoa(lengthResponse), WorkDirectory+"/data/output/FuffDomainHttp.txt", "domain", true, 0, wordlist)
 }
 
 func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string, results chan<- string, domain string, count *int, mu *sync.Mutex) {
@@ -100,7 +66,7 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 				//fmt.Println(*count)
 				return
 			} else {
-				responseAnswer := dig(subdomain+"."+domain, dns.TypeA)
+				responseAnswer := utils.Dig(subdomain+"."+domain, dns.TypeA)
 				//fmt.Println(responseAnswer, subdomain)
 				if len(responseAnswer) != 0 {
 					//fmt.Fprintf(os.Stdout, "Subdomain tồn tại:: %-35s \n", subdomain)
@@ -170,6 +136,7 @@ func NewOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, filter
 				if to, err := g.DB.FindById(rel.ToAsset.ID, start); err == nil {
 					tostr := fmt.Sprintf("%v", to.Asset)
 					if strings.Contains(tostr, domain) {
+						fmt.Println(fromstr, "-->", rel.Type, "-->", tostr)
 						output = append(output, tostr[2:len(tostr)-1])
 					}
 					filter.Insert(lineid)
@@ -202,10 +169,10 @@ func processOutput(ctx context.Context, ctxTimeout context.Context, g *netmap.Gr
 	for {
 		select {
 		case <-ctxTimeout.Done():
-			//extract(last)
+			extract(last)
 			return
 		case <-ctx.Done():
-			//extract(last)
+			extract(last)
 			return
 		case <-t.C:
 			next := time.Now()
@@ -238,7 +205,7 @@ func AmassDomainOSINT(ctx context.Context, cancel context.CancelFunc, domain str
 	}
 
 	// Set the timeout by configuring the time for the context
-	timeout := 10 * time.Minute
+	timeout := 20 * time.Minute
 	ctxTimeout, cancelTimeout := context.WithTimeout(ctx, timeout)
 	defer cancelTimeout()
 
