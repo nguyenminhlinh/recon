@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -11,12 +12,16 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"strings"
+	data "recon/data/type"
 	"sync"
 	"syscall"
 	"time"
 
-	"github.com/miekg/dns"
+	"github.com/projectdiscovery/goflags"
+	"github.com/projectdiscovery/gologger"
+	"github.com/projectdiscovery/gologger/levels"
+	runnerhttpx "github.com/projectdiscovery/httpx/runner"
+	wappalyzer "github.com/projectdiscovery/wappalyzergo"
 )
 
 func LengthResponse(domain string, host string) int {
@@ -152,131 +157,177 @@ func CancelRun(cancel context.CancelFunc) bool {
 	return true
 }
 
-func UniqueLine(inputFile string, outputFile string) {
-	// Mở file để đọc
-	file, err := os.Open(inputFile)
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
-	}
-	defer file.Close()
+func StopRun() {
+	// Channel để bắt tín hiệu từ hệ điều hành
+	stopChan := make(chan os.Signal, 1)
+	signal.Notify(stopChan, os.Interrupt, syscall.SIGTERM)
 
-	// Tạo map để lưu các phần tử duy nhất
-	uniqueLines := make(map[string]bool)
-
-	// Đọc từng dòng trong file
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		// Thêm dòng vào map nếu chưa tồn tại
-		if line != "" {
-			uniqueLines[line] = true
-		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		fmt.Println("Error reading file:", err)
-		return
-	}
-
-	// Mở file để ghi các phần tử duy nhất
-	output, err := os.Create(outputFile)
-	if err != nil {
-		fmt.Println("Error creating output file:", err)
-		return
-	}
-	defer output.Close()
-
-	// Ghi các phần tử duy nhất vào file
-	for line := range uniqueLines {
-		_, err := output.WriteString(line + "\n")
-		if err != nil {
-			fmt.Println("Error writing to file:", err)
-			return
-		}
-	}
-}
-
-func AllDomain(ctx context.Context, WorkDirectory string, Domain string) {
-	data := ReadJSONFile(WorkDirectory + "/data/output/DomainBruteForceHttp.json")
-
-	results, ok := data["results"].([]interface{})
-	if !ok {
-		log.Fatalf("Error: 'results' is not a valid array")
-	}
-	var wg sync.WaitGroup
-	var count int
-	var mu sync.Mutex
-	outputChan := make(chan string, 50)
-	wg.Add(1)
-	go WriteFiles(ctx, &wg, outputChan, WorkDirectory+"/data/output/AllDomain.txt")
-	for _, result := range results {
-		resultMap := result.(map[string]interface{})
-		outputChan <- resultMap["input"].(map[string]interface{})["FUZZ"].(string) + "." + Domain
-	}
-	wg.Add(1)
-	go ReadFiles(ctx, &wg, WorkDirectory+"/data/output/DomainOSINTSubfinder.txt", outputChan, &count, &mu, 3)
-	wg.Add(1)
-	go ReadFiles(ctx, &wg, WorkDirectory+"/data/output/DomainBruteForceDNS.txt", outputChan, &count, &mu, 3)
-	wg.Add(1)
-	go ReadFiles(ctx, &wg, WorkDirectory+"/data/output/DomainOSINTAmass.txt", outputChan, &count, &mu, 3)
-	wg.Wait()
-	UniqueLine(WorkDirectory+"/data/output/AllDomain.txt", WorkDirectory+"/data/output/AllDomainUnique.txt")
-	AllDomainHaveIp(ctx, WorkDirectory)
-}
-
-func Dig(domain string, qtype uint16) []dns.RR {
-	// Create a DNS message
-	msg := new(dns.Msg)
-	msg.SetQuestion(dns.Fqdn(domain), qtype)
-	msg.RecursionDesired = true
-
-	// Select the DNS server to query
-	dnsServer := "8.8.8.8:53" //Use Google DNS
-
-	// Create a client to send DNS requests
-	client := new(dns.Client)
-	client.Timeout = 5 * time.Second
-
-	// Send DNS requests
-	response, _, err := client.Exchange(msg, dnsServer)
-	if err != nil {
-		//	fmt.Printf("Error: %v at domain %s \n", err, domain)
-		return []dns.RR{}
-	}
-	return response.Answer
-}
-
-func AllDomainHaveIp(ctx context.Context, WorkDirectory string) {
-	var wg sync.WaitGroup
-	var count int
-	var mu sync.Mutex
-	outputChan := make(chan string, 50)
-	intputChanHaveIP := make(chan string, 50)
-	intputChanNoIP := make(chan string, 50)
-	wg.Add(1)
-	go ReadFiles(ctx, &wg, WorkDirectory+"/data/output/AllDomainUnique.txt", outputChan, &count, &mu, 1)
-	wg.Add(1)
+	// Tạo WaitGroup để chờ các goroutines hoàn thành
+	// Bắt tín hiệu Ctrl+C
 	go func() {
-		for domain := range outputChan {
-			DomainHaveIPs := Dig(domain, dns.TypeA)
-			if len(DomainHaveIPs) != 0 {
-				for _, DomainHaveIP := range DomainHaveIPs {
-					intputChanHaveIP <- DomainHaveIP.String()
-				}
-			} else {
-				intputChanNoIP <- domain
-			}
-		}
-		close(intputChanHaveIP)
-		close(intputChanNoIP)
-		wg.Done()
+		<-stopChan
+		fmt.Println("Received an interrupt, stopping...")
+		os.Exit(1) // Thoát khỏi chương trình ngay lập tức
 	}()
+}
 
-	wg.Add(1)
-	go WriteFiles(ctx, &wg, intputChanHaveIP, WorkDirectory+"/data/output/AllDomainHaveIp.txt")
+func Httpx(wg *sync.WaitGroup, domain string, InfoDomain *data.InfoDomain) {
+	// Channel để bắt tín hiệu từ hệ điều hành
+	stopChan := make(chan os.Signal, 1)
+	signal.Notify(stopChan, os.Interrupt, syscall.SIGTERM)
 
-	wg.Add(1)
-	go WriteFiles(ctx, &wg, intputChanNoIP, WorkDirectory+"/data/output/AllDomainNoIp.txt")
-	wg.Wait()
+	// Tạo WaitGroup để chờ các goroutines hoàn thà
+	// Bắt tín hiệu Ctrl+C
+	go func() {
+		<-stopChan
+		fmt.Println("Received an interrupt, stopping...")
+		os.Exit(1) // Thoát khỏi chương trình ngay lập tức
+	}()
+	gologger.DefaultLogger.SetMaxLevel(levels.LevelVerbose) // increase the verbosity (optional)
+	//gologger.Silent()
+	apiEndpoint := "127.0.0.1:31234"
+
+	options := runnerhttpx.Options{
+		Methods:         "GET",
+		InputTargetHost: goflags.StringSlice{domain},
+		Threads:         1,
+		HttpApiEndpoint: apiEndpoint,
+		OnResult: func(r runnerhttpx.Result) {
+			// handle error
+			if r.Err != nil {
+				fmt.Printf("[Err] %s: %s\n", r.Input, r.Err)
+				return
+			}
+			fmt.Printf("%s * %d * %s \n", r.Input, r.StatusCode, r.Title)
+			fmt.Println("12")
+			infoWeb := data.InfoWeb{}
+			if InfoDomain.HttpOrHttps == nil {
+				InfoDomain.HttpOrHttps = make(map[string]data.InfoWeb)
+			}
+			if infoWeb.TechnologyDetails == nil {
+				infoWeb.TechnologyDetails = make(map[string]wappalyzer.AppInfo)
+			}
+			fmt.Println("13")
+			for key, value := range r.TechnologyDetails {
+				infoWeb.TechnologyDetails[key] = value
+			}
+			InfoDomain.HttpOrHttps[r.URL] = infoWeb
+			fmt.Println("14", infoWeb)
+		},
+	}
+
+	// after 3 seconds increase the speed to 50
+	time.AfterFunc(3*time.Second, func() {
+		client := &http.Client{}
+
+		concurrencySettings := runnerhttpx.Concurrency{Threads: 20}
+		requestBody, err := json.Marshal(concurrencySettings)
+		if err != nil {
+			log.Fatalf("Error creating request body: %v", err)
+		}
+
+		req, err := http.NewRequest("PUT", fmt.Sprintf("http://%s/api/concurrency", apiEndpoint), bytes.NewBuffer(requestBody))
+		if err != nil {
+			log.Fatalf("Error creating PUT request: %v", err)
+		}
+		req.Header.Set("Content-Type", "application/json")
+
+		resp, err := client.Do(req)
+		if err != nil {
+			log.Fatalf("Error sending PUT request: %v", err)
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			log.Printf("Failed to update threads, status code: %d", resp.StatusCode)
+		} else {
+			log.Println("Threads updated to 20 successfully")
+		}
+	})
+
+	if err := options.ValidateOptions(); err != nil {
+		log.Fatal(err)
+	}
+
+	httpxRunner, err := runnerhttpx.New(&options)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer httpxRunner.Close()
+
+	httpxRunner.RunEnumeration()
+}
+
+func Httpx1(outChans chan string, domain []string) {
+	// Channel để bắt tín hiệu từ hệ điều hành
+	stopChan := make(chan os.Signal, 1)
+	signal.Notify(stopChan, os.Interrupt, syscall.SIGTERM)
+
+	// Tạo WaitGroup để chờ các goroutines hoàn thà
+	// Bắt tín hiệu Ctrl+C
+	go func() {
+		<-stopChan
+		fmt.Println("Received an interrupt, stopping...")
+		os.Exit(1) // Thoát khỏi chương trình ngay lập tức
+	}()
+	gologger.DefaultLogger.SetMaxLevel(levels.LevelVerbose) // increase the verbosity (optional)
+	//gologger.Silent()
+	apiEndpoint := "127.0.0.1:31234"
+
+	options := runnerhttpx.Options{
+		Methods:         "GET",
+		InputTargetHost: goflags.StringSlice(domain),
+		Threads:         1,
+		HttpApiEndpoint: apiEndpoint,
+		OnResult: func(r runnerhttpx.Result) {
+			// handle error
+			if r.Err != nil {
+				fmt.Printf("[Err] %s: %s\n", r.Input, r.Err)
+				return
+			}
+			fmt.Printf("%s * %d * %s \n", r.Input, r.StatusCode, r.Title)
+			outChans <- r.Input
+		},
+	}
+
+	// after 3 seconds increase the speed to 50
+	time.AfterFunc(3*time.Second, func() {
+		client := &http.Client{}
+
+		concurrencySettings := runnerhttpx.Concurrency{Threads: 20}
+		requestBody, err := json.Marshal(concurrencySettings)
+		if err != nil {
+			log.Fatalf("Error creating request body: %v", err)
+		}
+
+		req, err := http.NewRequest("PUT", fmt.Sprintf("http://%s/api/concurrency", apiEndpoint), bytes.NewBuffer(requestBody))
+		if err != nil {
+			log.Fatalf("Error creating PUT request: %v", err)
+		}
+		req.Header.Set("Content-Type", "application/json")
+
+		resp, err := client.Do(req)
+		if err != nil {
+			log.Fatalf("Error sending PUT request: %v", err)
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			log.Printf("Failed to update threads, status code: %d", resp.StatusCode)
+		} else {
+			log.Println("Threads updated to 20 successfully")
+		}
+	})
+
+	if err := options.ValidateOptions(); err != nil {
+		log.Fatal(err)
+	}
+
+	httpxRunner, err := runnerhttpx.New(&options)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer httpxRunner.Close()
+
+	httpxRunner.RunEnumeration()
 }

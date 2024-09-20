@@ -1,0 +1,4427 @@
+{
+  "0.client-channel.google.com": {
+    "domainname": "0.client-channel.google.com",
+    "ips": [
+      "142.251.12.189"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://0.client-channel.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": null
+  },
+  "1.google.com": {
+    "domainname": "1.google.com",
+    "ips": [
+      "142.251.12.113",
+      "142.251.12.102",
+      "142.251.12.138",
+      "142.251.12.139",
+      "142.251.12.101",
+      "142.251.12.100"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://1.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Get More Storage, More AI capabilities, and More Features - Google One"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "23.client-channel.google.com": {
+    "domainname": "23.client-channel.google.com",
+    "ips": [
+      "142.251.10.189"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://23.client-channel.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": null
+  },
+  "6.client-channel.google.com": {
+    "domainname": "6.client-channel.google.com",
+    "ips": [
+      "74.125.68.189"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://6.client-channel.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": null
+  },
+  "7.docs.google.com": {
+    "domainname": "7.docs.google.com",
+    "ips": [
+      "74.125.130.189"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://7.docs.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Sign in - Google Accounts"
+      }
+    },
+    "cname": [
+      "browserchannel-sites.l.google.com."
+    ]
+  },
+  "MAIL.google.com": {
+    "domainname": "MAIL.google.com",
+    "ips": [
+      "74.125.68.19",
+      "74.125.68.17",
+      "74.125.68.83",
+      "74.125.68.18"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://MAIL.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Gmail"
+      }
+    },
+    "cname": null
+  },
+  "account.google.com": {
+    "domainname": "account.google.com",
+    "ips": [
+      "142.251.12.113",
+      "142.251.12.138",
+      "142.251.12.102",
+      "142.251.12.101",
+      "142.251.12.100",
+      "142.251.12.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://account.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Sign in - Google Accounts"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "admin.google.com": {
+    "domainname": "admin.google.com",
+    "ips": [
+      "142.251.10.113",
+      "142.251.10.100",
+      "142.251.10.138",
+      "142.251.10.139",
+      "142.251.10.101",
+      "142.251.10.102"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://admin.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "429 Too Many Requests",
+        "title": "https://admin.google.com/"
+      }
+    },
+    "cname": null
+  },
+  "ads.google.com": {
+    "domainname": "ads.google.com",
+    "ips": [
+      "142.251.12.100",
+      "142.251.12.102",
+      "142.251.12.138",
+      "142.251.12.113",
+      "142.251.12.101",
+      "142.251.12.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://ads.google.com": {
+        "technologydetails": {
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "\n      Google Ads – Thu hút khách hàng và tăng doanh số bán hàng nhờ quảng cáo\n      trực tuyến\n    "
+      }
+    },
+    "cname": null
+  },
+  "analytics-alv.google.com": {
+    "domainname": "analytics-alv.google.com",
+    "ips": [
+      "216.239.38.181",
+      "216.239.32.181",
+      "216.239.36.181",
+      "216.239.34.181"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://analytics-alv.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": null
+  },
+  "analytics.google.com": {
+    "domainname": "analytics.google.com",
+    "ips": [
+      "216.239.38.181",
+      "216.239.32.181",
+      "216.239.36.181",
+      "216.239.34.181"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://analytics.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Redirecting..."
+      }
+    },
+    "cname": [
+      "analytics-alv.google.com."
+    ]
+  },
+  "apikeys.clients6.google.com": {
+    "domainname": "apikeys.clients6.google.com",
+    "ips": [
+      "64.233.170.95"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://apikeys.clients6.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": null
+  },
+  "apps.google.com": {
+    "domainname": "apps.google.com",
+    "ips": [
+      "142.251.12.139",
+      "142.251.12.138",
+      "142.251.12.102",
+      "142.251.12.101",
+      "142.251.12.100",
+      "142.251.12.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://apps.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Workspace | Các công cụ cộng tác và ứng dụng cho doanh nghiệp"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "archive.google.com": {
+    "domainname": "archive.google.com",
+    "ips": [
+      "74.125.24.101",
+      "74.125.24.138",
+      "74.125.24.113",
+      "74.125.24.102",
+      "74.125.24.100",
+      "74.125.24.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://archive.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": null
+  },
+  "blog.google.com": {
+    "domainname": "blog.google.com",
+    "ips": [
+      "74.125.24.191"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://blog.google.com": {
+        "technologydetails": {
+          "Google Cloud": {
+            "Description": "Google Cloud is a suite of cloud computing services.",
+            "Website": "https://cloud.google.com",
+            "CPE": "cpe:2.3:a:google:cloud_platform:*:*:*:*:*:*:*:*",
+            "Icon": "Google Cloud.svg",
+            "Categories": [
+              "IaaS"
+            ]
+          },
+          "Google Cloud Trace": {
+            "Description": "Google Cloud Trace is a distributed tracing system that collects latency data from applications and displays it in the Google Cloud Console.",
+            "Website": "https://cloud.google.com/trace",
+            "CPE": "",
+            "Icon": "google-cloud-trace.svg",
+            "Categories": [
+              "Performance"
+            ]
+          },
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "The Keyword | Google Product and Technology News and Stories"
+      }
+    },
+    "cname": [
+      "www.blogger.com.",
+      "blogger.l.google.com."
+    ]
+  },
+  "blogs.google.com": {
+    "domainname": "blogs.google.com",
+    "ips": null,
+    "portandservice": null,
+    "httporhttps": {
+      "": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "",
+        "title": ""
+      }
+    },
+    "cname": null
+  },
+  "books.google.com": {
+    "domainname": "books.google.com",
+    "ips": [
+      "142.251.175.139",
+      "142.251.175.101",
+      "142.251.175.100",
+      "142.251.175.113",
+      "142.251.175.138",
+      "142.251.175.102"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://books.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Books"
+      }
+    },
+    "cname": null
+  },
+  "business.google.com": {
+    "domainname": "business.google.com",
+    "ips": [
+      "74.125.130.101",
+      "74.125.130.139",
+      "74.125.130.138",
+      "74.125.130.113",
+      "74.125.130.102",
+      "74.125.130.100"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://business.google.com": {
+        "technologydetails": {
+          "Google Analytics": {
+            "Description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+            "Website": "https://google.com/analytics",
+            "CPE": "",
+            "Icon": "Google Analytics.svg",
+            "Categories": [
+              "Analytics"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Update your browser to manage your Business Profile - Google Business Profile Help"
+      }
+    },
+    "cname": null
+  },
+  "calendar.google.com": {
+    "domainname": "calendar.google.com",
+    "ips": [
+      "64.233.170.101",
+      "64.233.170.139",
+      "64.233.170.100",
+      "64.233.170.138",
+      "64.233.170.113",
+      "64.233.170.102"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://calendar.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Calendar - Sign in to Access \u0026 Edit Your Schedule"
+      }
+    },
+    "cname": null
+  },
+  "careers.google.com": {
+    "domainname": "careers.google.com",
+    "ips": [
+      "74.125.130.138",
+      "74.125.130.102",
+      "74.125.130.100",
+      "74.125.130.139",
+      "74.125.130.113",
+      "74.125.130.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://careers.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Build for everyone — Google Careers"
+      }
+    },
+    "cname": null
+  },
+  "chat.google.com": {
+    "domainname": "chat.google.com",
+    "ips": [
+      "172.253.118.100",
+      "172.253.118.113",
+      "172.253.118.138",
+      "172.253.118.139",
+      "172.253.118.101",
+      "172.253.118.102"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://chat.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Sign in - Google Accounts"
+      }
+    },
+    "cname": null
+  },
+  "cloud.google.com": {
+    "domainname": "cloud.google.com",
+    "ips": [
+      "74.125.200.139",
+      "74.125.200.100",
+      "74.125.200.113",
+      "74.125.200.102",
+      "74.125.200.138",
+      "74.125.200.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://cloud.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": ""
+      }
+    },
+    "cname": null
+  },
+  "code.google.com": {
+    "domainname": "code.google.com",
+    "ips": [
+      "142.251.175.101",
+      "142.251.175.100",
+      "142.251.175.102",
+      "142.251.175.138",
+      "142.251.175.113",
+      "142.251.175.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://code.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          },
+          "Material Design Lite": {
+            "Description": "Material Design Lite is a library of components for web developers.",
+            "Website": "https://getmdl.io",
+            "CPE": "",
+            "Icon": "Material Design Lite.png",
+            "Categories": [
+              "UI frameworks"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Code"
+      }
+    },
+    "cname": [
+      "code.l.google.com."
+    ]
+  },
+  "composer-qa.cloud.google.com": {
+    "domainname": "composer-qa.cloud.google.com",
+    "ips": [
+      "142.251.12.102",
+      "142.251.12.101",
+      "142.251.12.100",
+      "142.251.12.138",
+      "142.251.12.139",
+      "142.251.12.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://composer-qa.cloud.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "da-mtv-8.da.ext.google.com": {
+    "domainname": "da-mtv-8.da.ext.google.com",
+    "ips": [
+      "216.239.45.197"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://da-mtv-8.da.ext.google.com": {
+        "technologydetails": {
+          "Microsoft HTTPAPI:2.0": {
+            "Description": "Microsoft HTTPAPI is a kernel-mode HTTP driver in the Windows operating system responsible for handling HTTP requests and responses with efficiency, scalability, and security.",
+            "Website": "https://learn.microsoft.com/en-us/windows/win32/http/http-api-start-page",
+            "CPE": "",
+            "Icon": "Microsoft.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Not Found"
+      }
+    },
+    "cname": null
+  },
+  "da-twd-9.da.ext.google.com": {
+    "domainname": "da-twd-9.da.ext.google.com",
+    "ips": [
+      "72.14.229.214"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://da-twd-9.da.ext.google.com": {
+        "technologydetails": {
+          "Microsoft HTTPAPI:2.0": {
+            "Description": "Microsoft HTTPAPI is a kernel-mode HTTP driver in the Windows operating system responsible for handling HTTP requests and responses with efficiency, scalability, and security.",
+            "Website": "https://learn.microsoft.com/en-us/windows/win32/http/http-api-start-page",
+            "CPE": "",
+            "Icon": "Microsoft.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Not Found"
+      }
+    },
+    "cname": null
+  },
+  "design.google.com": {
+    "domainname": "design.google.com",
+    "ips": [
+      "64.233.170.102",
+      "64.233.170.139",
+      "64.233.170.100",
+      "64.233.170.101",
+      "64.233.170.138",
+      "64.233.170.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://design.google.com": {
+        "technologydetails": {
+          "Google Cloud": {
+            "Description": "Google Cloud is a suite of cloud computing services.",
+            "Website": "https://cloud.google.com",
+            "CPE": "cpe:2.3:a:google:cloud_platform:*:*:*:*:*:*:*:*",
+            "Icon": "Google Cloud.svg",
+            "Categories": [
+              "IaaS"
+            ]
+          },
+          "Google Cloud CDN": {
+            "Description": "Cloud CDN uses Google's global edge network to serve content closer to users.",
+            "Website": "https://cloud.google.com/cdn",
+            "CPE": "",
+            "Icon": "google-cloud-cdn.svg",
+            "Categories": [
+              "CDN"
+            ]
+          },
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "Next.js": {
+            "Description": "Next.js is a React framework for developing single page Javascript applications.",
+            "Website": "https://nextjs.org",
+            "CPE": "cpe:2.3:a:zeit:next.js:*:*:*:*:*:*:*:*",
+            "Icon": "Next.js.svg",
+            "Categories": [
+              "JavaScript frameworks",
+              "Web frameworks",
+              "Web servers",
+              "Static site generator"
+            ]
+          },
+          "Node.js": {
+            "Description": "Node.js is an open-source, cross-platform, JavaScript runtime environment that executes JavaScript code outside a web browser.",
+            "Website": "https://nodejs.org",
+            "CPE": "cpe:2.3:a:nodejs:node.js:*:*:*:*:*:*:*:*",
+            "Icon": "Node.js.svg",
+            "Categories": [
+              "Programming languages"
+            ]
+          },
+          "React": {
+            "Description": "React is an open-source JavaScript library for building user interfaces or UI components.",
+            "Website": "https://reactjs.org",
+            "CPE": "cpe:2.3:a:facebook:react:*:*:*:*:*:*:*:*",
+            "Icon": "React.svg",
+            "Categories": [
+              "JavaScript frameworks"
+            ]
+          },
+          "Webpack": {
+            "Description": "Webpack is an open-source JavaScript module bundler.",
+            "Website": "https://webpack.js.org/",
+            "CPE": "",
+            "Icon": "Webpack.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Design"
+      }
+    },
+    "cname": null
+  },
+  "developer.google.com": {
+    "domainname": "developer.google.com",
+    "ips": [
+      "142.251.10.138",
+      "142.251.10.139",
+      "142.251.10.102",
+      "142.251.10.113",
+      "142.251.10.100",
+      "142.251.10.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://developer.google.com": {
+        "technologydetails": {
+          "Google Cloud": {
+            "Description": "Google Cloud is a suite of cloud computing services.",
+            "Website": "https://cloud.google.com",
+            "CPE": "cpe:2.3:a:google:cloud_platform:*:*:*:*:*:*:*:*",
+            "Icon": "Google Cloud.svg",
+            "Categories": [
+              "IaaS"
+            ]
+          },
+          "Google Cloud Trace": {
+            "Description": "Google Cloud Trace is a distributed tracing system that collects latency data from applications and displays it in the Google Cloud Console.",
+            "Website": "https://cloud.google.com/trace",
+            "CPE": "",
+            "Icon": "google-cloud-trace.svg",
+            "Categories": [
+              "Performance"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google for Developers - from AI and Cloud to Mobile and Web"
+      }
+    },
+    "cname": null
+  },
+  "dl.google.com": {
+    "domainname": "dl.google.com",
+    "ips": [
+      "142.251.175.91",
+      "142.251.175.190",
+      "142.251.175.136",
+      "142.251.175.93"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://dl.google.com": {
+        "technologydetails": {
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Chrome - The Fast \u0026 Secure Web Browser Built to be YoursMenuMenuicon chrome logoclose drawericon chrome logoYoutubeTwitterFacebookGoogleHelp"
+      }
+    },
+    "cname": null
+  },
+  "doc.google.com": {
+    "domainname": "doc.google.com",
+    "ips": [
+      "74.125.130.113",
+      "74.125.130.101",
+      "74.125.130.102",
+      "74.125.130.138",
+      "74.125.130.100",
+      "74.125.130.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://doc.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Sign in - Google Accounts"
+      }
+    },
+    "cname": [
+      "writely.l.google.com."
+    ]
+  },
+  "docs.google.com": {
+    "domainname": "docs.google.com",
+    "ips": [
+      "172.253.118.138",
+      "172.253.118.102",
+      "172.253.118.101",
+      "172.253.118.100",
+      "172.253.118.139",
+      "172.253.118.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://docs.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Sign in - Google Accounts"
+      }
+    },
+    "cname": null
+  },
+  "domains.google.com": {
+    "domainname": "domains.google.com",
+    "ips": [
+      "172.253.118.138",
+      "172.253.118.139",
+      "172.253.118.102",
+      "172.253.118.100",
+      "172.253.118.101",
+      "172.253.118.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://domains.google.com": {
+        "technologydetails": {
+          "Google Analytics": {
+            "Description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+            "Website": "https://google.com/analytics",
+            "CPE": "",
+            "Icon": "Google Analytics.svg",
+            "Categories": [
+              "Analytics"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "About the Squarespace purchase of Google Domains registrations - Google Domains Help"
+      }
+    },
+    "cname": null
+  },
+  "edu.google.com": {
+    "domainname": "edu.google.com",
+    "ips": [
+      "74.125.200.139",
+      "74.125.200.102",
+      "74.125.200.138",
+      "74.125.200.100",
+      "74.125.200.101",
+      "74.125.200.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://edu.google.com": {
+        "technologydetails": {
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          },
+          "Hammer.js": {
+            "Description": "",
+            "Website": "https://hammerjs.github.io",
+            "CPE": "",
+            "Icon": "Hammer.js.png",
+            "Categories": [
+              "JavaScript libraries"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google for Education - Online Resources for Teachers \u0026 Students"
+      }
+    },
+    "cname": null
+  },
+  "education.google.com": {
+    "domainname": "education.google.com",
+    "ips": [
+      "142.251.175.102",
+      "142.251.175.138",
+      "142.251.175.139",
+      "142.251.175.100",
+      "142.251.175.101",
+      "142.251.175.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://education.google.com": {
+        "technologydetails": {
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          },
+          "Hammer.js": {
+            "Description": "",
+            "Website": "https://hammerjs.github.io",
+            "CPE": "",
+            "Icon": "Hammer.js.png",
+            "Categories": [
+              "JavaScript libraries"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google for Education - Online Resources for Teachers \u0026 Students"
+      }
+    },
+    "cname": null
+  },
+  "files.google.com": {
+    "domainname": "files.google.com",
+    "ips": [
+      "142.251.12.100",
+      "142.251.12.138",
+      "142.251.12.113",
+      "142.251.12.139",
+      "142.251.12.101",
+      "142.251.12.102"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://files.google.com": {
+        "technologydetails": {
+          "Bootstrap": {
+            "Description": "Bootstrap is a free and open-source CSS framework directed at responsive, mobile-first front-end web development. It contains CSS and JavaScript-based design templates for typography, forms, buttons, navigation, and other interface components.",
+            "Website": "https://getbootstrap.com",
+            "CPE": "cpe:2.3:a:getbootstrap:bootstrap:*:*:*:*:*:*:*:*",
+            "Icon": "Bootstrap.svg",
+            "Categories": [
+              "UI frameworks"
+            ]
+          },
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Files"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "finance.google.com": {
+    "domainname": "finance.google.com",
+    "ips": [
+      "142.251.12.139",
+      "142.251.12.138",
+      "142.251.12.101",
+      "142.251.12.102",
+      "142.251.12.100",
+      "142.251.12.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://finance.google.com": {
+        "technologydetails": {
+          "Google Analytics": {
+            "Description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+            "Website": "https://google.com/analytics",
+            "CPE": "",
+            "Icon": "Google Analytics.svg",
+            "Categories": [
+              "Analytics"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Finance - Stock Market Prices, Real-time Quotes \u0026 Business News"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "forms.google.com": {
+    "domainname": "forms.google.com",
+    "ips": [
+      "74.125.130.138",
+      "74.125.130.113",
+      "74.125.130.102",
+      "74.125.130.101",
+      "74.125.130.100",
+      "74.125.130.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://forms.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Forms: Sign-in"
+      }
+    },
+    "cname": null
+  },
+  "foto.google.com": {
+    "domainname": "foto.google.com",
+    "ips": [
+      "74.125.24.139",
+      "74.125.24.101",
+      "74.125.24.102",
+      "74.125.24.138",
+      "74.125.24.100",
+      "74.125.24.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://foto.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Photos: Edit, Organize, Search, and Backup Your Photos"
+      }
+    },
+    "cname": null
+  },
+  "games.google.com": {
+    "domainname": "games.google.com",
+    "ips": [
+      "142.251.12.138",
+      "142.251.12.100",
+      "142.251.12.139",
+      "142.251.12.102",
+      "142.251.12.113",
+      "142.251.12.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://games.google.com": {
+        "technologydetails": {
+          "Blogger": {
+            "Description": "Blogger is a blog-publishing service that allows multi-user blogs with time-stamped entries.",
+            "Website": "https://www.blogger.com",
+            "CPE": "",
+            "Icon": "Blogger.png",
+            "Categories": [
+              "Blogs"
+            ]
+          },
+          "Google Analytics": {
+            "Description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+            "Website": "https://google.com/analytics",
+            "CPE": "",
+            "Icon": "Google Analytics.svg",
+            "Categories": [
+              "Analytics"
+            ]
+          },
+          "Google Hosted Libraries": {
+            "Description": "Google Hosted Libraries is a stable, reliable, high-speed, globally available content distribution network for the most popular, open-source JavaScript libraries.",
+            "Website": "https://developers.google.com/speed/libraries",
+            "CPE": "",
+            "Icon": "Google Developers.svg",
+            "Categories": [
+              "CDN"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          },
+          "Java": {
+            "Description": "Java is a class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.",
+            "Website": "https://java.com",
+            "CPE": "cpe:2.3:a:oracle:jre:*:*:*:*:*:*:*:*",
+            "Icon": "Java.svg",
+            "Categories": [
+              "Programming languages"
+            ]
+          },
+          "MailChimp": {
+            "Description": "Mailchimp is a marketing automation platform and email marketing service.",
+            "Website": "https://mailchimp.com",
+            "CPE": "cpe:2.3:a:thinkshout:mailchimp:*:*:*:*:*:*:*:*",
+            "Icon": "mailchimp.svg",
+            "Categories": [
+              "Marketing automation",
+              "Email"
+            ]
+          },
+          "OpenGSE": {
+            "Description": "OpenGSE is a test suite used for testing servlet compliance. It is deployed by using WAR files that are deployed on the server engine.",
+            "Website": "https://code.google.com/p/opengse",
+            "CPE": "",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "Python": {
+            "Description": "Python is an interpreted and general-purpose programming language.",
+            "Website": "https://python.org",
+            "CPE": "cpe:2.3:a:python:python:*:*:*:*:*:*:*:*",
+            "Icon": "Python.png",
+            "Categories": [
+              "Programming languages"
+            ]
+          },
+          "jQuery": {
+            "Description": "jQuery is a JavaScript library which is a free, open-source software designed to simplify HTML DOM tree traversal and manipulation, as well as event handling, CSS animation, and Ajax.",
+            "Website": "https://jquery.com",
+            "CPE": "cpe:2.3:a:jquery:jquery:*:*:*:*:*:*:*:*",
+            "Icon": "jQuery.svg",
+            "Categories": [
+              "JavaScript libraries"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "\nGoogle Workspace Updates: New community features for Google Chat and an update on Currents \n"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "google-proxy-66-102-7-120.google.com": {
+    "domainname": "google-proxy-66-102-7-120.google.com",
+    "ips": [
+      "66.102.7.120"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "",
+        "title": ""
+      }
+    },
+    "cname": null
+  },
+  "google-proxy-74-125-213-110.google.com": {
+    "domainname": "google-proxy-74-125-213-110.google.com",
+    "ips": [
+      "74.125.213.110"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "",
+        "title": ""
+      }
+    },
+    "cname": null
+  },
+  "google.com": {
+    "domainname": "google.com",
+    "ips": [
+      "142.251.12.139",
+      "142.251.12.113",
+      "142.251.12.138",
+      "142.251.12.101",
+      "142.251.12.100",
+      "142.251.12.102"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google"
+      }
+    },
+    "cname": null
+  },
+  "health.google.com": {
+    "domainname": "health.google.com",
+    "ips": [
+      "64.233.170.101",
+      "64.233.170.138",
+      "64.233.170.100",
+      "64.233.170.102",
+      "64.233.170.113",
+      "64.233.170.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://health.google.com": {
+        "technologydetails": {
+          "Google Hosted Libraries": {
+            "Description": "Google Hosted Libraries is a stable, reliable, high-speed, globally available content distribution network for the most popular, open-source JavaScript libraries.",
+            "Website": "https://developers.google.com/speed/libraries",
+            "CPE": "",
+            "Icon": "Google Developers.svg",
+            "Categories": [
+              "CDN"
+            ]
+          },
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          },
+          "Hammer.js": {
+            "Description": "",
+            "Website": "https://hammerjs.github.io",
+            "CPE": "",
+            "Icon": "Hammer.js.png",
+            "Categories": [
+              "JavaScript libraries"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "What Is Google Health? - Google Health"
+      }
+    },
+    "cname": null
+  },
+  "help.google.com": {
+    "domainname": "help.google.com",
+    "ips": [
+      "142.251.12.102",
+      "142.251.12.101",
+      "142.251.12.100",
+      "142.251.12.139",
+      "142.251.12.138",
+      "142.251.12.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://help.google.com": {
+        "technologydetails": {
+          "Google Analytics": {
+            "Description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+            "Website": "https://google.com/analytics",
+            "CPE": "",
+            "Icon": "Google Analytics.svg",
+            "Categories": [
+              "Analytics"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Help"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "history.google.com": {
+    "domainname": "history.google.com",
+    "ips": [
+      "74.125.24.113",
+      "74.125.24.102",
+      "74.125.24.138",
+      "74.125.24.101",
+      "74.125.24.139",
+      "74.125.24.100"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://history.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Welcome to My Activity"
+      }
+    },
+    "cname": [
+      "history.l.google.com."
+    ]
+  },
+  "home.google.com": {
+    "domainname": "home.google.com",
+    "ips": [
+      "142.251.12.101",
+      "142.251.12.139",
+      "142.251.12.100",
+      "142.251.12.138",
+      "142.251.12.113",
+      "142.251.12.102"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://home.google.com": {
+        "technologydetails": {
+          "Google Hosted Libraries": {
+            "Description": "Google Hosted Libraries is a stable, reliable, high-speed, globally available content distribution network for the most popular, open-source JavaScript libraries.",
+            "Website": "https://developers.google.com/speed/libraries",
+            "CPE": "",
+            "Icon": "Google Developers.svg",
+            "Categories": [
+              "CDN"
+            ]
+          },
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          },
+          "Hammer.js": {
+            "Description": "",
+            "Website": "https://hammerjs.github.io",
+            "CPE": "",
+            "Icon": "Hammer.js.png",
+            "Categories": [
+              "JavaScript libraries"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Best Smart Home Devices, Gadgets \u0026 Products - Google Home"
+      }
+    },
+    "cname": null
+  },
+  "hotels.google.com": {
+    "domainname": "hotels.google.com",
+    "ips": [
+      "142.251.12.100",
+      "142.251.12.139",
+      "142.251.12.138",
+      "142.251.12.102",
+      "142.251.12.101",
+      "142.251.12.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://hotels.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Travel"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "image.google.com": {
+    "domainname": "image.google.com",
+    "ips": [
+      "74.125.68.101",
+      "74.125.68.138",
+      "74.125.68.100",
+      "74.125.68.102",
+      "74.125.68.139",
+      "74.125.68.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://image.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google H\ufffdnh ảnh"
+      }
+    },
+    "cname": [
+      "images.google.com.",
+      "images.l.google.com."
+    ]
+  },
+  "images.google.com": {
+    "domainname": "images.google.com",
+    "ips": [
+      "74.125.68.139",
+      "74.125.68.102",
+      "74.125.68.101",
+      "74.125.68.113",
+      "74.125.68.100",
+      "74.125.68.138"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://images.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google H\ufffdnh ảnh"
+      }
+    },
+    "cname": [
+      "images.l.google.com."
+    ]
+  },
+  "images.l.google.com": {
+    "domainname": "images.l.google.com",
+    "ips": [
+      "74.125.68.100",
+      "74.125.68.138",
+      "74.125.68.102",
+      "74.125.68.139",
+      "74.125.68.101",
+      "74.125.68.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "http://images.l.google.com": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": null
+  },
+  "ipv4.google.com": {
+    "domainname": "ipv4.google.com",
+    "ips": [
+      "142.251.10.139",
+      "142.251.10.113",
+      "142.251.10.102",
+      "142.251.10.138",
+      "142.251.10.100",
+      "142.251.10.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://ipv4.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google"
+      }
+    },
+    "cname": [
+      "ipv4.l.google.com."
+    ]
+  },
+  "ipv4.l.google.com": {
+    "domainname": "ipv4.l.google.com",
+    "ips": [
+      "142.251.10.101",
+      "142.251.10.100",
+      "142.251.10.102",
+      "142.251.10.113",
+      "142.251.10.138",
+      "142.251.10.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "http://ipv4.l.google.com": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": null
+  },
+  "jobs.google.com": {
+    "domainname": "jobs.google.com",
+    "ips": [
+      "142.251.12.102",
+      "142.251.12.138",
+      "142.251.12.101",
+      "142.251.12.100",
+      "142.251.12.139",
+      "142.251.12.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://jobs.google.com": {
+        "technologydetails": {
+          "Google Analytics": {
+            "Description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+            "Website": "https://google.com/analytics",
+            "CPE": "",
+            "Icon": "Google Analytics.svg",
+            "Categories": [
+              "Analytics"
+            ]
+          },
+          "Google Hosted Libraries": {
+            "Description": "Google Hosted Libraries is a stable, reliable, high-speed, globally available content distribution network for the most popular, open-source JavaScript libraries.",
+            "Website": "https://developers.google.com/speed/libraries",
+            "CPE": "",
+            "Icon": "Google Developers.svg",
+            "Categories": [
+              "CDN"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Job Search on Google - Get Your Job Postings on Google Today"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "labs.google.com": {
+    "domainname": "labs.google.com",
+    "ips": [
+      "142.251.12.113",
+      "142.251.12.139",
+      "142.251.12.138",
+      "142.251.12.101",
+      "142.251.12.102",
+      "142.251.12.100"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://labs.google.com": {
+        "technologydetails": {
+          "Google Cloud": {
+            "Description": "Google Cloud is a suite of cloud computing services.",
+            "Website": "https://cloud.google.com",
+            "CPE": "cpe:2.3:a:google:cloud_platform:*:*:*:*:*:*:*:*",
+            "Icon": "Google Cloud.svg",
+            "Categories": [
+              "IaaS"
+            ]
+          },
+          "Google Cloud Trace": {
+            "Description": "Google Cloud Trace is a distributed tracing system that collects latency data from applications and displays it in the Google Cloud Console.",
+            "Website": "https://cloud.google.com/trace",
+            "CPE": "",
+            "Icon": "google-cloud-trace.svg",
+            "Categories": [
+              "Performance"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          },
+          "Next.js": {
+            "Description": "Next.js is a React framework for developing single page Javascript applications.",
+            "Website": "https://nextjs.org",
+            "CPE": "cpe:2.3:a:zeit:next.js:*:*:*:*:*:*:*:*",
+            "Icon": "Next.js.svg",
+            "Categories": [
+              "JavaScript frameworks",
+              "Web frameworks",
+              "Web servers",
+              "Static site generator"
+            ]
+          },
+          "Node.js": {
+            "Description": "Node.js is an open-source, cross-platform, JavaScript runtime environment that executes JavaScript code outside a web browser.",
+            "Website": "https://nodejs.org",
+            "CPE": "cpe:2.3:a:nodejs:node.js:*:*:*:*:*:*:*:*",
+            "Icon": "Node.js.svg",
+            "Categories": [
+              "Programming languages"
+            ]
+          },
+          "React": {
+            "Description": "React is an open-source JavaScript library for building user interfaces or UI components.",
+            "Website": "https://reactjs.org",
+            "CPE": "cpe:2.3:a:facebook:react:*:*:*:*:*:*:*:*",
+            "Icon": "React.svg",
+            "Categories": [
+              "JavaScript frameworks"
+            ]
+          },
+          "Webpack": {
+            "Description": "Webpack is an open-source JavaScript module bundler.",
+            "Website": "https://webpack.js.org/",
+            "CPE": "",
+            "Icon": "Webpack.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "LABS.GOOGLE"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "learning.google.com": {
+    "domainname": "learning.google.com",
+    "ips": [
+      "142.251.175.102",
+      "142.251.175.139",
+      "142.251.175.101",
+      "142.251.175.100",
+      "142.251.175.113",
+      "142.251.175.138"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://learning.google.com": {
+        "technologydetails": {
+          "Google Hosted Libraries": {
+            "Description": "Google Hosted Libraries is a stable, reliable, high-speed, globally available content distribution network for the most popular, open-source JavaScript libraries.",
+            "Website": "https://developers.google.com/speed/libraries",
+            "CPE": "",
+            "Icon": "Google Developers.svg",
+            "Categories": [
+              "CDN"
+            ]
+          },
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          },
+          "Hammer.js": {
+            "Description": "",
+            "Website": "https://hammerjs.github.io",
+            "CPE": "",
+            "Icon": "Hammer.js.png",
+            "Categories": [
+              "JavaScript libraries"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Learning -  Digital Learning Tools \u0026 Solutions"
+      }
+    },
+    "cname": null
+  },
+  "local.google.com": {
+    "domainname": "local.google.com",
+    "ips": [
+      "74.125.68.138",
+      "74.125.68.139",
+      "74.125.68.100",
+      "74.125.68.101",
+      "74.125.68.113",
+      "74.125.68.102"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://local.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "  Google Maps  "
+      }
+    },
+    "cname": [
+      "maps.l.google.com."
+    ]
+  },
+  "m.google.com": {
+    "domainname": "m.google.com",
+    "ips": [
+      "142.251.175.193"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://m.google.com": {
+        "technologydetails": {
+          "Google Hosted Libraries": {
+            "Description": "Google Hosted Libraries is a stable, reliable, high-speed, globally available content distribution network for the most popular, open-source JavaScript libraries.",
+            "Website": "https://developers.google.com/speed/libraries",
+            "CPE": "",
+            "Icon": "Google Developers.svg",
+            "Categories": [
+              "CDN"
+            ]
+          },
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          },
+          "Hammer.js": {
+            "Description": "",
+            "Website": "https://hammerjs.github.io",
+            "CPE": "",
+            "Icon": "Hammer.js.png",
+            "Categories": [
+              "JavaScript libraries"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Xem tất cả sản phẩm và dịch vụ của Google - Google"
+      }
+    },
+    "cname": [
+      "mobile.l.google.com."
+    ]
+  },
+  "mail-pl1-f200.google.com": {
+    "domainname": "mail-pl1-f200.google.com",
+    "ips": [
+      "209.85.214.200"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "",
+        "title": ""
+      }
+    },
+    "cname": null
+  },
+  "mail.google.com": {
+    "domainname": "mail.google.com",
+    "ips": [
+      "142.251.10.17",
+      "142.251.10.19",
+      "142.251.10.18",
+      "142.251.10.83"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://mail.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Gmail"
+      }
+    },
+    "cname": null
+  },
+  "manifest.lh3-dd.photos3.sandbox.google.com": {
+    "domainname": "manifest.lh3-dd.photos3.sandbox.google.com",
+    "ips": [
+      "142.251.12.81"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://manifest.lh3-dd.photos3.sandbox.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": null
+  },
+  "map.google.com": {
+    "domainname": "map.google.com",
+    "ips": [
+      "74.125.200.102",
+      "74.125.200.139",
+      "74.125.200.101",
+      "74.125.200.100",
+      "74.125.200.138",
+      "74.125.200.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://map.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "  Google Maps  "
+      }
+    },
+    "cname": [
+      "maps.google.com."
+    ]
+  },
+  "maps.google.com": {
+    "domainname": "maps.google.com",
+    "ips": [
+      "74.125.200.102",
+      "74.125.200.101",
+      "74.125.200.100",
+      "74.125.200.138",
+      "74.125.200.139",
+      "74.125.200.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://maps.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "  Google Maps  "
+      }
+    },
+    "cname": null
+  },
+  "mars.google.com": {
+    "domainname": "mars.google.com",
+    "ips": [
+      "142.251.12.100",
+      "142.251.12.138",
+      "142.251.12.113",
+      "142.251.12.102",
+      "142.251.12.101",
+      "142.251.12.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://mars.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "  Google Maps  "
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "meet.google.com": {
+    "domainname": "meet.google.com",
+    "ips": [
+      "74.125.130.102",
+      "74.125.130.113",
+      "74.125.130.100",
+      "74.125.130.139",
+      "74.125.130.138",
+      "74.125.130.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://meet.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Meet: Hội nghị truyền hình trực tuyến và cuộc gọi trực tuyến trên web | Google Workspace"
+      }
+    },
+    "cname": null
+  },
+  "mobile.google.com": {
+    "domainname": "mobile.google.com",
+    "ips": [
+      "142.251.175.193"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://mobile.google.com": {
+        "technologydetails": {
+          "Google Hosted Libraries": {
+            "Description": "Google Hosted Libraries is a stable, reliable, high-speed, globally available content distribution network for the most popular, open-source JavaScript libraries.",
+            "Website": "https://developers.google.com/speed/libraries",
+            "CPE": "",
+            "Icon": "Google Developers.svg",
+            "Categories": [
+              "CDN"
+            ]
+          },
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          },
+          "Hammer.js": {
+            "Description": "",
+            "Website": "https://hammerjs.github.io",
+            "CPE": "",
+            "Icon": "Hammer.js.png",
+            "Categories": [
+              "JavaScript libraries"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Xem tất cả sản phẩm và dịch vụ của Google - Google"
+      }
+    },
+    "cname": [
+      "mobile.l.google.com."
+    ]
+  },
+  "music.google.com": {
+    "domainname": "music.google.com",
+    "ips": [
+      "142.251.12.101",
+      "142.251.12.138",
+      "142.251.12.139",
+      "142.251.12.113",
+      "142.251.12.100",
+      "142.251.12.102"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://music.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Play Âm nhạc không còn hoạt động nữa"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "news.google.com": {
+    "domainname": "news.google.com",
+    "ips": [
+      "142.251.175.100",
+      "142.251.175.102",
+      "142.251.175.101",
+      "142.251.175.138",
+      "142.251.175.139",
+      "142.251.175.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://news.google.com": {
+        "technologydetails": {
+          "Google Analytics": {
+            "Description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+            "Website": "https://google.com/analytics",
+            "CPE": "",
+            "Icon": "Google Analytics.svg",
+            "Categories": [
+              "Analytics"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google News"
+      }
+    },
+    "cname": null
+  },
+  "ns1.google.com": {
+    "domainname": "ns1.google.com",
+    "ips": [
+      "216.239.32.10"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "",
+        "title": ""
+      }
+    },
+    "cname": null
+  },
+  "ns2.google.com": {
+    "domainname": "ns2.google.com",
+    "ips": [
+      "216.239.34.10"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "",
+        "title": ""
+      }
+    },
+    "cname": null
+  },
+  "ns4.google.com": {
+    "domainname": "ns4.google.com",
+    "ips": [
+      "216.239.38.10"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "",
+        "title": ""
+      }
+    },
+    "cname": null
+  },
+  "orion.google.com": {
+    "domainname": "orion.google.com",
+    "ips": [
+      "64.233.170.113",
+      "64.233.170.139",
+      "64.233.170.102",
+      "64.233.170.138",
+      "64.233.170.100",
+      "64.233.170.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://orion.google.com": {
+        "technologydetails": {
+          "Google Analytics": {
+            "Description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+            "Website": "https://google.com/analytics",
+            "CPE": "",
+            "Icon": "Google Analytics.svg",
+            "Categories": [
+              "Analytics"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Orion Wi-Fi"
+      }
+    },
+    "cname": null
+  },
+  "partners.google.com": {
+    "domainname": "partners.google.com",
+    "ips": [
+      "142.251.12.113",
+      "142.251.12.101",
+      "142.251.12.100",
+      "142.251.12.102",
+      "142.251.12.138",
+      "142.251.12.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://partners.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Partners"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "partnertest.fi.google.com": {
+    "domainname": "partnertest.fi.google.com",
+    "ips": [
+      "64.233.170.101",
+      "64.233.170.138",
+      "64.233.170.139",
+      "64.233.170.100",
+      "64.233.170.113",
+      "64.233.170.102"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://partnertest.fi.google.com": {
+        "technologydetails": {
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "403 Forbidden",
+        "title": "Google Fi Wireless"
+      }
+    },
+    "cname": null
+  },
+  "pay.google.com": {
+    "domainname": "pay.google.com",
+    "ips": [
+      "74.125.24.92"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://pay.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Sign in - Google Accounts"
+      }
+    },
+    "cname": null
+  },
+  "photo.google.com": {
+    "domainname": "photo.google.com",
+    "ips": [
+      "142.251.12.102",
+      "142.251.12.139",
+      "142.251.12.100",
+      "142.251.12.113",
+      "142.251.12.138",
+      "142.251.12.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://photo.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Photos: Edit, Organize, Search, and Backup Your Photos"
+      }
+    },
+    "cname": null
+  },
+  "photos.google.com": {
+    "domainname": "photos.google.com",
+    "ips": [
+      "142.251.12.138",
+      "142.251.12.113",
+      "142.251.12.100",
+      "142.251.12.102",
+      "142.251.12.101",
+      "142.251.12.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://photos.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Photos: Edit, Organize, Search, and Backup Your Photos"
+      }
+    },
+    "cname": null
+  },
+  "play.google.com": {
+    "domainname": "play.google.com",
+    "ips": [
+      "74.125.24.102",
+      "74.125.24.138",
+      "74.125.24.101",
+      "74.125.24.100",
+      "74.125.24.139",
+      "74.125.24.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://play.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Android Apps on Google Play"
+      }
+    },
+    "cname": null
+  },
+  "podcast.google.com": {
+    "domainname": "podcast.google.com",
+    "ips": [
+      "142.251.12.100",
+      "142.251.12.139",
+      "142.251.12.102",
+      "142.251.12.101",
+      "142.251.12.113",
+      "142.251.12.138"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://podcast.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Podcasts"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "r3.sn-npoeenl7.c.docs.google.com": {
+    "domainname": "r3.sn-npoeenl7.c.docs.google.com",
+    "ips": [
+      "74.125.101.104"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "http://r3.sn-npoeenl7.c.docs.google.com": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": null
+  },
+  "r5---sn-vgqskn66.c.pack.google.com": {
+    "domainname": "r5---sn-vgqskn66.c.pack.google.com",
+    "ips": [
+      "173.194.55.202"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://r5---sn-vgqskn66.c.pack.google.com": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": [
+      "r5.sn-vgqskn66.c.pack.google.com."
+    ]
+  },
+  "r5.sn-a5meknzr.c.drive.google.com": {
+    "domainname": "r5.sn-a5meknzr.c.drive.google.com",
+    "ips": [
+      "74.125.157.106"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "http://r5.sn-a5meknzr.c.drive.google.com": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": null
+  },
+  "rate-limited-proxy-108-177-68-220.google.com": {
+    "domainname": "rate-limited-proxy-108-177-68-220.google.com",
+    "ips": [
+      "108.177.68.220"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "",
+        "title": ""
+      }
+    },
+    "cname": null
+  },
+  "rate-limited-proxy-209-85-238-110.google.com": {
+    "domainname": "rate-limited-proxy-209-85-238-110.google.com",
+    "ips": [
+      "209.85.238.110"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "",
+        "title": ""
+      }
+    },
+    "cname": null
+  },
+  "rate-limited-proxy-74-125-151-20.google.com": {
+    "domainname": "rate-limited-proxy-74-125-151-20.google.com",
+    "ips": [
+      "74.125.151.20"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "",
+        "title": ""
+      }
+    },
+    "cname": null
+  },
+  "research.google.com": {
+    "domainname": "research.google.com",
+    "ips": [
+      "142.251.12.138",
+      "142.251.12.102",
+      "142.251.12.101",
+      "142.251.12.113",
+      "142.251.12.139",
+      "142.251.12.100"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://research.google.com": {
+        "technologydetails": {
+          "Google Cloud": {
+            "Description": "Google Cloud is a suite of cloud computing services.",
+            "Website": "https://cloud.google.com",
+            "CPE": "cpe:2.3:a:google:cloud_platform:*:*:*:*:*:*:*:*",
+            "Icon": "Google Cloud.svg",
+            "Categories": [
+              "IaaS"
+            ]
+          },
+          "Google Cloud Trace": {
+            "Description": "Google Cloud Trace is a distributed tracing system that collects latency data from applications and displays it in the Google Cloud Console.",
+            "Website": "https://cloud.google.com/trace",
+            "CPE": "",
+            "Icon": "google-cloud-trace.svg",
+            "Categories": [
+              "Performance"
+            ]
+          },
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          },
+          "Material Design Lite": {
+            "Description": "Material Design Lite is a library of components for web developers.",
+            "Website": "https://getmdl.io",
+            "CPE": "",
+            "Icon": "Material Design Lite.png",
+            "Categories": [
+              "UI frameworks"
+            ]
+          },
+          "YouTube": {
+            "Description": "YouTube is a video sharing service where users can create their own profile, upload videos, watch, like and comment on other videos.",
+            "Website": "https://www.youtube.com",
+            "CPE": "",
+            "Icon": "YouTube.png",
+            "Categories": [
+              "Video players"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Research - Explore Our Latest Research in Science and AI"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "search.google.com": {
+    "domainname": "search.google.com",
+    "ips": [
+      "142.251.12.100",
+      "142.251.12.102",
+      "142.251.12.113",
+      "142.251.12.138",
+      "142.251.12.101",
+      "142.251.12.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://search.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "security.google.com": {
+    "domainname": "security.google.com",
+    "ips": [
+      "142.251.12.101",
+      "142.251.12.139",
+      "142.251.12.113",
+      "142.251.12.102",
+      "142.251.12.100",
+      "142.251.12.138"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://security.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Sign in - Google Accounts"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "services.google.com": {
+    "domainname": "services.google.com",
+    "ips": [
+      "142.251.12.113",
+      "142.251.12.138",
+      "142.251.12.102",
+      "142.251.12.100",
+      "142.251.12.101",
+      "142.251.12.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://services.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "shopping.google.com": {
+    "domainname": "shopping.google.com",
+    "ips": [
+      "142.251.12.92"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://shopping.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Shopping - Shop Online, Compare Prices \u0026 Where to Buy"
+      }
+    },
+    "cname": null
+  },
+  "sites.google.com": {
+    "domainname": "sites.google.com",
+    "ips": [
+      "172.253.118.101",
+      "172.253.118.138",
+      "172.253.118.113",
+      "172.253.118.100",
+      "172.253.118.139",
+      "172.253.118.102"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://sites.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Sites: Sign-in"
+      }
+    },
+    "cname": null
+  },
+  "store.google.com": {
+    "domainname": "store.google.com",
+    "ips": [
+      "172.253.118.139",
+      "172.253.118.101",
+      "172.253.118.102",
+      "172.253.118.100",
+      "172.253.118.113",
+      "172.253.118.138"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://store.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Change your region and language"
+      }
+    },
+    "cname": null
+  },
+  "support.google.com": {
+    "domainname": "support.google.com",
+    "ips": [
+      "74.125.200.102",
+      "74.125.200.113",
+      "74.125.200.100",
+      "74.125.200.138",
+      "74.125.200.101",
+      "74.125.200.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://support.google.com": {
+        "technologydetails": {
+          "Google Analytics": {
+            "Description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+            "Website": "https://google.com/analytics",
+            "CPE": "",
+            "Icon": "Google Analytics.svg",
+            "Categories": [
+              "Analytics"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Help"
+      }
+    },
+    "cname": null
+  },
+  "survey.google.com": {
+    "domainname": "survey.google.com",
+    "ips": [
+      "64.233.170.100",
+      "64.233.170.102",
+      "64.233.170.101",
+      "64.233.170.138",
+      "64.233.170.113",
+      "64.233.170.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://survey.google.com": {
+        "technologydetails": {
+          "Google Analytics": {
+            "Description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+            "Website": "https://google.com/analytics",
+            "CPE": "",
+            "Icon": "Google Analytics.svg",
+            "Categories": [
+              "Analytics"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Surveys Sunset - Google Surveys Help"
+      }
+    },
+    "cname": null
+  },
+  "time.google.com": {
+    "domainname": "time.google.com",
+    "ips": [
+      "216.239.35.4",
+      "216.239.35.8",
+      "216.239.35.12",
+      "216.239.35.0"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://time.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google"
+      }
+    },
+    "cname": null
+  },
+  "tools.google.com": {
+    "domainname": "tools.google.com",
+    "ips": [
+      "142.251.175.101",
+      "142.251.175.100",
+      "142.251.175.102",
+      "142.251.175.138",
+      "142.251.175.113",
+      "142.251.175.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://tools.google.com": {
+        "technologydetails": {
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Chrome - The Fast \u0026 Secure Web Browser Built to be YoursMenuMenuicon chrome logoclose drawericon chrome logoYoutubeTwitterFacebookGoogleHelp"
+      }
+    },
+    "cname": [
+      "tools.l.google.com."
+    ]
+  },
+  "travel.google.com": {
+    "domainname": "travel.google.com",
+    "ips": [
+      "64.233.170.100",
+      "64.233.170.139",
+      "64.233.170.102",
+      "64.233.170.113",
+      "64.233.170.138",
+      "64.233.170.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://travel.google.com": {
+        "technologydetails": {
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Travel"
+      }
+    },
+    "cname": null
+  },
+  "tv.google.com": {
+    "domainname": "tv.google.com",
+    "ips": [
+      "142.251.12.138",
+      "142.251.12.102",
+      "142.251.12.100",
+      "142.251.12.139",
+      "142.251.12.113",
+      "142.251.12.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://tv.google.com": {
+        "technologydetails": {
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google TV | All in one smart TV streaming platform"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "video.google.com": {
+    "domainname": "video.google.com",
+    "ips": [
+      "142.251.10.139",
+      "142.251.10.102",
+      "142.251.10.113",
+      "142.251.10.138",
+      "142.251.10.100",
+      "142.251.10.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://video.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Video"
+      }
+    },
+    "cname": [
+      "video.l.google.com."
+    ]
+  },
+  "vpn.google.com": {
+    "domainname": "vpn.google.com",
+    "ips": [
+      "64.9.224.70",
+      "64.9.224.68",
+      "64.9.224.69"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "",
+        "title": ""
+      }
+    },
+    "cname": null
+  },
+  "webmaster.google.com": {
+    "domainname": "webmaster.google.com",
+    "ips": [
+      "142.251.12.100",
+      "142.251.12.102",
+      "142.251.12.113",
+      "142.251.12.139",
+      "142.251.12.101",
+      "142.251.12.138"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://webmaster.google.com": {
+        "technologydetails": {
+          "Google Cloud": {
+            "Description": "Google Cloud is a suite of cloud computing services.",
+            "Website": "https://cloud.google.com",
+            "CPE": "cpe:2.3:a:google:cloud_platform:*:*:*:*:*:*:*:*",
+            "Icon": "Google Cloud.svg",
+            "Categories": [
+              "IaaS"
+            ]
+          },
+          "Google Cloud Trace": {
+            "Description": "Google Cloud Trace is a distributed tracing system that collects latency data from applications and displays it in the Google Cloud Console.",
+            "Website": "https://cloud.google.com/trace",
+            "CPE": "",
+            "Icon": "google-cloud-trace.svg",
+            "Categories": [
+              "Performance"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Search Central (formerly Webmasters) | Web SEO Resources  |  Google for DevelopersGoogleGoogle"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "work.google.com": {
+    "domainname": "work.google.com",
+    "ips": [
+      "142.251.12.113",
+      "142.251.12.101",
+      "142.251.12.100",
+      "142.251.12.139",
+      "142.251.12.102",
+      "142.251.12.138"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://work.google.com": {
+        "technologydetails": {
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": ""
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "ww.google.com": {
+    "domainname": "ww.google.com",
+    "ips": [
+      "142.251.12.138",
+      "142.251.12.100",
+      "142.251.12.101",
+      "142.251.12.139",
+      "142.251.12.102",
+      "142.251.12.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://ww.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google"
+      }
+    },
+    "cname": [
+      "www3.l.google.com."
+    ]
+  },
+  "www.ads.google.com": {
+    "domainname": "www.ads.google.com",
+    "ips": [
+      "142.251.12.139",
+      "142.251.12.138",
+      "142.251.12.102",
+      "142.251.12.113",
+      "142.251.12.100",
+      "142.251.12.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://www.ads.google.com": {
+        "technologydetails": {
+          "Google Tag Manager": {
+            "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+            "Website": "https://www.google.com/tagmanager",
+            "CPE": "",
+            "Icon": "Google Tag Manager.svg",
+            "Categories": [
+              "Tag managers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "\n      Google Ads – Thu hút khách hàng và tăng doanh số bán hàng nhờ quảng cáo\n      trực tuyến\n    "
+      }
+    },
+    "cname": [
+      "ads.google.com."
+    ]
+  },
+  "www.google.com": {
+    "domainname": "www.google.com",
+    "ips": [
+      "74.125.200.105",
+      "74.125.200.99",
+      "74.125.200.103",
+      "74.125.200.104",
+      "74.125.200.106",
+      "74.125.200.147"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://www.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google"
+      }
+    },
+    "cname": null
+  },
+  "www.images.google.com": {
+    "domainname": "www.images.google.com",
+    "ips": [
+      "74.125.68.138",
+      "74.125.68.101",
+      "74.125.68.100",
+      "74.125.68.102",
+      "74.125.68.113",
+      "74.125.68.139"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "http://www.images.google.com": {
+        "technologydetails": {
+          "Google Web Server": {
+            "Description": "",
+            "Website": "https://en.wikipedia.org/wiki/Google_Web_Server",
+            "CPE": "cpe:2.3:a:google:web_server:*:*:*:*:*:*:*:*",
+            "Icon": "Google.svg",
+            "Categories": [
+              "Web servers"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google H\ufffdnh ảnh"
+      }
+    },
+    "cname": [
+      "images.google.com.",
+      "images.l.google.com."
+    ]
+  },
+  "www.news.google.com": {
+    "domainname": "www.news.google.com",
+    "ips": [
+      "142.251.175.138",
+      "142.251.175.139",
+      "142.251.175.100",
+      "142.251.175.113",
+      "142.251.175.102",
+      "142.251.175.101"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://www.news.google.com": {
+        "technologydetails": {
+          "Google Analytics": {
+            "Description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+            "Website": "https://google.com/analytics",
+            "CPE": "",
+            "Icon": "Google Analytics.svg",
+            "Categories": [
+              "Analytics"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google News"
+      }
+    },
+    "cname": [
+      "news.google.com."
+    ]
+  },
+  "www.support.google.com": {
+    "domainname": "www.support.google.com",
+    "ips": [
+      "216.239.32.27"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "https://www.support.google.com": {
+        "technologydetails": {
+          "Google Analytics": {
+            "Description": "Google Analytics is a free web analytics service that tracks and reports website traffic.",
+            "Website": "https://google.com/analytics",
+            "CPE": "",
+            "Icon": "Google Analytics.svg",
+            "Categories": [
+              "Analytics"
+            ]
+          },
+          "HSTS": {
+            "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+            "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+            "CPE": "",
+            "Icon": "",
+            "Categories": [
+              "Security"
+            ]
+          },
+          "HTTP/3": {
+            "Description": "HTTP/3 is the third major version of the Hypertext Transfer Protocol used to exchange information on the World Wide Web.",
+            "Website": "https://httpwg.org/",
+            "CPE": "",
+            "Icon": "HTTP3.svg",
+            "Categories": [
+              "Miscellaneous"
+            ]
+          }
+        },
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "200 OK",
+        "title": "Google Help"
+      }
+    },
+    "cname": null
+  },
+  "www3.l.google.com": {
+    "domainname": "www3.l.google.com",
+    "ips": [
+      "142.251.12.138",
+      "142.251.12.101",
+      "142.251.12.100",
+      "142.251.12.139",
+      "142.251.12.102",
+      "142.251.12.113"
+    ],
+    "portandservice": null,
+    "httporhttps": {
+      "http://www3.l.google.com": {
+        "technologydetails": {},
+        "link": null,
+        "dirandfile": null,
+        "firewall": "",
+        "ttatus": "404 Not Found",
+        "title": "Error 404 (Not Found)!!1"
+      }
+    },
+    "cname": null
+  }
+}

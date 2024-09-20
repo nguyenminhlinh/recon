@@ -26,7 +26,8 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	utils.CancelRun(cancel)
+	//utils.CancelRun(cancel)
+	utils.StopRun()
 	workDirectory := utils.Getwd()
 
 	// Get command from console
@@ -39,13 +40,13 @@ func main() {
 	fmt.Fprintf(os.Stderr, "%s\n       %+60s\n%s\n", BANNER_HEADER, "Made by MinhLinh", BANNER_SEP)
 	fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "Scanning target", domainName)
 
-	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainBruteForceHttp")
-	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainBruteForceDNS")
-	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainOSINTAmass")
-	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainOSINTSubfinder")
-	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DirAndFileBruteForce")
+	// core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainBruteForceHttp")
+	// core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainBruteForceDNS")
+	// core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainOSINTAmass")
+	// core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainOSINTSubfinder")
+	// core.Core(ctx, cancel, &wg, domainName, workDirectory, "DirAndFileBruteForce")
 
 	wg.Wait()
-	//utils.AllDomain(ctx, workDirectory, domainName)
+	core.ScanDomain(ctx, workDirectory, domainName)
 	fmt.Println("\nComplete all missions ")
 }

@@ -8,12 +8,15 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"recon/utils"
+
 	"strconv"
 	"strings"
 	"sync"
 	"syscall"
 	"time"
+
+	dnsrecon "recon/collector/dns"
+	"recon/utils"
 
 	"github.com/caffix/netmap"
 	"github.com/caffix/stringset"
@@ -28,24 +31,20 @@ import (
 	"github.com/projectdiscovery/subfinder/v2/pkg/runner"
 )
 
-const maxGoroutines = 10    // Limit the number of concurrent goroutines
-const maxChanSemaphore = 10 // Limit the number of elements in the chan semaphore
-const maxChanResults = 10   // Limit the number of elements in chan results
-
 func DomainBruteForceHttp(domain string, wordList string, workDirectory string) {
 	//Using the wrong host to get length web content "C:/Users/minhl/recon/src/data/common.txt"
 	lengthResponse := utils.LengthResponse(domain, "abcdefghiklm."+domain)
 	utils.Ffuf(domain, strconv.Itoa(lengthResponse), workDirectory+"/data/output/DomainBruteForceHttp.txt", "domain", true, 0, wordList)
 }
 
-func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string, results chan<- string, domain string, count *int, mu *sync.Mutex) {
+func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string, results chan<- string, domain string, count *int, mu *sync.Mutex, maxGoroutines int) {
 	defer wg.Done()
 	for {
 		select {
 		case <-ctx.Done(): //If a cancel signal is received from context
 			mu.Lock()
 			(*count)++
-			if *count == maxChanSemaphore {
+			if *count == maxGoroutines {
 				for len(semaphore) > 0 {
 					<-semaphore // Read and skip data until the channel is empty
 				}
@@ -57,7 +56,7 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 			subdomain, ok := <-semaphore
 			if !ok {
 				(*count)++
-				if *count == maxChanSemaphore {
+				if *count == maxGoroutines {
 					for len(semaphore) > 0 {
 						<-semaphore // Read and skip data until the channel is empty
 					}
@@ -66,11 +65,20 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 				//fmt.Println(*count)
 				return
 			} else {
-				responseAnswer := utils.Dig(subdomain+"."+domain, dns.TypeA)
-				//fmt.Println(responseAnswer, subdomain)
-				if len(responseAnswer) != 0 {
-					//fmt.Fprintf(os.Stdout, "Subdomain tồn tại:: %-35s \n", subdomain)
-					results <- subdomain + "." + domain
+				if domain != "" {
+					responseAnswer := dnsrecon.Dig(subdomain+"."+domain, dns.TypeA)
+					//fmt.Println(responseAnswer, subdomain)
+					if len(responseAnswer) != 0 {
+						//fmt.Fprintf(os.Stdout, "Subdomain tồn tại:: %-35s \n", subdomain)
+						results <- subdomain + "." + domain
+					}
+				} else {
+					responseAnswer := dnsrecon.Dig(subdomain, dns.TypeA)
+					//fmt.Println(responseAnswer, subdomain)
+					if len(responseAnswer) != 0 {
+						//fmt.Fprintf(os.Stdout, "Subdomain tồn tại:: %-35s \n", subdomain)
+						results <- subdomain
+					}
 				}
 			}
 		}
@@ -83,6 +91,9 @@ func DomainBruteForceDNS(ctx context.Context, cancel context.CancelFunc, domain 
 	var mu sync.Mutex
 	var countReadFiles int
 	var muReadFiles sync.Mutex
+	const maxGoroutines = 50    // Limit the number of concurrent goroutines
+	const maxChanSemaphore = 50 // Limit the number of elements in the chan semaphore
+	const maxChanResults = 50   // Limit the number of elements in chan results
 	// Create semaphore channel to receive info from file and sen to checkDomain
 	semaphore := make(chan string, maxChanSemaphore)
 	// Create semaphore channel to receive info from checkDomain and send to writeFiles
@@ -95,7 +106,7 @@ func DomainBruteForceDNS(ctx context.Context, cancel context.CancelFunc, domain 
 	// Start goroutines to check the domain
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
-		go checkDomain(ctx, &wg, semaphore, results, domain, &count, &mu)
+		go checkDomain(ctx, &wg, semaphore, results, domain, &count, &mu, maxGoroutines)
 	}
 
 	// Start the goroutine to write the results to the output file
@@ -245,7 +256,20 @@ func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain str
 	}
 }
 
-func DomainOSINTSubfinder(ctx context.Context, cancel context.CancelFunc, domain string, WorkDirectory string) {
+func DomainOSINTSubfinder(ctx context.Context, cancel context.CancelFunc, domain string, workDirectory string) {
+	// Monitor for cancellation by the user
+	go func(c context.Context, f context.CancelFunc) {
+		quit := make(chan os.Signal, 1)
+		signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+		defer signal.Stop(quit)
+		select {
+		case <-quit:
+			f()
+		case <-c.Done():
+		}
+
+	}(ctx, cancel)
+
 	subfinderOpts := &runner.Options{
 		Threads:            10, // Thread controls the number of threads to use for active enumerations
 		Timeout:            30, // Timeout is the seconds to wait for sources to respond
@@ -254,7 +278,7 @@ func DomainOSINTSubfinder(ctx context.Context, cancel context.CancelFunc, domain
 		// ResultCallback: func(s *resolve.HostEntry) {
 		// callback function executed after each unique subdomain is found
 		// },
-		ProviderConfig: WorkDirectory + "/data/input/provider-config.yaml",
+		ProviderConfig: workDirectory + "/data/input/provider-config.yaml",
 		// and other config related options
 	}
 
@@ -268,30 +292,33 @@ func DomainOSINTSubfinder(ctx context.Context, cancel context.CancelFunc, domain
 
 	output := &bytes.Buffer{}
 	// To run subdomain enumeration on a single domain
-	if err = subfinder.EnumerateSingleDomainWithCtx(context.Background(), domain, []io.Writer{output}); err != nil {
+	if err = subfinder.EnumerateSingleDomainWithCtx(ctx, domain, []io.Writer{output}); err != nil {
 		log.Fatalf("failed to enumerate single domain: %v", err)
 	}
 
 	var wg sync.WaitGroup
-	outChans := make(chan string, 50)
-	outChans <- output.String()
-	close(outChans)
+	var count int
+	var mu sync.Mutex
+	outputChans := make(chan string, 50)
+	inputChans := make(chan string, 50)
+	const maxGoroutines = 50 // Limit the number of concurrent goroutines
 
 	// Start the goroutine to write the results to the output file
 	wg.Add(1)
-	go utils.WriteFiles(ctx, &wg, outChans, WorkDirectory+"/data/output/DomainOSINTSubfinder.txt")
+	go utils.WriteFiles(ctx, &wg, outputChans, workDirectory+"/data/output/DomainOSINTSubfinder.txt")
 
-	// Monitor for cancellation by the user
-	go func(c context.Context, f context.CancelFunc) {
-		quit := make(chan os.Signal, 1)
-		signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
-		defer signal.Stop(quit)
-		select {
-		case <-quit:
-			f()
-		case <-c.Done():
+	// Split string into slices based on line breaks
+	domains := strings.Split(output.String(), "\n")
+	go func() {
+		for _, domainLine := range domains {
+			inputChans <- domainLine
 		}
-	}(ctx, cancel)
+		close(inputChans)
+	}()
 
+	for i := 0; i < maxGoroutines; i++ {
+		wg.Add(1)
+		go checkDomain(ctx, &wg, inputChans, outputChans, "", &count, &mu, maxGoroutines)
+	}
 	wg.Wait()
 }
