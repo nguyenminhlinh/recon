@@ -1,7 +1,10 @@
 package dns
 
 import (
+	"fmt"
+	"net"
 	data "recon/data/type"
+	"strconv"
 	"sync"
 	"time"
 
@@ -30,19 +33,53 @@ func Dig(domain string, qtype uint16) []dns.RR {
 	return response.Answer
 }
 
-func GetIpAndcName(wgDomain *sync.WaitGroup, domain string, infoDomain *data.InfoDomain) {
-	domainHaveIPs := Dig(domain, dns.TypeA)
-	if len(domainHaveIPs) != 0 {
-		infoDomain.DomainName = domain
-		for _, DomainHaveIP := range domainHaveIPs {
-			if aRecord, ok := DomainHaveIP.(*dns.A); ok {
-				infoDomain.Ips = append(infoDomain.Ips, aRecord.A.String())
-			} else if cNameRecord, ok := DomainHaveIP.(*dns.CNAME); ok {
-				infoDomain.CName = append(infoDomain.CName, cNameRecord.Target)
+func GetIpAndcName(wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain) {
+	infoDigs := Dig(subDomain, dns.TypeA)
+	if len(infoDigs) != 0 {
+		for _, infoDig := range infoDigs {
+			if aRecord, ok := infoDig.(*dns.A); ok {
+				infoSubDomain.Ips = append(infoSubDomain.Ips, aRecord.A.String())
+			} else if cNameRecord, ok := infoDig.(*dns.CNAME); ok {
+				infoSubDomain.CName = append(infoSubDomain.CName, cNameRecord.Target)
 			}
 		}
-	} else {
-		infoDomain.DomainName = domain
 	}
 	wgDomain.Done()
+}
+
+func DNS(RootDomain string, infoDomain *data.InfoDomain) {
+
+	infoDigsMX := Dig(RootDomain, dns.TypeMX)
+	infoDigsNS := Dig(RootDomain, dns.TypeNS)
+	infoDigsSOA := Dig(RootDomain, dns.TypeSOA)
+
+	if len(infoDigsMX) != 0 {
+		for _, infoDigMX := range infoDigsMX {
+			mx := infoDigMX.(*dns.MX).Mx
+			preference := infoDigMX.(*dns.MX).Preference
+			infoDomain.MXRecords = append(infoDomain.MXRecords, strconv.FormatUint(uint64(preference), 10)+" "+mx)
+		}
+	}
+
+	if len(infoDigsNS) != 0 {
+		for _, infoDigNS := range infoDigsNS {
+			NSRecord := infoDigNS.(*dns.NS).Ns
+			infoDomain.NSRecords = append(infoDomain.NSRecords, NSRecord)
+		}
+	}
+
+	if len(infoDigsSOA) != 0 {
+		for _, infoDigSOA := range infoDigsSOA {
+			ttl := infoDigSOA.(*dns.SOA).Refresh
+			email := infoDigSOA.(*dns.SOA).Mbox
+			infoDomain.SOARecords = append(infoDomain.SOARecords, "ttl: "+strconv.FormatUint(uint64(ttl), 10)+"  email: "+email)
+		}
+	}
+
+	txtRecords, err := net.LookupTXT(RootDomain)
+	if err != nil {
+		fmt.Printf("Error looking up TXT records for %s: %v\n", RootDomain, err)
+	} else {
+		infoDomain.TXTRecords = txtRecords
+	}
 }

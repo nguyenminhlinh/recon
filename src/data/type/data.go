@@ -11,12 +11,19 @@ type InfoWeb struct {
 	Title             string                        `json:"title"`
 }
 
-type InfoDomain struct {
-	DomainName     string             `json:"domainname"`
+type InfoSubDomain struct {
 	Ips            []string           `json:"ips"`
 	PortAndService map[string]string  `json:"portandservice"`
 	HttpOrHttps    map[string]InfoWeb `json:"httporhttps"`
 	CName          []string           `json:"cname"`
+}
+
+type InfoDomain struct {
+	MXRecords  []string                 `json:"mxrecords"`
+	NSRecords  []string                 `json:"nsrecords"`
+	SOARecords []string                 `json:"soarecords"`
+	TXTRecords []string                 `json:"txtrecords"`
+	SubDomain  map[string]InfoSubDomain `json:"subdomain"`
 }
 
 var ListDomain = make(map[string]InfoDomain)

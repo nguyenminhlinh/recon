@@ -7,6 +7,7 @@ import (
 	"recon/core"
 	"recon/utils"
 	"sync"
+	"time"
 )
 
 const (
@@ -21,6 +22,7 @@ const (
 )
 
 func main() {
+	start := time.Now()
 	var wg sync.WaitGroup
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -47,6 +49,8 @@ func main() {
 	// core.Core(ctx, cancel, &wg, domainName, workDirectory, "DirAndFileBruteForce")
 
 	wg.Wait()
+
 	core.ScanDomain(ctx, workDirectory, domainName)
-	fmt.Println("\nComplete all missions ")
+	elapsed := time.Since(start)
+	fmt.Println("\nComplete all missions with time ", elapsed)
 }

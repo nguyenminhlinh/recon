@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 
 	"recon/collector/dir"
@@ -13,7 +14,6 @@ import (
 	"recon/collector/tech"
 	data "recon/data/type"
 	"recon/utils"
-
 	"sync"
 	"time"
 
@@ -58,30 +58,99 @@ func Core(ctx context.Context, cancel context.CancelFunc, wg *sync.WaitGroup, do
 	}()
 }
 
-func AllOfInformationOfDomain(wg1 *sync.WaitGroup, ctx context.Context, workDirectory string, domainsChan chan string) {
+func InformationOfAllSubDomain(wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain) {
 	defer wg1.Done()
 	var wg sync.WaitGroup
-	const maxGoroutines = 20 // Limit the number of concurrent goroutines
+	const maxGoroutines = 10 // Limit the number of concurrent goroutines
+
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
 		go func() {
-			for domain := range domainsChan {
-				var wgDomain sync.WaitGroup
-				infoDomain := data.ListDomain[domain]
+			for subDomain := range subDomainChan {
+				var wgsubDomain sync.WaitGroup
+				infoSubDomain := infoAllSubDomain[subDomain]
+				wgsubDomain.Add(1)
+				go dns.GetIpAndcName(&wgsubDomain, subDomain, &infoSubDomain) //Get Ip,cName
 
-				wgDomain.Add(1)
-				go dns.GetIpAndcName(&wgDomain, domain, &infoDomain) //Get Ip,cName
+				wgsubDomain.Add(1)
+				go tech.HttpxSimple(&wgsubDomain, subDomain, &infoSubDomain) //Get tech,title,status
 
-				wgDomain.Add(1)
-				go tech.HttpxSimple(&wgDomain, domain, &infoDomain) //Get tech,title,status
-
-				wgDomain.Wait()
-				data.ListDomain[domain] = infoDomain //Assignment new item into map
+				wgsubDomain.Wait()
+				infoAllSubDomain[subDomain] = infoSubDomain //Assignment new item into map
 			}
 			wg.Done()
+
 		}()
 	}
+
 	wg.Wait()
+}
+
+func ScanDomain(ctx context.Context, workDirectory string, rootDomain string) {
+	start := time.Now()
+	fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "ScanDomain", "Running....")
+
+	var wg sync.WaitGroup
+	var count int
+	var mu sync.Mutex
+	subDomainsFile := make(chan string, 50)
+	subDomainChan := make(chan string, 50)
+	// Create map to store unique line
+	subDomainsMap := make(map[string]bool)
+
+	wg.Add(1)
+	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DomainBruteForceDNS.txt", subDomainsFile, &count, &mu, 4)
+	wg.Add(1)
+	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DomainBruteForceHttp.txt", subDomainsFile, &count, &mu, 4)
+	wg.Add(1)
+	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DomainOSINTAmass.txt", subDomainsFile, &count, &mu, 4)
+	wg.Add(1)
+	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DomainOSINTSubfinder.txt", subDomainsFile, &count, &mu, 4)
+
+	wg.Add(1)
+	go func() {
+		for subDomain := range subDomainsFile {
+			line := strings.TrimSpace(subDomain)
+			//Add new line if don"t have
+			if line != "" {
+				subDomainsMap[line] = true
+			}
+		}
+		wg.Done()
+	}()
+
+	wg.Wait()
+	// create slice containing the key
+	var subDomains []string
+	for subDomainMap := range subDomainsMap {
+		subDomains = append(subDomains, subDomainMap)
+	}
+
+	// Sort slice keys
+	sort.Strings(subDomains)
+	var wg1 sync.WaitGroup
+	infoDomain := data.ListDomain[rootDomain]
+
+	if infoDomain.SubDomain == nil {
+		infoDomain.SubDomain = make(map[string]data.InfoSubDomain)
+	}
+	dns.DNS(rootDomain, &infoDomain) //Get information dns of rootdomain
+
+	data.ListDomain[rootDomain] = infoDomain
+
+	wg1.Add(1)
+	go func() {
+		for _, subDomain := range subDomains {
+			subDomainChan <- subDomain
+		}
+		close(subDomainChan)
+		wg1.Done()
+	}()
+	wg1.Add(1)
+	go InformationOfAllSubDomain(&wg1, subDomainChan, infoDomain.SubDomain)
+
+	wg1.Wait()
+
 	// Convert ListDomain to JSON and write to file
 	file, err := os.Create("list_domain.json")
 	if err != nil {
@@ -96,51 +165,13 @@ func AllOfInformationOfDomain(wg1 *sync.WaitGroup, ctx context.Context, workDire
 	if err != nil {
 		fmt.Println("Error encoding JSON:", err)
 	}
-	//fmt.Println(data.ListDomain)
-}
-
-func ScanDomain(ctx context.Context, workDirectory string, Domain string) map[string]bool {
-	var wg sync.WaitGroup
-	var count int
-	var mu sync.Mutex
-	outputChan := make(chan string, 50)
-	inputChan := make(chan string, 50)
-	// Create map to store unique line
-	uniqueLines := make(map[string]bool)
-
-	wg.Add(1)
-	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DomainBruteForceDNS.txt", outputChan, &count, &mu, 4)
-	wg.Add(1)
-	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DomainBruteForceHttp.txt", outputChan, &count, &mu, 4)
-	wg.Add(1)
-	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DomainOSINTAmass.txt", outputChan, &count, &mu, 4)
-	wg.Add(1)
-	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DomainOSINTSubfinder.txt", outputChan, &count, &mu, 4)
-
-	wg.Add(1)
-	go func() {
-		for domain := range outputChan {
-			line := strings.TrimSpace(domain)
-			//Add new line if don"t have
-			if line != "" {
-				uniqueLines[line] = true
-			}
-		}
-		wg.Done()
-	}()
-
-	wg.Wait()
-	var wg1 sync.WaitGroup
-	wg1.Add(1)
-	go func() {
-		for domain := range uniqueLines {
-			inputChan <- domain
-		}
-		close(inputChan)
-		wg1.Done()
-	}()
-	wg1.Add(1)
-	go AllOfInformationOfDomain(&wg1, ctx, workDirectory, inputChan)
-	wg1.Wait()
-	return uniqueLines
+	elapsed := time.Since(start)
+	select {
+	case <-ctx.Done():
+		// If a signal is received from the context
+		fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "ScanDomain", red("Finished due to cancellation in "), elapsed)
+	default:
+		// If there is no cancel signal, take another action
+		fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "ScanDomain", green("Finished successfully in "), elapsed)
+	}
 }

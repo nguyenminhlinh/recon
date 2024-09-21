@@ -71,14 +71,14 @@ func extractTitle(resp *http.Response) string {
 	return title
 }
 
-func HttpxSimple(wgDomain *sync.WaitGroup, domain string, InfoDomain *data.InfoDomain) {
-	url, status, title, tech := HttpAndHttps(domain)
+func HttpxSimple(wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain) {
+	url, status, title, tech := HttpAndHttps(subDomain)
 
-	if InfoDomain.HttpOrHttps == nil {
-		InfoDomain.HttpOrHttps = make(map[string]data.InfoWeb)
+	if infoSubDomain.HttpOrHttps == nil {
+		infoSubDomain.HttpOrHttps = make(map[string]data.InfoWeb)
 	}
 
-	infoWeb := InfoDomain.HttpOrHttps[url]
+	infoWeb := infoSubDomain.HttpOrHttps[url]
 	infoWeb.Status = status
 	infoWeb.Title = title
 	if infoWeb.TechnologyDetails == nil {
@@ -89,8 +89,9 @@ func HttpxSimple(wgDomain *sync.WaitGroup, domain string, InfoDomain *data.InfoD
 		infoWeb.TechnologyDetails[key] = value
 	}
 
-	InfoDomain.HttpOrHttps[url] = infoWeb
-	wgDomain.Done()
+	infoSubDomain.HttpOrHttps[url] = infoWeb
+
+	wgSubDomain.Done()
 }
 
 // func HttpxSimple(wgDomain *sync.WaitGroup, domain string, InfoDomain *data.InfoDomain) {
