@@ -1,10 +1,15 @@
 package dns
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net"
+	"net/http"
+	"recon/collector/port"
 	data "recon/data/type"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -33,16 +38,28 @@ func Dig(domain string, qtype uint16) []dns.RR {
 	return response.Answer
 }
 
-func GetIpAndcName(wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain) {
+func GetIpAndcName(wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string) {
 	infoDigs := Dig(subDomain, dns.TypeA)
+	flagScanPort := false
 	if len(infoDigs) != 0 {
 		for _, infoDig := range infoDigs {
 			if aRecord, ok := infoDig.(*dns.A); ok {
-				infoSubDomain.Ips = append(infoSubDomain.Ips, aRecord.A.String())
+				ip := aRecord.A.String()
+				checkIntermediaryIp, nameOrganisation := CheckIntermediaryIp(ip, cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs)
+				if checkIntermediaryIp {
+					infoSubDomain.Ips = append(infoSubDomain.Ips, ip+" : "+nameOrganisation)
+				} else {
+					infoSubDomain.Ips = append(infoSubDomain.Ips, ip)
+					//fmt.Println("Scan domain by nmap")
+					flagScanPort = true //If domain have ip is not intermediary ip
+				}
 			} else if cNameRecord, ok := infoDig.(*dns.CNAME); ok {
 				infoSubDomain.CName = append(infoSubDomain.CName, cNameRecord.Target)
 			}
 		}
+	}
+	if flagScanPort {
+		port.ScanPortAndService()
 	}
 	wgDomain.Done()
 }
@@ -81,5 +98,175 @@ func DNS(RootDomain string, infoDomain *data.InfoDomain) {
 		fmt.Printf("Error looking up TXT records for %s: %v\n", RootDomain, err)
 	} else {
 		infoDomain.TXTRecords = txtRecords
+	}
+}
+
+// Cloudflare IP list structure
+type CloudflareIPs struct {
+	Addresses []string `json:"addresses"`
+}
+
+// Fastly IP list structure
+type IncapsulaIPs struct {
+	IpRanges []string `json:"ipRanges"`
+}
+
+type AWSCloudFrontIPs struct {
+	Prefixes []struct {
+		IPPrefix string `json:"ip_prefix"`
+		Service  string `json:"service"`
+	} `json:"prefixes"`
+}
+
+// Fastly IP list structure
+type GcoreIPs struct {
+	Addresses []string `json:"addresses"`
+}
+
+// Fastly IP list structure
+type FastlyIPs struct {
+	Addresses []string `json:"addresses"`
+}
+
+func getCloudflareIPs() ([]string, error) {
+	resp, err := http.Get("https://www.cloudflare.com/ips-v4")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	cloudFlare := strings.Split(string(body), "\n")
+	return cloudFlare, nil
+}
+
+func getIncapsulaIPs() ([]string, error) {
+	resp, err := http.Get("https://my.imperva.com/api/integration/v1/ips")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var incapsula IncapsulaIPs
+	if err := json.NewDecoder(resp.Body).Decode(&incapsula); err != nil {
+		return nil, err
+	}
+
+	return incapsula.IpRanges, nil
+}
+
+func getAWSCloudFrontIPs() ([]string, error) {
+	resp, err := http.Get("https://ip-ranges.amazonaws.com/ip-ranges.json")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var AWSCloudFront AWSCloudFrontIPs
+	if err := json.NewDecoder(resp.Body).Decode(&AWSCloudFront); err != nil {
+		return nil, err
+	}
+
+	var ipPrefixes []string
+	for _, prefix := range AWSCloudFront.Prefixes {
+		if strings.Contains(strings.ToLower(prefix.Service), "cloudfront") {
+			ipPrefixes = append(ipPrefixes, prefix.IPPrefix)
+		}
+	}
+	return ipPrefixes, nil
+}
+
+func getGcoreIPs() ([]string, error) {
+	resp, err := http.Get("https://api.gcore.com/cdn/public-ip-list")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var gcore GcoreIPs
+	if err := json.NewDecoder(resp.Body).Decode(&gcore); err != nil {
+		return nil, err
+	}
+
+	return gcore.Addresses, nil
+}
+
+func getFastlyIPs() ([]string, error) {
+	resp, err := http.Get("https://api.fastly.com/public-ip-list")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var fastly FastlyIPs
+	if err := json.NewDecoder(resp.Body).Decode(&fastly); err != nil {
+		return nil, err
+	}
+
+	return fastly.Addresses, nil
+}
+
+func isIPInRange(ip string, ranges []string) bool {
+	ipAddr := net.ParseIP(ip)
+	if ipAddr == nil {
+		fmt.Printf("Invalid IP address: %s\n", ip)
+		return false
+	}
+
+	for _, r := range ranges {
+		_, netRange, err := net.ParseCIDR(r)
+		if err != nil {
+			fmt.Printf("Error parsing CIDR: %s\n", r)
+			continue // Bỏ qua dải IP không hợp lệ
+		}
+		if netRange.Contains(ipAddr) {
+			return true
+		}
+	}
+	return false
+}
+
+func GetIntermediaryIpRange() ([]string, []string, []string, []string, []string) {
+	cloudflareIPs, err := getCloudflareIPs()
+	if err != nil {
+		fmt.Println("Error getting Cloudflare IPs:", err)
+	}
+	incapsulaIPs, err := getIncapsulaIPs()
+	if err != nil {
+		fmt.Println("Error getting Cloudflare IPs:", err)
+	}
+	//fmt.Println(cloudflareIPs)
+	awsCloudFrontIPs, err := getAWSCloudFrontIPs()
+	if err != nil {
+		fmt.Println("Error getting AWSCloudFront IPs:", err)
+	}
+
+	gcoreIPs, err := getGcoreIPs()
+	if err != nil {
+		fmt.Println("Error getting AWSCloudFront IPs:", err)
+	}
+	fastlyIPs, err := getFastlyIPs()
+	if err != nil {
+		fmt.Println("Error getting Fastly IPs:", err)
+	}
+	// fmt.Println(fastlyIPs)
+	return cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs
+}
+
+func CheckIntermediaryIp(ipToCheck string, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string) (bool, string) {
+	if isIPInRange(ipToCheck, *cloudflareIPs) {
+		return true, "cloudflareIPs"
+	} else if isIPInRange(ipToCheck, *incapsulaIPs) {
+		return true, "IncapsulaIPs"
+	} else if isIPInRange(ipToCheck, *awsCloudFrontIPs) {
+		return true, "awsCloudFrontIPs"
+	} else if isIPInRange(ipToCheck, *gcoreIPs) {
+		return true, "GcoreIPs"
+	} else if isIPInRange(ipToCheck, *fastlyIPs) {
+		return true, "fastlyIPs"
+	} else {
+		return false, ""
 	}
 }

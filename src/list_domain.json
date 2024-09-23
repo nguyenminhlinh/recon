@@ -1,0 +1,993 @@
+{
+  "hackerone.com": {
+    "mxrecords": [
+      "30 aspmx3.googlemail.com.",
+      "20 alt1.aspmx.l.google.com.",
+      "10 aspmx.l.google.com.",
+      "20 alt2.aspmx.l.google.com.",
+      "30 aspmx2.googlemail.com."
+    ],
+    "nsrecords": [
+      "b.ns.hackerone.com.",
+      "a.ns.hackerone.com."
+    ],
+    "soarecords": [
+      "ttl: 10000  email: dns.cloudflare.com."
+    ],
+    "txtrecords": [
+      "ethiack-verification=90a57e39678d110483d6af677032a2b66f098cf58f74d64f924ecbc1e2c251afe0006eaa1ea5b527973d46d3c2f258907e1fc47a22681d64abbfd3180f0c4c8c",
+      "h1-domain-verification=LDEQA8SYNEMgdUN1kfMtjFNptDJcnjKN8LxNHCN3JNvT5Fxo",
+      "google-site-verification=kOO_QjqFZ7fbwXaF0PiMcK2OMQL5nTVBiM21SsO9Olk",
+      "google-site-verification=mKdqQzjtY7X20BzUFnhAmFU2pmtFJ_Zie_S22FiwubA",
+      "4b7570f2564f4074b42872e1d78668ad",
+      "70gn9hp69jzpn3nkp42r8n9jwwtd1d70",
+      "wayback=verification for request #673161",
+      "slack-domain-verification=cQndsOjWj4XDM9icHSNlvtrh3r1jfQMQTfhDNxiz",
+      "MS=ms75772789",
+      "stripe-verification=20c821f6e4dfc5ee358ea9b8e4635cf062a2acac5751f8004d23b122f1cb5ac2",
+      "zapier-domain-verification-challenge=d1be5c1b-f415-418f-9542-abc14d8321af",
+      "ZOOM_verify_pzZpSwKqRx6pAD9lLkSl5g",
+      "adobe-idp-site-verification=5d77b0274800290cf193145126595b14308358f46dfe90eba5e298f99d32d2fc",
+      "v=spf1 include:_spf.google.com include:amazonses.com include:mail.zendesk.com include:spf.mail.intercom.io include:mktomail.com include:registrarmail.net -all",
+      "google-site-verification=3LAOq3Z_u6zVOJHlZW0I7tuQpCPvZHC9JBZMk3e20mk",
+      "wework-site-verification=e0czKzmn7ul5Cr9A",
+      "cloudpiercer-verification=32e7eea9d2f153b176b182626588bc77",
+      "c06l6z7hp4vk6bzpqb1j6b8w1m64nf84",
+      "apple-domain-verification=YOO9EuQfVRiqtbWi",
+      "drift-domain-verification=18fef5450d713c159ad9f6309fa338d298c11edd56fb22e343d758fb5f58437f",
+      "citrix-verification-code=9c920630-2d05-4154-b72a-1021665d3b58",
+      "atlassian-domain-verification=JpJ4g3munTo9KsuR3Elcdpn97c+KQV7KDjj2YmE+ULiWhGlcfA5f1ivoC0W2puQk",
+      "box-domain-verification=8b89b955ef91d29f746acc1a7147aa9490922028fcf458e98b62aa769136d99b",
+      "onetrust-domain-verification=0be23834ba1d435eb1748ba6b36d8b0c",
+      "docusign=848c7864-3a91-42aa-8e30-2671086f7516",
+      "facebook-domain-verification=niq4ke9m7djq4jt36f02t093aig8a5",
+      "stripe-verification=74802599834dfbfc093c8352686c992d22e7b20a6fdcfceac2e6a846074d6936",
+      "0q8zpfvc64swgyy9wwwrjl7vgwrfffbf"
+    ],
+    "subdomain": {
+      "WWW.hackerone.com": {
+        "ips": [
+          "104.18.36.214 : cloudflareIPs",
+          "172.64.151.42 : cloudflareIPs"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "https://WWW.hackerone.com": {
+            "technologydetails": {
+              "Cloudflare": {
+                "Description": "Cloudflare is a web-infrastructure and website-security company, providing content-delivery-network services, DDoS mitigation, Internet security, and distributed domain-name-server services.",
+                "Website": "https://www.cloudflare.com",
+                "CPE": "cpe:2.3:a:cloudflare:cloudflare:*:*:*:*:*:*:*:*",
+                "Icon": "CloudFlare.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "Drupal:10": {
+                "Description": "Drupal is a free and open-source web content management framework.",
+                "Website": "https://www.drupal.org/",
+                "CPE": "cpe:2.3:a:drupal:drupal:*:*:*:*:*:*:*:*",
+                "Icon": "Drupal.svg",
+                "Categories": [
+                  "CMS"
+                ]
+              },
+              "Fastly": {
+                "Description": "Fastly is a cloud computing services provider. Fastly's cloud platform provides a content delivery network, Internet security services, load balancing, and video \u0026 streaming services.",
+                "Website": "https://www.fastly.com",
+                "CPE": "cpe:2.3:a:fastly:fastly:*:*:*:*:*:*:*:*",
+                "Icon": "Fastly.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "Google Tag Manager": {
+                "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+                "Website": "https://www.google.com/tagmanager",
+                "CPE": "",
+                "Icon": "Google Tag Manager.svg",
+                "Categories": [
+                  "Tag managers"
+                ]
+              },
+              "HSTS": {
+                "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+                "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+                "CPE": "",
+                "Icon": "",
+                "Categories": [
+                  "Security"
+                ]
+              },
+              "MariaDB": {
+                "Description": "MariaDB is an open-source relational database management system compatible with MySQL.",
+                "Website": "https://mariadb.org",
+                "CPE": "cpe:2.3:a:mariadb_project:mariadb:*:*:*:*:*:*:*:*",
+                "Icon": "mariadb.svg",
+                "Categories": [
+                  "Databases"
+                ]
+              },
+              "Marketo Forms:2": {
+                "Description": "Marketo Forms help create web forms without programming knowledge. Forms can reside on Marketo landing pages and also be embedded on any page of website.",
+                "Website": "https://www.marketo.com",
+                "CPE": "",
+                "Icon": "Marketo.svg",
+                "Categories": [
+                  "Widgets",
+                  "Form builders"
+                ]
+              },
+              "Nginx": {
+                "Description": "Nginx is a web server that can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.",
+                "Website": "https://nginx.org/en",
+                "CPE": "cpe:2.3:a:f5:nginx:*:*:*:*:*:*:*:*",
+                "Icon": "Nginx.svg",
+                "Categories": [
+                  "Web servers",
+                  "Reverse proxies"
+                ]
+              },
+              "Optimizely": {
+                "Description": "Optimizely is an experimentation platform that helps developers build and run A/B tests on websites.",
+                "Website": "https://www.optimizely.com",
+                "CPE": "",
+                "Icon": "Optimizely.svg",
+                "Categories": [
+                  "A/B Testing",
+                  "Personalisation"
+                ]
+              },
+              "PHP": {
+                "Description": "PHP is a general-purpose scripting language used for web development.",
+                "Website": "https://php.net",
+                "CPE": "cpe:2.3:a:php:php:*:*:*:*:*:*:*:*",
+                "Icon": "PHP.svg",
+                "Categories": [
+                  "Programming languages"
+                ]
+              },
+              "Pantheon": {
+                "Description": "Pantheon is a WebOps (Website Operations) and Management Platform for WordPress and Drupal.",
+                "Website": "https://pantheon.io/",
+                "CPE": "",
+                "Icon": "Pantheon.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "TrustArc": {
+                "Description": "TrustArc provides software and services to help corporations update their privacy management processes so they comply with government laws and best practices.",
+                "Website": "https://trustarc.com",
+                "CPE": "",
+                "Icon": "TrustArc.svg",
+                "Categories": [
+                  "Cookie compliance"
+                ]
+              },
+              "Varnish": {
+                "Description": "Varnish is a reverse caching proxy.",
+                "Website": "https://www.varnish-cache.org",
+                "CPE": "cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*",
+                "Icon": "Varnish.svg",
+                "Categories": [
+                  "Caching"
+                ]
+              },
+              "YouTube": {
+                "Description": "YouTube is a video sharing service where users can create their own profile, upload videos, watch, like and comment on other videos.",
+                "Website": "https://www.youtube.com",
+                "CPE": "",
+                "Icon": "YouTube.png",
+                "Categories": [
+                  "Video players"
+                ]
+              }
+            },
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "200 OK",
+            "title": "HackerOne | #1 Trusted Security Platform and Hacker Program"
+          }
+        },
+        "cname": null
+      },
+      "a.ns.hackerone.com": {
+        "ips": [
+          "162.159.0.31 : cloudflareIPs"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": null
+      },
+      "api.hackerone.com": {
+        "ips": [
+          "104.18.36.214 : cloudflareIPs",
+          "172.64.151.42 : cloudflareIPs"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "https://api.hackerone.com": {
+            "technologydetails": {
+              "Algolia": {
+                "Description": "Algolia offers a hosted web search product delivering real-time results.",
+                "Website": "https://www.algolia.com",
+                "CPE": "",
+                "Icon": "Algolia.svg",
+                "Categories": [
+                  "Search engines"
+                ]
+              },
+              "Cloudflare": {
+                "Description": "Cloudflare is a web-infrastructure and website-security company, providing content-delivery-network services, DDoS mitigation, Internet security, and distributed domain-name-server services.",
+                "Website": "https://www.cloudflare.com",
+                "CPE": "cpe:2.3:a:cloudflare:cloudflare:*:*:*:*:*:*:*:*",
+                "Icon": "CloudFlare.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "HSTS": {
+                "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+                "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+                "CPE": "",
+                "Icon": "",
+                "Categories": [
+                  "Security"
+                ]
+              },
+              "jsDelivr": {
+                "Description": "JSDelivr is a free public CDN for open-source projects. It can serve web files directly from the npm registry and GitHub repositories without any configuration.",
+                "Website": "https://www.jsdelivr.com/",
+                "CPE": "",
+                "Icon": "jsdelivr-icon.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              }
+            },
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "200 OK",
+            "title": "HackerOne API"
+          }
+        },
+        "cname": null
+      },
+      "b.ns.hackerone.com": {
+        "ips": [
+          "162.159.1.31 : cloudflareIPs"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": null
+      },
+      "docs.hackerone.com": {
+        "ips": [
+          "104.18.36.214 : cloudflareIPs",
+          "172.64.151.42 : cloudflareIPs"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "https://docs.hackerone.com": {
+            "technologydetails": {
+              "Cloudflare": {
+                "Description": "Cloudflare is a web-infrastructure and website-security company, providing content-delivery-network services, DDoS mitigation, Internet security, and distributed domain-name-server services.",
+                "Website": "https://www.cloudflare.com",
+                "CPE": "cpe:2.3:a:cloudflare:cloudflare:*:*:*:*:*:*:*:*",
+                "Icon": "CloudFlare.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "HSTS": {
+                "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+                "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+                "CPE": "",
+                "Icon": "",
+                "Categories": [
+                  "Security"
+                ]
+              }
+            },
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "200 OK",
+            "title": "HackerOne Help Center"
+          }
+        },
+        "cname": null
+      },
+      "forwarding.hackerone.com": {
+        "ips": null,
+        "portandservice": null,
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": null
+      },
+      "gsemail.hackerone.com": {
+        "ips": null,
+        "portandservice": null,
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": [
+          "u18966564.wl065.sendgrid.net."
+        ]
+      },
+      "gslink.hackerone.com": {
+        "ips": [
+          "3.165.82.108 : awsCloudFrontIPs",
+          "3.165.82.44 : awsCloudFrontIPs",
+          "3.165.82.41 : awsCloudFrontIPs",
+          "3.165.82.76 : awsCloudFrontIPs"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "https://gslink.hackerone.com": {
+            "technologydetails": {
+              "Amazon CloudFront": {
+                "Description": "Amazon CloudFront is a fast content delivery network (CDN) service that securely delivers data, videos, applications, and APIs to customers globally with low latency, high transfer speeds.",
+                "Website": "https://aws.amazon.com/cloudfront/",
+                "CPE": "",
+                "Icon": "Amazon Cloudfront.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "Amazon Web Services": {
+                "Description": "Amazon Web Services (AWS) is a comprehensive cloud services platform offering compute power, database storage, content delivery and other functionality.",
+                "Website": "https://aws.amazon.com/",
+                "CPE": "",
+                "Icon": "Amazon Web Services.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "Nginx": {
+                "Description": "Nginx is a web server that can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.",
+                "Website": "https://nginx.org/en",
+                "CPE": "cpe:2.3:a:f5:nginx:*:*:*:*:*:*:*:*",
+                "Icon": "Nginx.svg",
+                "Categories": [
+                  "Web servers",
+                  "Reverse proxies"
+                ]
+              }
+            },
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "404 Not Found",
+            "title": "404 Not Found"
+          }
+        },
+        "cname": [
+          "d3rxkn2g2bbsjp.cloudfront.net."
+        ]
+      },
+      "hackerone.com": {
+        "ips": [
+          "104.18.36.214 : cloudflareIPs",
+          "172.64.151.42 : cloudflareIPs"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "https://hackerone.com": {
+            "technologydetails": {
+              "Cloudflare": {
+                "Description": "Cloudflare is a web-infrastructure and website-security company, providing content-delivery-network services, DDoS mitigation, Internet security, and distributed domain-name-server services.",
+                "Website": "https://www.cloudflare.com",
+                "CPE": "cpe:2.3:a:cloudflare:cloudflare:*:*:*:*:*:*:*:*",
+                "Icon": "CloudFlare.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "Drupal:10": {
+                "Description": "Drupal is a free and open-source web content management framework.",
+                "Website": "https://www.drupal.org/",
+                "CPE": "cpe:2.3:a:drupal:drupal:*:*:*:*:*:*:*:*",
+                "Icon": "Drupal.svg",
+                "Categories": [
+                  "CMS"
+                ]
+              },
+              "Fastly": {
+                "Description": "Fastly is a cloud computing services provider. Fastly's cloud platform provides a content delivery network, Internet security services, load balancing, and video \u0026 streaming services.",
+                "Website": "https://www.fastly.com",
+                "CPE": "cpe:2.3:a:fastly:fastly:*:*:*:*:*:*:*:*",
+                "Icon": "Fastly.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "Google Tag Manager": {
+                "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+                "Website": "https://www.google.com/tagmanager",
+                "CPE": "",
+                "Icon": "Google Tag Manager.svg",
+                "Categories": [
+                  "Tag managers"
+                ]
+              },
+              "HSTS": {
+                "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+                "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+                "CPE": "",
+                "Icon": "",
+                "Categories": [
+                  "Security"
+                ]
+              },
+              "MariaDB": {
+                "Description": "MariaDB is an open-source relational database management system compatible with MySQL.",
+                "Website": "https://mariadb.org",
+                "CPE": "cpe:2.3:a:mariadb_project:mariadb:*:*:*:*:*:*:*:*",
+                "Icon": "mariadb.svg",
+                "Categories": [
+                  "Databases"
+                ]
+              },
+              "Marketo Forms:2": {
+                "Description": "Marketo Forms help create web forms without programming knowledge. Forms can reside on Marketo landing pages and also be embedded on any page of website.",
+                "Website": "https://www.marketo.com",
+                "CPE": "",
+                "Icon": "Marketo.svg",
+                "Categories": [
+                  "Widgets",
+                  "Form builders"
+                ]
+              },
+              "Nginx": {
+                "Description": "Nginx is a web server that can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.",
+                "Website": "https://nginx.org/en",
+                "CPE": "cpe:2.3:a:f5:nginx:*:*:*:*:*:*:*:*",
+                "Icon": "Nginx.svg",
+                "Categories": [
+                  "Web servers",
+                  "Reverse proxies"
+                ]
+              },
+              "Optimizely": {
+                "Description": "Optimizely is an experimentation platform that helps developers build and run A/B tests on websites.",
+                "Website": "https://www.optimizely.com",
+                "CPE": "",
+                "Icon": "Optimizely.svg",
+                "Categories": [
+                  "A/B Testing",
+                  "Personalisation"
+                ]
+              },
+              "PHP": {
+                "Description": "PHP is a general-purpose scripting language used for web development.",
+                "Website": "https://php.net",
+                "CPE": "cpe:2.3:a:php:php:*:*:*:*:*:*:*:*",
+                "Icon": "PHP.svg",
+                "Categories": [
+                  "Programming languages"
+                ]
+              },
+              "Pantheon": {
+                "Description": "Pantheon is a WebOps (Website Operations) and Management Platform for WordPress and Drupal.",
+                "Website": "https://pantheon.io/",
+                "CPE": "",
+                "Icon": "Pantheon.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "TrustArc": {
+                "Description": "TrustArc provides software and services to help corporations update their privacy management processes so they comply with government laws and best practices.",
+                "Website": "https://trustarc.com",
+                "CPE": "",
+                "Icon": "TrustArc.svg",
+                "Categories": [
+                  "Cookie compliance"
+                ]
+              },
+              "Varnish": {
+                "Description": "Varnish is a reverse caching proxy.",
+                "Website": "https://www.varnish-cache.org",
+                "CPE": "cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*",
+                "Icon": "Varnish.svg",
+                "Categories": [
+                  "Caching"
+                ]
+              },
+              "YouTube": {
+                "Description": "YouTube is a video sharing service where users can create their own profile, upload videos, watch, like and comment on other videos.",
+                "Website": "https://www.youtube.com",
+                "CPE": "",
+                "Icon": "YouTube.png",
+                "Categories": [
+                  "Video players"
+                ]
+              }
+            },
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "200 OK",
+            "title": "HackerOne | #1 Trusted Security Platform and Hacker Program"
+          }
+        },
+        "cname": null
+      },
+      "managed.hackerone.com": {
+        "ips": null,
+        "portandservice": null,
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": null
+      },
+      "mta-sts.forwarding.hackerone.com": {
+        "ips": [
+          "185.199.110.153",
+          "185.199.108.153",
+          "185.199.109.153",
+          "185.199.111.153"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "https://mta-sts.forwarding.hackerone.com": {
+            "technologydetails": {
+              "Fastly": {
+                "Description": "Fastly is a cloud computing services provider. Fastly's cloud platform provides a content delivery network, Internet security services, load balancing, and video \u0026 streaming services.",
+                "Website": "https://www.fastly.com",
+                "CPE": "cpe:2.3:a:fastly:fastly:*:*:*:*:*:*:*:*",
+                "Icon": "Fastly.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "GitHub Pages": {
+                "Description": "GitHub Pages is a static site hosting service.",
+                "Website": "https://pages.github.com/",
+                "CPE": "",
+                "Icon": "GitHub.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "Varnish": {
+                "Description": "Varnish is a reverse caching proxy.",
+                "Website": "https://www.varnish-cache.org",
+                "CPE": "cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*",
+                "Icon": "Varnish.svg",
+                "Categories": [
+                  "Caching"
+                ]
+              }
+            },
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "404 Not Found",
+            "title": "Page not found · GitHub Pages"
+          }
+        },
+        "cname": [
+          "hacker0x01.github.io."
+        ]
+      },
+      "mta-sts.hackerone.com": {
+        "ips": [
+          "185.199.108.153",
+          "185.199.111.153",
+          "185.199.110.153",
+          "185.199.109.153"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "https://mta-sts.hackerone.com": {
+            "technologydetails": {
+              "Fastly": {
+                "Description": "Fastly is a cloud computing services provider. Fastly's cloud platform provides a content delivery network, Internet security services, load balancing, and video \u0026 streaming services.",
+                "Website": "https://www.fastly.com",
+                "CPE": "cpe:2.3:a:fastly:fastly:*:*:*:*:*:*:*:*",
+                "Icon": "Fastly.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "GitHub Pages": {
+                "Description": "GitHub Pages is a static site hosting service.",
+                "Website": "https://pages.github.com/",
+                "CPE": "",
+                "Icon": "GitHub.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "Varnish": {
+                "Description": "Varnish is a reverse caching proxy.",
+                "Website": "https://www.varnish-cache.org",
+                "CPE": "cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*",
+                "Icon": "Varnish.svg",
+                "Categories": [
+                  "Caching"
+                ]
+              }
+            },
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "404 Not Found",
+            "title": "Page not found · GitHub Pages"
+          }
+        },
+        "cname": [
+          "hacker0x01.github.io."
+        ]
+      },
+      "mta-sts.managed.hackerone.com": {
+        "ips": [
+          "185.199.109.153",
+          "185.199.111.153",
+          "185.199.108.153",
+          "185.199.110.153"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "https://mta-sts.managed.hackerone.com": {
+            "technologydetails": {
+              "Fastly": {
+                "Description": "Fastly is a cloud computing services provider. Fastly's cloud platform provides a content delivery network, Internet security services, load balancing, and video \u0026 streaming services.",
+                "Website": "https://www.fastly.com",
+                "CPE": "cpe:2.3:a:fastly:fastly:*:*:*:*:*:*:*:*",
+                "Icon": "Fastly.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "GitHub Pages": {
+                "Description": "GitHub Pages is a static site hosting service.",
+                "Website": "https://pages.github.com/",
+                "CPE": "",
+                "Icon": "GitHub.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "Varnish": {
+                "Description": "Varnish is a reverse caching proxy.",
+                "Website": "https://www.varnish-cache.org",
+                "CPE": "cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*",
+                "Icon": "Varnish.svg",
+                "Categories": [
+                  "Caching"
+                ]
+              }
+            },
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "404 Not Found",
+            "title": "Page not found · GitHub Pages"
+          }
+        },
+        "cname": [
+          "hacker0x01.github.io."
+        ]
+      },
+      "resources.hackerone.com": {
+        "ips": [
+          "52.60.160.16",
+          "52.60.165.183",
+          "3.98.63.202"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "http://resources.hackerone.com": {
+            "technologydetails": {},
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "404 Not Found",
+            "title": "Sorry, no Folders found."
+          }
+        },
+        "cname": [
+          "read.uberflip.com."
+        ]
+      },
+      "support.hackerone.com": {
+        "ips": [
+          "54.84.172.199",
+          "35.153.42.21",
+          "52.204.232.143",
+          "44.209.47.227",
+          "100.26.81.86"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": [
+          "2fe254e58a0ea8096400b2fda121ee35.freshdesk.com.",
+          "fwfd-use1-lb208.freshdesk.com."
+        ]
+      },
+      "www.hackerone.com": {
+        "ips": [
+          "172.64.151.42 : cloudflareIPs",
+          "104.18.36.214 : cloudflareIPs"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "https://www.hackerone.com": {
+            "technologydetails": {
+              "Cloudflare": {
+                "Description": "Cloudflare is a web-infrastructure and website-security company, providing content-delivery-network services, DDoS mitigation, Internet security, and distributed domain-name-server services.",
+                "Website": "https://www.cloudflare.com",
+                "CPE": "cpe:2.3:a:cloudflare:cloudflare:*:*:*:*:*:*:*:*",
+                "Icon": "CloudFlare.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "Drupal:10": {
+                "Description": "Drupal is a free and open-source web content management framework.",
+                "Website": "https://www.drupal.org/",
+                "CPE": "cpe:2.3:a:drupal:drupal:*:*:*:*:*:*:*:*",
+                "Icon": "Drupal.svg",
+                "Categories": [
+                  "CMS"
+                ]
+              },
+              "Fastly": {
+                "Description": "Fastly is a cloud computing services provider. Fastly's cloud platform provides a content delivery network, Internet security services, load balancing, and video \u0026 streaming services.",
+                "Website": "https://www.fastly.com",
+                "CPE": "cpe:2.3:a:fastly:fastly:*:*:*:*:*:*:*:*",
+                "Icon": "Fastly.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "Google Tag Manager": {
+                "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+                "Website": "https://www.google.com/tagmanager",
+                "CPE": "",
+                "Icon": "Google Tag Manager.svg",
+                "Categories": [
+                  "Tag managers"
+                ]
+              },
+              "HSTS": {
+                "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+                "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+                "CPE": "",
+                "Icon": "",
+                "Categories": [
+                  "Security"
+                ]
+              },
+              "MariaDB": {
+                "Description": "MariaDB is an open-source relational database management system compatible with MySQL.",
+                "Website": "https://mariadb.org",
+                "CPE": "cpe:2.3:a:mariadb_project:mariadb:*:*:*:*:*:*:*:*",
+                "Icon": "mariadb.svg",
+                "Categories": [
+                  "Databases"
+                ]
+              },
+              "Marketo Forms:2": {
+                "Description": "Marketo Forms help create web forms without programming knowledge. Forms can reside on Marketo landing pages and also be embedded on any page of website.",
+                "Website": "https://www.marketo.com",
+                "CPE": "",
+                "Icon": "Marketo.svg",
+                "Categories": [
+                  "Widgets",
+                  "Form builders"
+                ]
+              },
+              "Nginx": {
+                "Description": "Nginx is a web server that can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.",
+                "Website": "https://nginx.org/en",
+                "CPE": "cpe:2.3:a:f5:nginx:*:*:*:*:*:*:*:*",
+                "Icon": "Nginx.svg",
+                "Categories": [
+                  "Web servers",
+                  "Reverse proxies"
+                ]
+              },
+              "Optimizely": {
+                "Description": "Optimizely is an experimentation platform that helps developers build and run A/B tests on websites.",
+                "Website": "https://www.optimizely.com",
+                "CPE": "",
+                "Icon": "Optimizely.svg",
+                "Categories": [
+                  "A/B Testing",
+                  "Personalisation"
+                ]
+              },
+              "PHP": {
+                "Description": "PHP is a general-purpose scripting language used for web development.",
+                "Website": "https://php.net",
+                "CPE": "cpe:2.3:a:php:php:*:*:*:*:*:*:*:*",
+                "Icon": "PHP.svg",
+                "Categories": [
+                  "Programming languages"
+                ]
+              },
+              "Pantheon": {
+                "Description": "Pantheon is a WebOps (Website Operations) and Management Platform for WordPress and Drupal.",
+                "Website": "https://pantheon.io/",
+                "CPE": "",
+                "Icon": "Pantheon.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "TrustArc": {
+                "Description": "TrustArc provides software and services to help corporations update their privacy management processes so they comply with government laws and best practices.",
+                "Website": "https://trustarc.com",
+                "CPE": "",
+                "Icon": "TrustArc.svg",
+                "Categories": [
+                  "Cookie compliance"
+                ]
+              },
+              "Varnish": {
+                "Description": "Varnish is a reverse caching proxy.",
+                "Website": "https://www.varnish-cache.org",
+                "CPE": "cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*",
+                "Icon": "Varnish.svg",
+                "Categories": [
+                  "Caching"
+                ]
+              },
+              "YouTube": {
+                "Description": "YouTube is a video sharing service where users can create their own profile, upload videos, watch, like and comment on other videos.",
+                "Website": "https://www.youtube.com",
+                "CPE": "",
+                "Icon": "YouTube.png",
+                "Categories": [
+                  "Video players"
+                ]
+              }
+            },
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "200 OK",
+            "title": "HackerOne | #1 Trusted Security Platform and Hacker Program"
+          }
+        },
+        "cname": null
+      },
+      "zendesk1.hackerone.com": {
+        "ips": [
+          "162.159.128.7 : cloudflareIPs",
+          "162.159.138.6 : cloudflareIPs"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": [
+          "mail1.zendesk.com."
+        ]
+      },
+      "zendesk2.hackerone.com": {
+        "ips": [
+          "162.159.128.7 : cloudflareIPs",
+          "162.159.138.6 : cloudflareIPs"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": [
+          "mail2.zendesk.com."
+        ]
+      },
+      "zendesk3.hackerone.com": {
+        "ips": [
+          "162.159.138.6 : cloudflareIPs",
+          "162.159.128.7 : cloudflareIPs"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": [
+          "mail3.zendesk.com."
+        ]
+      },
+      "zendesk4.hackerone.com": {
+        "ips": [
+          "162.159.128.7 : cloudflareIPs",
+          "162.159.138.6 : cloudflareIPs"
+        ],
+        "portandservice": null,
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "dirandfile": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": [
+          "mail4.zendesk.com."
+        ]
+      }
+    }
+  }
+}

@@ -61,16 +61,17 @@ func Core(ctx context.Context, cancel context.CancelFunc, wg *sync.WaitGroup, do
 func InformationOfAllSubDomain(wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain) {
 	defer wg1.Done()
 	var wg sync.WaitGroup
-	const maxGoroutines = 10 // Limit the number of concurrent goroutines
-
+	const maxGoroutines = 10                                                                           // Limit the number of concurrent goroutines
+	cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs := dns.GetIntermediaryIpRange() //Get new information intermediary ip range
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
 		go func() {
 			for subDomain := range subDomainChan {
 				var wgsubDomain sync.WaitGroup
+
 				infoSubDomain := infoAllSubDomain[subDomain]
 				wgsubDomain.Add(1)
-				go dns.GetIpAndcName(&wgsubDomain, subDomain, &infoSubDomain) //Get Ip,cName
+				go dns.GetIpAndcName(&wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs) //Get Ip,cName
 
 				wgsubDomain.Add(1)
 				go tech.HttpxSimple(&wgsubDomain, subDomain, &infoSubDomain) //Get tech,title,status
@@ -79,7 +80,6 @@ func InformationOfAllSubDomain(wg1 *sync.WaitGroup, subDomainChan chan string, i
 				infoAllSubDomain[subDomain] = infoSubDomain //Assignment new item into map
 			}
 			wg.Done()
-
 		}()
 	}
 
