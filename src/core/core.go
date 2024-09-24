@@ -58,7 +58,7 @@ func Core(ctx context.Context, cancel context.CancelFunc, wg *sync.WaitGroup, do
 	}()
 }
 
-func InformationOfAllSubDomain(wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain) {
+func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, workDirectory string) {
 	defer wg1.Done()
 	var wg sync.WaitGroup
 	const maxGoroutines = 10                                                                           // Limit the number of concurrent goroutines
@@ -71,7 +71,7 @@ func InformationOfAllSubDomain(wg1 *sync.WaitGroup, subDomainChan chan string, i
 
 				infoSubDomain := infoAllSubDomain[subDomain]
 				wgsubDomain.Add(1)
-				go dns.GetIpAndcName(&wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs) //Get Ip,cName
+				go dns.GetIpAndcName(ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, workDirectory) //Get Ip,cName
 
 				wgsubDomain.Add(1)
 				go tech.HttpxSimple(&wgsubDomain, subDomain, &infoSubDomain) //Get tech,title,status
@@ -147,7 +147,7 @@ func ScanDomain(ctx context.Context, workDirectory string, rootDomain string) {
 		wg1.Done()
 	}()
 	wg1.Add(1)
-	go InformationOfAllSubDomain(&wg1, subDomainChan, infoDomain.SubDomain)
+	go InformationOfAllSubDomain(ctx, &wg1, subDomainChan, infoDomain.SubDomain, workDirectory)
 
 	wg1.Wait()
 

@@ -1,6 +1,7 @@
 package dns
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -38,7 +39,7 @@ func Dig(domain string, qtype uint16) []dns.RR {
 	return response.Answer
 }
 
-func GetIpAndcName(wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string) {
+func GetIpAndcName(ctx context.Context, wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, workDirectory string) {
 	infoDigs := Dig(subDomain, dns.TypeA)
 	flagScanPort := false
 	if len(infoDigs) != 0 {
@@ -59,7 +60,7 @@ func GetIpAndcName(wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *da
 		}
 	}
 	if flagScanPort {
-		port.ScanPortAndService(subDomain, infoSubDomain)
+		port.ScanPortAndService(subDomain, infoSubDomain, workDirectory)
 	}
 	wgDomain.Done()
 }

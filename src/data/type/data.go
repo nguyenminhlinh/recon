@@ -13,7 +13,8 @@ type InfoWeb struct {
 
 type InfoSubDomain struct {
 	Ips            []string           `json:"ips"`
-	PortAndService []string           `json:"portandservice"`
+	PortAndService map[string]string  `json:"portsandservice"`
+	Os             []string           `json:"os"`
 	HttpOrHttps    map[string]InfoWeb `json:"httporhttps"`
 	CName          []string           `json:"cname"`
 }

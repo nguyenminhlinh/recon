@@ -37,7 +37,23 @@ func LengthResponse(domain string, host string) int {
 	}
 	return len(body)
 }
+func ReadFilesSimple(file string) string {
+	// Mở file để đọc
+	inputFile, err := os.Open(file)
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return ""
+	}
+	defer inputFile.Close()
 
+	// Đọc toàn bộ nội dung file vào biến
+	content, err := io.ReadAll(inputFile)
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		return ""
+	}
+	return string(content)
+}
 func ReadFiles(ctx context.Context, wg *sync.WaitGroup, file string, semaphore chan<- string, count *int, mu *sync.Mutex, maxgoroutines int) {
 	defer wg.Done()
 	inputFile, err := os.Open(file)
