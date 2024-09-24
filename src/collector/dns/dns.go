@@ -59,7 +59,7 @@ func GetIpAndcName(wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *da
 		}
 	}
 	if flagScanPort {
-		port.ScanPortAndService()
+		port.ScanPortAndService(subDomain, infoSubDomain)
 	}
 	wgDomain.Done()
 }

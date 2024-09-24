@@ -13,8 +13,14 @@ require (
 	github.com/owasp-amass/asset-db v0.3.5
 	github.com/owasp-amass/config v0.1.5
 	github.com/owasp-amass/open-asset-model v0.2.0
+	github.com/pkg/errors v0.9.1
+	github.com/projectdiscovery/ipranger v0.0.44
+	github.com/projectdiscovery/mapcidr v1.1.34
 	github.com/projectdiscovery/subfinder/v2 v2.6.6
+	github.com/projectdiscovery/uncover v1.0.7
 	github.com/projectdiscovery/wappalyzergo v0.1.12
+	github.com/remeh/sizedwaitgroup v1.0.0
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
@@ -31,6 +37,7 @@ require (
 	github.com/chromedp/chromedp v0.10.0 // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect
 	github.com/cjoudrey/gluaurl v0.0.0-20161028222611-31cbb9bef199 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgraph-io/badger v1.6.2 // indirect
 	github.com/dgraph-io/ristretto v0.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
@@ -45,6 +52,7 @@ require (
 	github.com/gobwas/ws v1.4.0 // indirect
 	github.com/golang/glog v1.2.2 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
+	github.com/google/gopacket v1.1.19 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
@@ -62,7 +70,9 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/owasp-amass/resolve v0.6.21 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/projectdiscovery/asnmap v1.1.0 // indirect
+	github.com/projectdiscovery/freeport v0.0.6 // indirect
 	github.com/prometheus/client_golang v1.20.3 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.59.1 // indirect
@@ -75,6 +85,7 @@ require (
 	github.com/yuin/gopher-lua v1.1.1 // indirect
 	go.uber.org/ratelimit v0.3.1 // indirect
 	golang.org/x/crypto v0.27.0 // indirect
+	golang.org/x/term v0.24.0 // indirect
 	golang.org/x/text v0.18.0 // indirect
 	golang.org/x/time v0.6.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
@@ -93,7 +104,7 @@ require (
 require (
 	aead.dev/minisign v0.2.0 // indirect
 	github.com/Masterminds/semver/v3 v3.2.1 // indirect
-	github.com/Mzack9999/gcache v0.0.0-20230410081825-519e28eab057 // indirect
+	github.com/Mzack9999/gcache v0.0.0-20230410081825-519e28eab057
 	github.com/Mzack9999/go-http-digest-auth-client v0.6.1-0.20220414142836-eb8883508809 // indirect
 	github.com/VividCortex/ewma v1.2.0 // indirect
 	github.com/adrg/xdg v0.5.0 // indirect
@@ -143,20 +154,22 @@ require (
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pierrec/lz4/v4 v4.1.21 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
-	github.com/projectdiscovery/blackrock v0.0.1 // indirect
+	github.com/projectdiscovery/blackrock v0.0.1
 	github.com/projectdiscovery/cdncheck v1.1.0 // indirect
 	github.com/projectdiscovery/chaos-client v0.5.1 // indirect
-	github.com/projectdiscovery/dnsx v1.2.1 // indirect
+	github.com/projectdiscovery/clistats v0.1.1
+	github.com/projectdiscovery/dnsx v1.2.1
 	github.com/projectdiscovery/fastdialer v0.2.3 // indirect
-	github.com/projectdiscovery/goflags v0.1.62 // indirect
-	github.com/projectdiscovery/gologger v1.1.19 // indirect
+	github.com/projectdiscovery/goflags v0.1.62
+	github.com/projectdiscovery/gologger v1.1.19
 	github.com/projectdiscovery/hmap v0.0.54 // indirect
 	github.com/projectdiscovery/machineid v0.0.0-20240226150047-2e2c51e35983 // indirect
+	github.com/projectdiscovery/naabu/v2 v2.3.1
 	github.com/projectdiscovery/networkpolicy v0.0.9 // indirect
-	github.com/projectdiscovery/ratelimit v0.0.49 // indirect
+	github.com/projectdiscovery/ratelimit v0.0.49
 	github.com/projectdiscovery/retryabledns v1.0.70 // indirect
-	github.com/projectdiscovery/retryablehttp-go v1.0.72 // indirect
-	github.com/projectdiscovery/utils v0.2.4 // indirect
+	github.com/projectdiscovery/retryablehttp-go v1.0.72
+	github.com/projectdiscovery/utils v0.2.4
 	github.com/refraction-networking/utls v1.6.7 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
@@ -187,7 +200,7 @@ require (
 	github.com/zmap/zcrypto v0.0.0-20240512203510-0fef58d9a9db // indirect
 	go.etcd.io/bbolt v1.3.10 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 // indirect
+	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842
 	golang.org/x/mod v0.21.0 // indirect
 	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/oauth2 v0.22.0 // indirect
