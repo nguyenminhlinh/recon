@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"recon/collector/link"
 	data "recon/data/type"
 	"sync"
 
@@ -33,7 +34,7 @@ func Tech(url string) map[string]wappalyzer.AppInfo {
 	return fingerprintsWithInfo
 }
 
-func HttpAndHttps(domain string) (string, string, string, map[string]wappalyzer.AppInfo) {
+func HttpAndHttps(domain string) (string, string, string, map[string]wappalyzer.AppInfo, bool) {
 	// Check HTTPS
 	url := "https://" + domain
 	Resp, err := http.Get(url)
@@ -42,7 +43,7 @@ func HttpAndHttps(domain string) (string, string, string, map[string]wappalyzer.
 		title := extractTitle(Resp)
 		tech := Tech(url)
 		Resp.Body.Close()
-		return url, status, title, tech
+		return url, status, title, tech, true
 	}
 
 	// Check HTTP
@@ -53,10 +54,10 @@ func HttpAndHttps(domain string) (string, string, string, map[string]wappalyzer.
 		title := extractTitle(Resp)
 		tech := Tech(url)
 		Resp.Body.Close()
-		return url, status, title, tech
+		return url, status, title, tech, true
 	}
 
-	return "", "", "", map[string]wappalyzer.AppInfo{}
+	return "", "", "", map[string]wappalyzer.AppInfo{}, false
 }
 
 // extractTitle gets the title from the response
@@ -72,13 +73,17 @@ func extractTitle(resp *http.Response) string {
 }
 
 func HttpxSimple(wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain) {
-	url, status, title, tech := HttpAndHttps(subDomain)
-
+	url, status, title, tech, flagGetURL := HttpAndHttps(subDomain)
+	var allLink []string
+	if flagGetURL { //Only getURL if subdomain have type http or https
+		allLink = link.GetURL(subDomain)
+	}
 	if infoSubDomain.HttpOrHttps == nil {
 		infoSubDomain.HttpOrHttps = make(map[string]data.InfoWeb)
 	}
 
 	infoWeb := infoSubDomain.HttpOrHttps[url]
+	infoWeb.Link = allLink
 	infoWeb.Status = status
 	infoWeb.Title = title
 	if infoWeb.TechnologyDetails == nil {
