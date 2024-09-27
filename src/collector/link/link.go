@@ -10,7 +10,6 @@ import (
 	"os"
 	"strings"
 	"sync"
-	"time"
 )
 
 func GetURL(subDomain string) []string {
@@ -22,7 +21,7 @@ func GetURL(subDomain string) []string {
 	}
 
 	var wg sync.WaitGroup
-	wurls := make(chan wurl)
+	wurls := make(chan wurl, 100)
 
 	for _, fn := range fetchFns {
 		wg.Add(1)
@@ -55,13 +54,12 @@ func GetURL(subDomain string) []string {
 		}
 		seen[w.url] = true
 
-		d, err := time.Parse("20060102150405", w.date)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to parse date [%s] for URL [%s]\n", w.date, w.url)
-		}
-		link = append(link, d.Format(time.RFC3339)+" "+w.url)
-		// link = append(link, w.url)
-		// fmt.Printf("%s %s\n", d.Format(time.RFC3339), w.url)
+		// d, err := time.Parse("20060102150405", w.date)
+		// if err != nil {
+		// 	fmt.Fprintf(os.Stderr, "failed to parse date [%s] for URL [%s]\n", w.date, w.url)
+		// }
+		// link = append(link, d.Format(time.RFC3339)+" "+w.url)
+		link = append(link, w.url)
 	}
 	return link
 }
@@ -110,7 +108,6 @@ func getWaybackURLs(domain string, noSubs bool) ([]wurl, error) {
 	}
 
 	return out, nil
-
 }
 
 func getCommonCrawlURLs(domain string, noSubs bool) ([]wurl, error) {
@@ -147,7 +144,6 @@ func getCommonCrawlURLs(domain string, noSubs bool) ([]wurl, error) {
 	}
 
 	return out, nil
-
 }
 
 func getVirusTotalURLs(domain string, noSubs bool) ([]wurl, error) {
@@ -189,7 +185,6 @@ func getVirusTotalURLs(domain string, noSubs bool) ([]wurl, error) {
 	}
 
 	return out, nil
-
 }
 
 func isSubdomain(rawUrl, domain string) bool {

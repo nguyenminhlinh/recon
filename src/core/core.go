@@ -58,31 +58,45 @@ func Core(ctx context.Context, cancel context.CancelFunc, wg *sync.WaitGroup, do
 	}()
 }
 
-func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, workDirectory string) {
+func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, workDirectory string, mu *sync.Mutex) {
 	defer wg1.Done()
 	var wg sync.WaitGroup
-	const maxGoroutines = 10                                                                           // Limit the number of concurrent goroutines
-	cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs := dns.GetIntermediaryIpRange() //Get new information intermediary ip range
+	const maxGoroutines = 10
+	cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs := dns.GetIntermediaryIpRange()
+
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
 		go func() {
 			for subDomain := range subDomainChan {
 				var wgsubDomain sync.WaitGroup
+				mu.Lock() // Lock map before accessing it
+				infoSubDomain, exists := infoAllSubDomain[subDomain]
+				mu.Unlock()
+				if !exists {
+					infoSubDomain = data.InfoSubDomain{
+						Ips:            []string{},
+						PortAndService: make(map[string]string),
+						Os:             []string{},
+						HttpOrHttps:    make(map[string]data.InfoWeb),
+						CName:          []string{},
+					}
+				}
 
-				infoSubDomain := infoAllSubDomain[subDomain]
 				wgsubDomain.Add(1)
-				go dns.GetIpAndcName(ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, workDirectory) //Get Ip,cName
+				go dns.GetIpAndcName(ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, workDirectory)
 
 				wgsubDomain.Add(1)
-				go tech.HttpxSimple(&wgsubDomain, subDomain, &infoSubDomain) //Get tech,title,status
+				go tech.HttpxSimple(&wgsubDomain, subDomain, &infoSubDomain)
 
 				wgsubDomain.Wait()
-				infoAllSubDomain[subDomain] = infoSubDomain //Assignment new item into map
+
+				mu.Lock() // Lock map before updating it
+				infoAllSubDomain[subDomain] = infoSubDomain
+				mu.Unlock()
 			}
 			wg.Done()
 		}()
 	}
-
 	wg.Wait()
 }
 
@@ -111,6 +125,7 @@ func ScanDomain(ctx context.Context, workDirectory string, rootDomain string) {
 	go func() {
 		for subDomain := range subDomainsFile {
 			line := strings.TrimSpace(subDomain)
+			line = strings.ToLower(line)
 			//Add new line if don"t have
 			if line != "" {
 				subDomainsMap[line] = true
@@ -147,7 +162,7 @@ func ScanDomain(ctx context.Context, workDirectory string, rootDomain string) {
 		wg1.Done()
 	}()
 	wg1.Add(1)
-	go InformationOfAllSubDomain(ctx, &wg1, subDomainChan, infoDomain.SubDomain, workDirectory)
+	go InformationOfAllSubDomain(ctx, &wg1, subDomainChan, infoDomain.SubDomain, workDirectory, &mu)
 
 	wg1.Wait()
 

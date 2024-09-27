@@ -60,6 +60,7 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 					for len(semaphore) > 0 {
 						<-semaphore // Read and skip data until the channel is empty
 					}
+					results <- domain
 					close(results) //Close the results channel after the goroutines complete
 				}
 				//fmt.Println(*count)

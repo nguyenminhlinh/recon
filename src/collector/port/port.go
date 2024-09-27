@@ -80,12 +80,7 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 		}
 	} else {
 		output := utils.ReadFilesSimple(workDirectory + "/data/output/scanPortAndService" + strconv.Itoa(randomNumber) + ".txt")
-		// remove file
-		err := os.Remove(workDirectory + "/data/output/scanPortAndService" + strconv.Itoa(randomNumber) + ".txt")
-		if err != nil {
-			fmt.Println("Error when deleting files:", err)
-			return
-		}
+
 		instances := strings.TrimSpace(output)
 
 		if instances != "" {
@@ -134,6 +129,12 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 					flagCopyPort = false
 				}
 			}
+		}
+		// remove file
+		err := os.Remove(workDirectory + "/data/output/scanPortAndService" + strconv.Itoa(randomNumber) + ".txt")
+		if err != nil {
+			fmt.Println("Error when deleting files:", err)
+			return
 		}
 	}
 }

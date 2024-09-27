@@ -42,11 +42,11 @@ func main() {
 	fmt.Fprintf(os.Stderr, "%s\n       %+60s\n%s\n", BANNER_HEADER, "Made by MinhLinh", BANNER_SEP)
 	fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "Scanning target", domainName)
 
-	// core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainBruteForceHttp")
-	// core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainBruteForceDNS")
-	// core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainOSINTAmass")
-	// core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainOSINTSubfinder")
-	// core.Core(ctx, cancel, &wg, domainName, workDirectory, "DirAndFileBruteForce")
+	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainBruteForceHttp")
+	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainBruteForceDNS")
+	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainOSINTAmass")
+	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainOSINTSubfinder")
+	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DirAndFileBruteForce")
 
 	wg.Wait()
 

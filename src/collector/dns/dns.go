@@ -40,6 +40,7 @@ func Dig(domain string, qtype uint16) []dns.RR {
 }
 
 func GetIpAndcName(ctx context.Context, wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, workDirectory string) {
+	defer wgDomain.Done()
 	infoDigs := Dig(subDomain, dns.TypeA)
 	flagScanPort := false
 	if len(infoDigs) != 0 {
@@ -51,7 +52,6 @@ func GetIpAndcName(ctx context.Context, wgDomain *sync.WaitGroup, subDomain stri
 					infoSubDomain.Ips = append(infoSubDomain.Ips, ip+" : "+nameOrganisation)
 				} else {
 					infoSubDomain.Ips = append(infoSubDomain.Ips, ip)
-					//fmt.Println("Scan domain by nmap")
 					flagScanPort = true //If domain have ip is not intermediary ip
 				}
 			} else if cNameRecord, ok := infoDig.(*dns.CNAME); ok {
@@ -62,7 +62,6 @@ func GetIpAndcName(ctx context.Context, wgDomain *sync.WaitGroup, subDomain stri
 	if flagScanPort {
 		port.ScanPortAndService(subDomain, infoSubDomain, workDirectory)
 	}
-	wgDomain.Done()
 }
 
 func DNS(RootDomain string, infoDomain *data.InfoDomain) {
@@ -96,7 +95,8 @@ func DNS(RootDomain string, infoDomain *data.InfoDomain) {
 
 	txtRecords, err := net.LookupTXT(RootDomain)
 	if err != nil {
-		fmt.Printf("Error looking up TXT records for %s: %v\n", RootDomain, err)
+		// fmt.Printf("Error looking up TXT records for %s: %v\n", RootDomain, err)
+		infoDomain.TXTRecords = []string{}
 	} else {
 		infoDomain.TXTRecords = txtRecords
 	}
