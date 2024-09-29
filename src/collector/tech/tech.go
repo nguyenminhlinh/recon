@@ -1,12 +1,14 @@
 package tech
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"recon/collector/link"
 	data "recon/data/type"
 	"sync"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	wappalyzer "github.com/projectdiscovery/wappalyzergo"
@@ -73,10 +75,15 @@ func extractTitle(resp *http.Response) string {
 }
 
 func HttpxSimple(wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain) {
+	start := time.Now()
+
 	url, status, title, tech, flagGetURL := HttpAndHttps(subDomain)
 	var allLink []string
 	if flagGetURL { //Only getURL if subdomain have type http or https
+		start := time.Now()
 		allLink = link.GetURL(subDomain)
+		elapsed := time.Since(start)
+		fmt.Println("GetURL", subDomain, elapsed)
 	}
 	if infoSubDomain.HttpOrHttps == nil {
 		infoSubDomain.HttpOrHttps = make(map[string]data.InfoWeb)
@@ -97,53 +104,6 @@ func HttpxSimple(wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *d
 	infoSubDomain.HttpOrHttps[url] = infoWeb
 
 	wgSubDomain.Done()
+	elapsed := time.Since(start)
+	fmt.Println("HttpxSimple", subDomain, elapsed)
 }
-
-// func HttpxSimple(wgDomain *sync.WaitGroup, domain string, InfoDomain *data.InfoDomain) {
-// 	options := runnerhttpx.Options{
-// 		Methods:         "GET",
-// 		InputTargetHost: goflags.StringSlice{domain},
-// 		TechDetect:      true,
-// 		Threads:         1,
-// 		Silent:          true,
-// 		OnResult: func(r runnerhttpx.Result) {
-// 			// handle error
-// 			if r.Err != nil {
-// 				fmt.Printf("[Err] %s: %s\n", r.Input, r.Err)
-// 				return
-// 			}
-
-// 			if InfoDomain.HttpOrHttps == nil {
-// 				InfoDomain.HttpOrHttps = make(map[string]data.InfoWeb)
-// 			}
-
-// 			infoWeb := InfoDomain.HttpOrHttps[r.URL]
-// 			if infoWeb.TechnologyDetails == nil {
-// 				infoWeb.TechnologyDetails = make(map[string]wappalyzer.AppInfo)
-// 			}
-
-// 			for key, value := range r.TechnologyDetails {
-// 				infoWeb.TechnologyDetails[key] = value
-// 			}
-
-// 			infoWeb.Status = strconv.Itoa(r.StatusCode)
-// 			infoWeb.Title = r.Title
-
-// 			InfoDomain.HttpOrHttps[r.URL] = infoWeb
-// 			//fmt.Printf("%s %s %d %v\n", r.Input, r.Host, r.StatusCode, r.Technologies)
-// 		},
-// 	}
-
-// 	if err := options.ValidateOptions(); err != nil {
-// 		log.Fatal(err)
-// 	}
-
-// 	httpxRunner, err := runnerhttpx.New(&options)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-
-// 	defer httpxRunner.Close()
-// 	httpxRunner.RunEnumeration()
-// 	wgDomain.Done()
-// }

@@ -73,22 +73,29 @@ func ScanDomain(ctx context.Context, workDirectory string, rootDomain string, ch
 	dns.DNS(rootDomain, &infoDomain) //Get information dns of rootdomain
 
 	data.ListDomain[rootDomain] = infoDomain
-	wg.Add(1)
-	go func() {
-		for subDomain := range chanResults {
-			line := strings.TrimSpace(subDomain)
-			line = strings.ToLower(line)
-			if line != "" {
-				if _, exists := subDomainsMap.Load(line); !exists { //Add new line if don"t have
-					subDomainsMap.Store(line, true)
-					//subDomainChan <- line
-					fmt.Printf("Added: %s\n", line)
-				}
+
+	for subDomain := range chanResults {
+		line := strings.TrimSpace(subDomain)
+		line = strings.ToLower(line)
+		if line != "" {
+			if _, exists := subDomainsMap.Load(line); !exists { //Add new line if don"t have
+				subDomainsMap.Store(line, true)
+				//subDomainChan <- line
+				fmt.Printf("Added: %s\n", line)
 			}
 		}
-		//close(subDomainChan)
+	}
+	wg.Add(1)
+	func() {
+		subDomainsMap.Range(func(key, value interface{}) bool {
+			//fmt.Printf("Key: %s, Value: %v\n", key, value)
+			subDomainChan <- key.(string)
+			return true // Trả về true để tiếp tục duyệt
+		})
 		wg.Done()
+		close(subDomainChan)
 	}()
+
 	wg.Add(1)
 	go InformationOfAllSubDomain(ctx, &wg, subDomainChan, infoDomain.SubDomain, workDirectory, &mu)
 

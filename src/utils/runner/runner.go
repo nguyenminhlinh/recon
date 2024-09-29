@@ -246,7 +246,7 @@ func (r *Runner) onReceive(hostResult *result.HostResult) {
 }
 
 // RunEnumeration runs the ports enumeration flow on the targets specified
-func (r *Runner) RunEnumeration(pctx context.Context, scanPortAndService *string) error {
+func (r *Runner) RunEnumeration(pctx context.Context) error {
 	ctx, cancel := context.WithCancel(pctx)
 	defer cancel()
 
@@ -334,7 +334,7 @@ func (r *Runner) RunEnumeration(pctx context.Context, scanPortAndService *string
 
 		// check if we should stop here or continue with full scan
 		if r.options.OnlyHostDiscovery {
-			//r.handleOutput(r.scanner.HostDiscoveryResults)
+			r.handleOutput(r.scanner.HostDiscoveryResults)
 			return nil
 		}
 	}
@@ -381,7 +381,7 @@ func (r *Runner) RunEnumeration(pctx context.Context, scanPortAndService *string
 			}
 		}
 		r.wgscan.Wait()
-		//r.handleOutput(r.scanner.ScanResults)
+		r.handleOutput(r.scanner.ScanResults)
 		return nil
 	case r.options.Stream && r.options.Passive: // stream passive
 		showNetworkCapabilities(r.options)
@@ -450,10 +450,10 @@ func (r *Runner) RunEnumeration(pctx context.Context, scanPortAndService *string
 			r.ConnectVerification()
 		}
 
-		//r.handleOutput(r.scanner.ScanResults)
+		r.handleOutput(r.scanner.ScanResults)
 
 		// handle nmap
-		return r.handleNmap(scanPortAndService)
+		return r.handleNmap()
 	default:
 		showNetworkCapabilities(r.options)
 
@@ -616,7 +616,7 @@ func (r *Runner) RunEnumeration(pctx context.Context, scanPortAndService *string
 		r.handleOutput(r.scanner.ScanResults)
 
 		// handle nmap
-		return r.handleNmap(scanPortAndService)
+		return r.handleNmap()
 	}
 }
 
@@ -661,11 +661,11 @@ func (r *Runner) GetTargetIps(ipsCallback func() ([]*net.IPNet, []string)) (targ
 }
 
 func (r *Runner) ShowScanResultOnExit() {
-	//r.handleOutput(r.scanner.ScanResults)
-	// err := r.handleNmap()
-	// if err != nil {
-	// 	gologger.Fatal().Msgf("Could not run enumeration: %s\n", err)
-	// }
+	r.handleOutput(r.scanner.ScanResults)
+	err := r.handleNmap()
+	if err != nil {
+		gologger.Fatal().Msgf("Could not run enumeration: %s\n", err)
+	}
 }
 
 // Close runner instance
@@ -963,7 +963,7 @@ func (r *Runner) handleOutput(scanResults *result.Result) {
 					} else if r.options.CSV {
 						err = WriteCsvOutput(host, hostResult.IP, hostResult.Ports, r.options.OutputCDN, isCDNIP, cdnName, csvFileHeaderEnabled, file)
 					} else {
-						//err = WriteHostOutput(host, hostResult.Ports, r.options.OutputCDN, cdnName, file)
+						err = WriteHostOutput(host, hostResult.Ports, r.options.OutputCDN, cdnName, file)
 					}
 					if err != nil {
 						gologger.Error().Msgf("Could not write results to file %s for %s: %s\n", output, host, err)
@@ -1025,7 +1025,7 @@ func (r *Runner) handleOutput(scanResults *result.Result) {
 					} else if r.options.CSV {
 						err = WriteCsvOutput(host, hostIP, nil, r.options.OutputCDN, isCDNIP, cdnName, csvFileHeaderEnabled, file)
 					} else {
-						//err = WriteHostOutput(host, nil, r.options.OutputCDN, cdnName, file)
+						err = WriteHostOutput(host, nil, r.options.OutputCDN, cdnName, file)
 					}
 					if err != nil {
 						gologger.Error().Msgf("Could not write results to file %s for %s: %s\n", output, host, err)

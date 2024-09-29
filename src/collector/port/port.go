@@ -7,15 +7,18 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"os/exec"
 	data "recon/data/type"
 	"recon/utils"
 	"recon/utils/runner"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/projectdiscovery/goflags"
 	"github.com/projectdiscovery/naabu/v2/pkg/port"
 	"github.com/projectdiscovery/naabu/v2/pkg/result"
+	osutil "github.com/projectdiscovery/utils/os"
 )
 
 type OsMatch struct {
@@ -43,54 +46,82 @@ type Service struct {
 	Version string `xml:"version,attr"`
 }
 
+func isCommandExecutable(args []string) bool {
+	commandLength := calculateCmdLength(args)
+	if osutil.IsWindows() {
+		// windows has a hard limit of
+		// - 2048 characters in XP
+		// - 32768 characters in Win7
+		return commandLength < 2048
+	}
+	// linux and darwin
+	return true
+}
+
+func calculateCmdLength(args []string) int {
+	var commandLength int
+	for _, arg := range args {
+		commandLength += len(arg)
+		commandLength += 1 // space character
+	}
+	return commandLength
+}
+
+func nmap(nmapCLI string) bool {
+	args := strings.Split(nmapCLI, " ")
+	commandCanBeExecuted := isCommandExecutable(args)
+	if commandCanBeExecuted {
+		posArgs := 0
+		nmapCommand := "nmap"
+		if args[0] == "nmap" || args[0] == "nmap.exe" {
+			posArgs = 1
+		}
+
+		// if it's windows search for the executable
+		if osutil.IsWindows() {
+			nmapCommand = "nmap.exe"
+		}
+
+		cmd := exec.Command(nmapCommand, args[posArgs:]...)
+
+		err := cmd.Run()
+		if err != nil {
+			fmt.Println("Could not run nmap command", err)
+			return false
+		} else {
+			return true
+		}
+	}
+	return false
+}
+
 func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, workDirectory string) {
+	fmt.Println(subDomain)
+	start := time.Now()
+	defer fmt.Println("done", subDomain)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	// Generate random numbers between 1 and 100
-	randomNumber := rand.Intn(100) + 1
-	var scanPortAndService string
+
+	randomNumber := rand.Intn(1000) + 1 // Generate random numbers between 1 and 100
 	var ports []*port.Port
-	//nmapCLI := "nmap -O -sV -oX " + workDirectory + "/data/output/scanPortAndService" + strconv.Itoa(randomNumber) + ".txt"
-	options := runner.Options{
-		Host:     goflags.StringSlice{subDomain},
-		ScanType: "s",
-		TopPorts: "1000",
-		//Nmap:     true,
-		//NmapCLI:  nmapCLI,
-		Silent: true,
-		OnResult: func(hr *result.HostResult) {
-			// fmt.Println(hr.Host, hr.Ports)
-			ports = hr.Ports
-		},
-	}
+	nmapCLI := "nmap -O -sV -top-ports 1000 -oX " + workDirectory + "/data/output/scanPortAndService" + strconv.Itoa(randomNumber) + ".txt " + subDomain
 
-	naabuRunner, err := runner.NewRunner(&options)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer naabuRunner.Close()
-
-	_ = naabuRunner.RunEnumeration(ctx, &scanPortAndService)
 	if infoSubDomain.PortAndService == nil {
 		infoSubDomain.PortAndService = make(map[string]string)
 	}
-	if true {
-		for _, port := range ports {
-			infoSubDomain.PortAndService[strconv.Itoa(port.Port)] = ""
-		}
-	} else {
+
+	if nmap(nmapCLI) { //If have nmap on device and complete run
 		output := utils.ReadFilesSimple(workDirectory + "/data/output/scanPortAndService" + strconv.Itoa(randomNumber) + ".txt")
 
 		instances := strings.TrimSpace(output)
 
 		if instances != "" {
-			flagCopyPort := false
+			flagGetType := false
 			os := ""
 			for _, instance := range strings.Split(instances, "\r\n") {
 				instance = strings.TrimSpace(instance)
 				if strings.Contains(instance, "<port protocol") {
-					// Use TrimPrefix to remove <ports>
-					instance = strings.TrimPrefix(instance, "<ports>")
+					instance = strings.TrimPrefix(instance, "<ports>") // Use TrimPrefix to remove <ports>
 					var port Port
 					err := xml.Unmarshal([]byte(instance), &port)
 					if err != nil {
@@ -115,9 +146,9 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 						return
 					}
 					os = "Name:" + osMatch.Name + " (" + osMatch.Accuracy + "%)"
-					flagCopyPort = true
+					flagGetType = true
 				}
-				if strings.Contains(instance, "<osclass") && flagCopyPort {
+				if strings.Contains(instance, "<osclass") && flagGetType {
 					var osClass OsClass
 					// Giải mã XML
 					err := xml.Unmarshal([]byte(instance), &osClass)
@@ -126,7 +157,7 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 						return
 					}
 					infoSubDomain.Os = append(infoSubDomain.Os, os+" Devicetype:"+osClass.Type)
-					flagCopyPort = false
+					flagGetType = false
 				}
 			}
 		}
@@ -136,5 +167,30 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 			fmt.Println("Error when deleting files:", err)
 			return
 		}
+		elapsed := time.Since(start)
+		fmt.Println("nmapCLI", subDomain, elapsed)
+	} else { //Use Naabu to scan port
+		options := runner.Options{
+			Host:     goflags.StringSlice{subDomain},
+			ScanType: "s",
+			Silent:   true,
+			OnResult: func(hr *result.HostResult) {
+				ports = hr.Ports
+			},
+		}
+
+		naabuRunner, err := runner.NewRunner(&options)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer naabuRunner.Close()
+
+		naabuRunner.RunEnumeration(ctx)
+
+		for _, port := range ports {
+			infoSubDomain.PortAndService[strconv.Itoa(port.Port)] = ""
+		}
+		elapsed := time.Since(start)
+		fmt.Println("naabu", subDomain, elapsed)
 	}
 }

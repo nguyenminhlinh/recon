@@ -92,8 +92,8 @@ func WriteHostOutput(host string, ports []*port.Port, outputCDN bool, cdnName st
 	sb := &strings.Builder{}
 
 	for _, p := range ports {
-		//sb.WriteString(host)
-		sb.WriteString(":đâsdsadasd")
+		sb.WriteString(host)
+		sb.WriteString(":")
 		sb.WriteString(strconv.Itoa(p.Port))
 		if outputCDN && cdnName != "" {
 			sb.WriteString(" [" + cdnName + "]")

@@ -14,13 +14,11 @@ require (
 	github.com/owasp-amass/config v0.1.5
 	github.com/owasp-amass/open-asset-model v0.2.0
 	github.com/pkg/errors v0.9.1
-	github.com/projectdiscovery/ipranger v0.0.44
 	github.com/projectdiscovery/mapcidr v1.1.34
 	github.com/projectdiscovery/subfinder/v2 v2.6.6
 	github.com/projectdiscovery/uncover v1.0.7
 	github.com/projectdiscovery/wappalyzergo v0.1.12
 	github.com/remeh/sizedwaitgroup v1.0.0
-	github.com/stretchr/testify v1.9.0
 )
 
 require (
@@ -37,7 +35,6 @@ require (
 	github.com/chromedp/chromedp v0.10.0 // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect
 	github.com/cjoudrey/gluaurl v0.0.0-20161028222611-31cbb9bef199 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgraph-io/badger v1.6.2 // indirect
 	github.com/dgraph-io/ristretto v0.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
@@ -70,9 +67,9 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/owasp-amass/resolve v0.6.21 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/projectdiscovery/asnmap v1.1.0 // indirect
 	github.com/projectdiscovery/freeport v0.0.6 // indirect
+	github.com/projectdiscovery/ipranger v0.0.44 // indirect
 	github.com/prometheus/client_golang v1.20.3 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.59.1 // indirect

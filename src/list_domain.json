@@ -3,9 +3,9 @@
     "mxrecords": [
       "5 ALT2.ASPMX.L.GOOGLE.COM.",
       "1 ASPMX.L.GOOGLE.COM.",
+      "10 ALT4.ASPMX.L.GOOGLE.COM.",
       "5 ALT1.ASPMX.L.GOOGLE.COM.",
-      "10 ALT3.ASPMX.L.GOOGLE.COM.",
-      "10 ALT4.ASPMX.L.GOOGLE.COM."
+      "10 ALT3.ASPMX.L.GOOGLE.COM."
     ],
     "nsrecords": [
       "ns2.inet.vn.",
@@ -17,19 +17,22 @@
     "txtrecords": [
       "v=spf1 include:_spf.google.com ~all",
       "facebook-domain-verification=7s6z2wfeeexgli54ppim9cojz1zgxa",
-      "google-site-verification=DELoVKerYRupl0_wgQHxrABdmHFJ4Y0SRAIEkRtfg5Q",
       "_globalsign-domain-verification=P1xKx84ZwZ-PfH1JeZkTHuH3602tkEWEWI6g6lLdeJ",
-      "_globalsign-domain-verification=_vUTjCN6N34gLGM-j7nwUG3GTZ6SquKvEWVBo2jqFT",
-      "v=spf1 include:spf.mailjet.com include:mailgun.org include:servers.mcsv.net ?all"
+      "v=spf1 include:spf.mailjet.com include:mailgun.org include:servers.mcsv.net ?all",
+      "google-site-verification=DELoVKerYRupl0_wgQHxrABdmHFJ4Y0SRAIEkRtfg5Q",
+      "_globalsign-domain-verification=_vUTjCN6N34gLGM-j7nwUG3GTZ6SquKvEWVBo2jqFT"
     ],
     "subdomain": {
       "bungnosinhnhat.gumac.vn": {
         "ips": [
-          "54.179.173.60",
           "18.139.62.226",
+          "54.179.173.60",
           "13.228.81.39"
         ],
-        "portsandservice": {},
+        "portsandservice": {
+          "443": "Port:443/tcp State:open Service:ssl/http Version:OpenResty web app server ",
+          "80": "Port:80/tcp State:open Service:http Version:OpenResty web app server "
+        },
         "os": [],
         "httporhttps": {
           "https://bungnosinhnhat.gumac.vn": {
@@ -89,8 +92,20 @@
         "ips": [
           "103.90.220.145"
         ],
-        "portsandservice": {},
-        "os": [],
+        "portsandservice": {
+          "135": "Port:135/tcp State:open Service:msrpc Version:Microsoft Windows RPC ",
+          "1801": "Port:1801/tcp State:open Service:msmq Version: ",
+          "2103": "Port:2103/tcp State:open Service:msrpc Version:Microsoft Windows RPC ",
+          "2105": "Port:2105/tcp State:open Service:msrpc Version:Microsoft Windows RPC ",
+          "2107": "Port:2107/tcp State:open Service:msrpc Version:Microsoft Windows RPC ",
+          "443": "Port:443/tcp State:open Service:ssl/http Version:Microsoft HTTPAPI httpd 2.0",
+          "5357": "Port:5357/tcp State:open Service:http Version:Microsoft HTTPAPI httpd 2.0",
+          "80": "Port:80/tcp State:open Service:http Version:Microsoft HTTPAPI httpd 2.0",
+          "99": "Port:99/tcp State:open Service:http Version:Microsoft IIS httpd 10.0"
+        },
+        "os": [
+          "Name:Windows Server 2019 (85%) Devicetype:general purpose"
+        ],
         "httporhttps": {
           "https://cdn.gumac.vn": {
             "technologydetails": {
@@ -677,11 +692,6 @@
               "https://cdn.gumac.vn/image/01/thoi-trang/vay-yem-vai-xoe150520201558408617.jpg",
               "https://cdn.gumac.vn/image/01/thoi-trang/vay/dam-hai-day-that-no030620201051198313.jpg",
               "https://cdn.gumac.vn/image/01/thoi-trang/vay/vay-cho-nguoi-chan-to-ngan120320200850384674.jpg",
-              "https://cdn.gumac.vn/image/01/tron-mau/ao-thun-de-thuong010620201657102617.jpg",
-              "https://cdn.gumac.vn/image/01/tron-mau/bang-quy-doi-size-ao-nguc010620201601219242.jpg",
-              "https://cdn.gumac.vn/image/01/tron-mau/cach-chon-size-ao-nguc010620201601219242.jpg",
-              "https://cdn.gumac.vn/image/01/tron-mau/cach-do-size-ao-nguc010620201601219398.jpg",
-              "https://cdn.gumac.vn/image/01/tron-mau/size-ao-nguc010620201601219398.jpg",
               "https://cdn.gumac.vn//image/0100/chan-vay/bai-1-cvhoa/a51-4270520191151438341.jpg",
               "https://cdn.gumac.vn/image/0100/chan-vay/bai-2-cv-chu-a/at21-4270520191431283239.jpg",
               "https://cdn.gumac.vn/image/0100/chan-vay/bai-4-cvvoan/a51-4270520191626529434.jpg",
@@ -2211,7 +2221,6 @@
               "https://cdn.gumac.vn//image/thang920/9113040920201401510875.jpg?width=180",
               "https://cdn.gumac.vn//image/thang920/9113m040920201401510875.jpg?width=180",
               "https://cdn.gumac.vn/image/thang920/thudong/7-10gumac.ctrinh0105111120201857095526.jpg",
-              "https://cdn.gumac.vn/image/tintuc/42017/Hien%20tuong%20thoi%20trang/3.jpg",
               "https://cdn.gumac.vn/image/tintuc/42017/Thang%2010%20-%202017/Album%20thang-10/10704.jpg",
               "https://cdn.gumac.vn/image/tintuc/42017/Thang%2010%20-%202017/Album%20thang-10/10714-2.jpg",
               "https://cdn.gumac.vn/image/tintuc/42017/Thang%2010%20-%202017/Album%20thang-10/10740-1.jpg",
@@ -2508,9 +2517,7 @@
               "https://cdn.gumac.vn/image2/anh-tin-tuc/phoi-do-voi-vest-nam/phoi-so-vest-nam-giup-ton-len-su-sang-trong191120211135496208.jpg",
               "https://cdn.gumac.vn/image2/anh-tin-tuc/phong-cach-bassic/phong-cah-bassic-la-gi120520221329483438.jpg",
               "https://cdn.gumac.vn/image2/anh-tin-tuc/phong-cach-danshari/phong-cach-danshari041020221622505620.jpg",
-              "https://cdn.gumac.vn/image2/anh-tin-tuc/phong-cach-rococo/dac-diem-phong-cach-thoi-trang-rococo010420221646066130.jpg",
               "https://cdn.gumac.vn/image2/anh-tin-tuc/phong-cach-rococo/phong-cach-rococo010420221646066130.jpg",
-              "https://cdn.gumac.vn/image2/anh-tin-tuc/phong-cach-rococo/rococo-fashion-la-gi010420221646066130.jpg",
               "https://cdn.gumac.vn/image2/anh-tin-tuc/phong-cach-thoi-trang-cua-jennnie/phong-cach-jennie-010420221420153103.jpg",
               "https://cdn.gumac.vn/image2/anh-tin-tuc/phong-cach-thoi-trang-cua-jennnie/phong-cach-thoi-trang-dang-cap-cung-am-nhac010420221400330543.jpg",
               "https://cdn.gumac.vn/image2/anh-tin-tuc/phong-cach-thoi-trang-cua-jennnie/phong-cach-thoi-trang-thuong-ngay-cua-jennie010420221400330699.jpg",
@@ -3464,8 +3471,28 @@
         "ips": [
           "103.245.248.199"
         ],
-        "portsandservice": {},
-        "os": [],
+        "portsandservice": {
+          "179": "Port:179/tcp State:filtered Service:bgp Version: ",
+          "1862": "Port:1862/tcp State:filtered Service:mysql-cm-agent Version: ",
+          "2022": "Port:2022/tcp State:filtered Service:down Version: ",
+          "2800": "Port:2800/tcp State:filtered Service:acc-raid Version: ",
+          "2998": "Port:2998/tcp State:filtered Service:iss-realsec Version: ",
+          "443": "Port:443/tcp State:open Service:ssl/http Version:nginx 1.18.0",
+          "53": "Port:53/tcp State:filtered Service:domain Version: ",
+          "80": "Port:80/tcp State:open Service:http Version:nginx 1.18.0"
+        },
+        "os": [
+          "Name:HP P2000 G3 NAS device (93%) Devicetype:storage-misc",
+          "Name:Linux 2.6.32 - 3.13 (93%) Devicetype:general purpose",
+          "Name:MikroTik RouterOS 6.36 - 6.48 (Linux 3.3.5) (93%) Devicetype:router",
+          "Name:Linux 3.10 - 4.11 (92%) Devicetype:general purpose",
+          "Name:MikroTik RouterOS 6.37 (Linux 3.3.5) (91%) Devicetype:router",
+          "Name:Linux 3.2 - 4.14 (91%) Devicetype:general purpose",
+          "Name:Linux 4.15 - 5.19 (91%) Devicetype:general purpose",
+          "Name:Linux 4.10 (91%) Devicetype:general purpose",
+          "Name:Asus RT-AC66U router (Linux 2.6) (90%) Devicetype:broadband router",
+          "Name:Asus RT-N16 WAP (Linux 2.6) (90%) Devicetype:WAP"
+        ],
         "httporhttps": {
           "https://cms.gumac.vn": {
             "technologydetails": {
@@ -3615,8 +3642,22 @@
         "ips": [
           "61.28.238.189"
         ],
-        "portsandservice": {},
-        "os": [],
+        "portsandservice": {
+          "443": "Port:443/tcp State:open Service:ssl/http Version:nginx 1.18.0",
+          "80": "Port:80/tcp State:open Service:http Version:nginx 1.18.0"
+        },
+        "os": [
+          "Name:Crestron XPanel control system (89%) Devicetype:specialized",
+          "Name:Android 8 - 9 (Linux 3.18 - 4.4) (88%) Devicetype:phone",
+          "Name:Linux 2.6.32 - 3.13 (88%) Devicetype:general purpose",
+          "Name:Linux 3.2 - 4.14 (88%) Devicetype:general purpose",
+          "Name:Linux 4.15 - 5.19 (88%) Devicetype:general purpose",
+          "Name:Linux 5.0 - 5.14 (88%) Devicetype:general purpose",
+          "Name:MikroTik RouterOS 6.36 - 6.48 (Linux 3.3.5) (88%) Devicetype:router",
+          "Name:Linux 2.6.32 - 3.10 (87%) Devicetype:general purpose",
+          "Name:HP P2000 G3 NAS device (87%) Devicetype:storage-misc",
+          "Name:Linux 3.10 - 4.11 (86%) Devicetype:general purpose"
+        ],
         "httporhttps": {
           "http://crm.gumac.vn": {
             "technologydetails": {
@@ -3909,9 +3950,7 @@
         "cname": []
       },
       "gumac.vn": {
-        "ips": [
-          "61.28.238.249"
-        ],
+        "ips": [],
         "portsandservice": {},
         "os": [],
         "httporhttps": {
@@ -3997,8 +4036,20 @@
         "ips": [
           "103.154.102.15"
         ],
-        "portsandservice": {},
-        "os": [],
+        "portsandservice": {
+          "443": "Port:443/tcp State:open Service:ssl/http Version:OpenResty web app server ",
+          "80": "Port:80/tcp State:open Service:http Version:OpenResty web app server "
+        },
+        "os": [
+          "Name:OpenWrt Kamikaze 7.09 (Linux 2.6.22) (93%) Devicetype:WAP",
+          "Name:OpenWrt 0.9 - 7.09 (Linux 2.4.30 - 2.4.34) (92%) Devicetype:WAP",
+          "Name:OpenWrt White Russian 0.9 (Linux 2.4.30) (92%) Devicetype:WAP",
+          "Name:Linux 2.4.18 (89%) Devicetype:general purpose",
+          "Name:OpenWrt (Linux 2.4.30 - 2.4.34) (87%) Devicetype:WAP",
+          "Name:OpenWrt (Linux 2.4.32) (87%) Devicetype:WAP",
+          "Name:Crestron XPanel control system (86%) Devicetype:specialized",
+          "Name:Toshiba Magnia SG10 server appliance (Linux 2.4.18) (85%) Devicetype:general purpose"
+        ],
         "httporhttps": {
           "https://hrv.gumac.vn": {
             "technologydetails": {
@@ -4082,8 +4133,20 @@
         "ips": [
           "103.92.30.179"
         ],
-        "portsandservice": {},
-        "os": [],
+        "portsandservice": {
+          "22": "Port:22/tcp State:open Service:ssh Version:OpenSSH 7.6p1 Ubuntu 4ubuntu0.5",
+          "3000": "Port:3000/tcp State:open Service:ppp Version: ",
+          "4000": "Port:4000/tcp State:open Service:ssl/http Version:nginx 1.16.1",
+          "4002": "Port:4002/tcp State:open Service:http Version:Jetty 11.0.14",
+          "443": "Port:443/tcp State:open Service:ssl/http Version:nginx 1.16.1",
+          "53": "Port:53/tcp State:filtered Service:domain Version: ",
+          "80": "Port:80/tcp State:open Service:http Version:nginx 1.16.1",
+          "8500": "Port:8500/tcp State:open Service:http Version:HashiCorp Consul agent "
+        },
+        "os": [
+          "Name:Linux 5.0 - 5.14 (100%) Devicetype:general purpose",
+          "Name:MikroTik RouterOS 7.2 - 7.5 (Linux 5.6.3) (100%) Devicetype:router"
+        ],
         "httporhttps": {
           "https://minigame.gumac.vn": {
             "technologydetails": {
@@ -4131,8 +4194,22 @@
         "ips": [
           "61.28.238.249"
         ],
-        "portsandservice": {},
-        "os": [],
+        "portsandservice": {
+          "443": "Port:443/tcp State:open Service:ssl/http Version:nginx 1.18.0",
+          "80": "Port:80/tcp State:open Service:http Version:nginx 1.18.0"
+        },
+        "os": [
+          "Name:Crestron XPanel control system (89%) Devicetype:specialized",
+          "Name:Android 8 - 9 (Linux 3.18 - 4.4) (88%) Devicetype:phone",
+          "Name:Linux 2.6.32 - 3.13 (88%) Devicetype:general purpose",
+          "Name:Linux 3.10 - 4.11 (88%) Devicetype:general purpose",
+          "Name:Linux 3.13 - 4.4 (88%) Devicetype:general purpose",
+          "Name:Linux 3.2 - 4.14 (88%) Devicetype:general purpose",
+          "Name:Linux 3.4 - 3.10 (88%) Devicetype:general purpose",
+          "Name:Linux 3.8 - 3.16 (88%) Devicetype:general purpose",
+          "Name:Linux 4.15 - 5.19 (88%) Devicetype:general purpose",
+          "Name:Linux 5.0 - 5.14 (88%) Devicetype:general purpose"
+        ],
         "httporhttps": {
           "http://missgu.gumac.vn": {
             "technologydetails": {
@@ -4169,8 +4246,23 @@
         "ips": [
           "103.90.220.145"
         ],
-        "portsandservice": {},
-        "os": [],
+        "portsandservice": {
+          "135": "Port:135/tcp State:open Service:msrpc Version:Microsoft Windows RPC ",
+          "1801": "Port:1801/tcp State:open Service:msmq Version: ",
+          "2103": "Port:2103/tcp State:open Service:msrpc Version:Microsoft Windows RPC ",
+          "2105": "Port:2105/tcp State:open Service:msrpc Version:Microsoft Windows RPC ",
+          "2107": "Port:2107/tcp State:open Service:msmq-mgmt Version: ",
+          "443": "Port:443/tcp State:open Service:ssl/http Version:Microsoft HTTPAPI httpd 2.0",
+          "5357": "Port:5357/tcp State:open Service:http Version:Microsoft HTTPAPI httpd 2.0",
+          "5985": "Port:5985/tcp State:open Service:http Version:Microsoft HTTPAPI httpd 2.0",
+          "80": "Port:80/tcp State:open Service:http Version:Microsoft HTTPAPI httpd 2.0",
+          "8089": "Port:8089/tcp State:open Service: Version: ",
+          "8090": "Port:8090/tcp State:open Service:http Version:Microsoft HTTPAPI httpd 2.0",
+          "99": "Port:99/tcp State:open Service:http Version:Microsoft IIS httpd 10.0"
+        },
+        "os": [
+          "Name:Windows Server 2019 (85%) Devicetype:general purpose"
+        ],
         "httporhttps": {
           "": {
             "technologydetails": {},
@@ -4187,8 +4279,22 @@
         "ips": [
           "103.90.220.145"
         ],
-        "portsandservice": {},
-        "os": [],
+        "portsandservice": {
+          "135": "Port:135/tcp State:open Service:msrpc Version:Microsoft Windows RPC ",
+          "1801": "Port:1801/tcp State:open Service:msmq Version: ",
+          "2103": "Port:2103/tcp State:open Service:msrpc Version:Microsoft Windows RPC ",
+          "2105": "Port:2105/tcp State:open Service:msrpc Version:Microsoft Windows RPC ",
+          "2107": "Port:2107/tcp State:open Service:msrpc Version:Microsoft Windows RPC ",
+          "443": "Port:443/tcp State:open Service:ssl/http Version:Microsoft HTTPAPI httpd 2.0",
+          "5985": "Port:5985/tcp State:open Service:http Version:Microsoft HTTPAPI httpd 2.0",
+          "80": "Port:80/tcp State:open Service:http Version:Microsoft HTTPAPI httpd 2.0",
+          "8089": "Port:8089/tcp State:open Service:http Version:Microsoft IIS httpd 10.0",
+          "8090": "Port:8090/tcp State:open Service:http Version:Microsoft HTTPAPI httpd 2.0",
+          "99": "Port:99/tcp State:open Service:http Version:Microsoft IIS httpd 10.0"
+        },
+        "os": [
+          "Name:Windows Server 2019 (85%) Devicetype:general purpose"
+        ],
         "httporhttps": {
           "http://quanly.gumac.vn": {
             "technologydetails": {
@@ -4283,8 +4389,23 @@
         "ips": [
           "61.28.238.249"
         ],
-        "portsandservice": {},
-        "os": [],
+        "portsandservice": {
+          "2121": "Port:2121/tcp State:closed Service:ccproxy-ftp Version: ",
+          "443": "Port:443/tcp State:open Service:ssl/http Version:nginx 1.18.0",
+          "80": "Port:80/tcp State:open Service:http Version:nginx 1.18.0"
+        },
+        "os": [
+          "Name:Linux 2.6.32 - 3.13 (90%) Devicetype:general purpose",
+          "Name:Linux 5.0 - 5.14 (90%) Devicetype:general purpose",
+          "Name:MikroTik RouterOS 6.36 - 6.48 (Linux 3.3.5) (90%) Devicetype:router",
+          "Name:HP P2000 G3 NAS device (89%) Devicetype:storage-misc",
+          "Name:MikroTik RouterOS 7.2 - 7.5 (Linux 5.6.3) (89%) Devicetype:router",
+          "Name:Linux 3.10 - 4.11 (88%) Devicetype:general purpose",
+          "Name:Linux 3.13 - 4.4 (88%) Devicetype:general purpose",
+          "Name:Linux 3.2 - 4.14 (86%) Devicetype:general purpose",
+          "Name:Linux 4.15 - 5.19 (86%) Devicetype:general purpose",
+          "Name:OpenWrt Kamikaze 7.09 (Linux 2.6.22) (86%) Devicetype:WAP"
+        ],
         "httporhttps": {
           "https://www.gumac.vn": {
             "technologydetails": {

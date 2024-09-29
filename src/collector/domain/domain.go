@@ -221,7 +221,7 @@ func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain str
 	}
 
 	// Set the timeout by configuring the time for the context
-	timeout := 5 * time.Minute
+	timeout := 3 * time.Minute
 	ctxTimeout, cancelTimeout := context.WithTimeout(ctx, timeout)
 	defer cancelTimeout()
 

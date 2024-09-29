@@ -13,7 +13,7 @@ import (
 	osutil "github.com/projectdiscovery/utils/os"
 )
 
-func (r *Runner) handleNmap(scanPortAndService *string) error {
+func (r *Runner) handleNmap() error {
 	// command from CLI
 	command := r.options.NmapCLI
 	hasCLI := r.options.NmapCLI != ""
@@ -74,10 +74,10 @@ func (r *Runner) handleNmap(scanPortAndService *string) error {
 				continue
 			}
 
-			portsStr := strings.Join(ports, ",")
+			//portsStr := strings.Join(ports, ",")
 			ipsStr := strings.Join(ips, " ")
 
-			args = append(args, "-p", portsStr)
+			//args = append(args, "-top-ports 1000")
 			args = append(args, ips...)
 
 			// if the command is not executable, we just suggest it
@@ -85,7 +85,7 @@ func (r *Runner) handleNmap(scanPortAndService *string) error {
 
 			// if requested via config file or via cli
 			if (r.options.Nmap || hasCLI) && commandCanBeExecuted {
-				gologger.Info().Msgf("Running nmap command: %s -p %s %s", command, portsStr, ipsStr)
+				gologger.Info().Msgf("Running nmap command: %s -p %s", command, ipsStr)
 				// check when user type '-nmap-cli "nmap -sV"'
 				// automatically remove nmap
 				posArgs := 0
@@ -99,25 +99,18 @@ func (r *Runner) handleNmap(scanPortAndService *string) error {
 				if osutil.IsWindows() {
 					nmapCommand = "nmap.exe"
 				}
-				if out, err := exec.Command(nmapCommand, args[posArgs:]...).Output(); err == nil {
-					*scanPortAndService = string(out)
-					//fmt.Println("linh", string(out), "linh")
-				} else {
+
+				cmd := exec.Command(nmapCommand, args[posArgs:]...)
+
+				//cmd.Stdout = os.Stdout
+				err := cmd.Run()
+				if err != nil {
 					errMsg := errors.Wrap(err, "Could not run nmap command")
 					gologger.Error().Msgf(errMsg.Error())
 					return errMsg
 				}
-				// cmd := exec.Command(nmapCommand, args[posArgs:]...)
-
-				// cmd.Stdout = os.Stdout
-				// err := cmd.Run()
-				// if err != nil {
-				// 	errMsg := errors.Wrap(err, "Could not run nmap command")
-				// 	gologger.Error().Msgf(errMsg.Error())
-				// 	return errMsg
-				// }
 			} else {
-				gologger.Info().Msgf("Suggested nmap command: %s -p %s %s", command, portsStr, ipsStr)
+				gologger.Info().Msgf("Suggested nmap command: %s -p %s", command, ipsStr)
 			}
 		}
 	}
