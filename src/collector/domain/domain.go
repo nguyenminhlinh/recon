@@ -17,6 +17,7 @@ import (
 
 	dnsrecon "recon/collector/dns"
 	"recon/utils"
+	"recon/utils/output"
 
 	"github.com/caffix/netmap"
 	"github.com/caffix/stringset"
@@ -31,10 +32,16 @@ import (
 	"github.com/projectdiscovery/subfinder/v2/pkg/runner"
 )
 
-func DomainBruteForceHttp(domain string, wordList string, workDirectory string) {
+var contstt = 0
+
+func DomainBruteForceHttp(domain string, wordList string, results chan string) {
 	//Using the wrong host to get length web content "C:/Users/minhl/recon/src/data/common.txt"
 	lengthResponse := utils.LengthResponse(domain, "abcdefghiklm."+domain)
-	utils.Ffuf(domain, strconv.Itoa(lengthResponse), workDirectory+"/data/output/DomainBruteForceHttp.txt", "domain", true, 0, wordList)
+	utils.Ffuf(domain, strconv.Itoa(lengthResponse), "DomainBruteForceHttp", "domain", true, 0, wordList)
+	for _, output := range output.OutputDomain {
+		results <- output
+	}
+	close(results)
 }
 
 func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string, results chan<- string, domain string, count *int, mu *sync.Mutex, maxGoroutines int) {
@@ -66,14 +73,18 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 				//fmt.Println(*count)
 				return
 			} else {
-				if domain != "" {
+				if domain != "" { //DomainBruteForceDNS with subdomain don't have domain
+					mu.Lock()
+					contstt++
+					fmt.Printf("\rStt: %d", contstt)
+					mu.Unlock()
 					responseAnswer := dnsrecon.Dig(subdomain+"."+domain, dns.TypeA)
 					//fmt.Println(responseAnswer, subdomain)
 					if len(responseAnswer) != 0 {
 						//fmt.Fprintf(os.Stdout, "Subdomain tồn tại:: %-35s \n", subdomain)
 						results <- subdomain + "." + domain
 					}
-				} else {
+				} else { //DomainOSINTSubfinder with subdomain had domain
 					responseAnswer := dnsrecon.Dig(subdomain, dns.TypeA)
 					//fmt.Println(responseAnswer, subdomain)
 					if len(responseAnswer) != 0 {
@@ -86,19 +97,16 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 	}
 }
 
-func DomainBruteForceDNS(ctx context.Context, cancel context.CancelFunc, domain string, wordList string, workDirectory string) {
+func DomainBruteForceDNS(ctx context.Context, cancel context.CancelFunc, domain string, wordList string, results chan string) {
 	var wg sync.WaitGroup
 	var count int
 	var mu sync.Mutex
 	var countReadFiles int
 	var muReadFiles sync.Mutex
-	const maxGoroutines = 50    // Limit the number of concurrent goroutines
+	const maxGoroutines = 40    // Limit the number of concurrent goroutines
 	const maxChanSemaphore = 50 // Limit the number of elements in the chan semaphore
-	const maxChanResults = 50   // Limit the number of elements in chan results
 	// Create semaphore channel to receive info from file and sen to checkDomain
 	semaphore := make(chan string, maxChanSemaphore)
-	// Create semaphore channel to receive info from checkDomain and send to writeFiles
-	results := make(chan string, maxChanResults)
 
 	// Start the goroutine to read the file into chan
 	wg.Add(1)
@@ -109,10 +117,6 @@ func DomainBruteForceDNS(ctx context.Context, cancel context.CancelFunc, domain 
 		wg.Add(1)
 		go checkDomain(ctx, &wg, semaphore, results, domain, &count, &mu, maxGoroutines)
 	}
-
-	// Start the goroutine to write the results to the output file
-	wg.Add(1)
-	go utils.WriteFiles(ctx, &wg, results, workDirectory+"/data/output/DomainBruteForceDNS.txt")
 
 	// Wait for all goroutines to complete
 	wg.Wait()
@@ -195,7 +199,7 @@ func processOutput(ctx context.Context, ctxTimeout context.Context, g *netmap.Gr
 	}
 }
 
-func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain string, workDirectory string) {
+func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain string, workDirectory string, chanResults chan string) {
 	// Create configuration for Amass
 	cfg := config.NewConfig()
 
@@ -217,7 +221,7 @@ func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain str
 	}
 
 	// Set the timeout by configuring the time for the context
-	timeout := 20 * time.Minute
+	timeout := 5 * time.Minute
 	ctxTimeout, cancelTimeout := context.WithTimeout(ctx, timeout)
 	defer cancelTimeout()
 
@@ -229,15 +233,10 @@ func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain str
 	}
 
 	var wg sync.WaitGroup
-	outChans := make(chan string, 50)
 
 	// Run the enumeration process and send the results to the channel
 	wg.Add(1)
-	go processOutput(ctx, ctxTimeout, sys.GraphDatabases()[0], e, outChans, &wg, domain)
-
-	// Start the goroutine to write the results to the output file
-	wg.Add(1)
-	go utils.WriteFiles(ctx, &wg, outChans, workDirectory+"/data/output/DomainOSINTAmass.txt")
+	go processOutput(ctx, ctxTimeout, sys.GraphDatabases()[0], e, chanResults, &wg, domain)
 
 	// Monitor for cancellation by the user
 	go func(c context.Context, f context.CancelFunc) {
@@ -257,7 +256,7 @@ func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain str
 	}
 }
 
-func DomainOSINTSubfinder(ctx context.Context, cancel context.CancelFunc, domain string, workDirectory string) {
+func DomainOSINTSubfinder(ctx context.Context, cancel context.CancelFunc, domain string, workDirectory string, chanResults chan string) {
 	// Monitor for cancellation by the user
 	go func(c context.Context, f context.CancelFunc) {
 		quit := make(chan os.Signal, 1)
@@ -300,13 +299,8 @@ func DomainOSINTSubfinder(ctx context.Context, cancel context.CancelFunc, domain
 	var wg sync.WaitGroup
 	var count int
 	var mu sync.Mutex
-	outputChans := make(chan string, 50)
 	inputChans := make(chan string, 50)
-	const maxGoroutines = 50 // Limit the number of concurrent goroutines
-
-	// Start the goroutine to write the results to the output file
-	wg.Add(1)
-	go utils.WriteFiles(ctx, &wg, outputChans, workDirectory+"/data/output/DomainOSINTSubfinder.txt")
+	const maxGoroutines = 20 // Limit the number of concurrent goroutines
 
 	// Split string into slices based on line breaks
 	domains := strings.Split(output.String(), "\n")
@@ -319,7 +313,7 @@ func DomainOSINTSubfinder(ctx context.Context, cancel context.CancelFunc, domain
 
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
-		go checkDomain(ctx, &wg, inputChans, outputChans, "", &count, &mu, maxGoroutines)
+		go checkDomain(ctx, &wg, inputChans, chanResults, "", &count, &mu, maxGoroutines)
 	}
 	wg.Wait()
 }

@@ -3,42 +3,29 @@ package dir
 import (
 	"context"
 	"recon/utils"
+	"recon/utils/output"
 	"strconv"
-	"sync"
 )
 
-func DirAndFileBruteForce(ctx context.Context, domain string, wordList string, workDirectory string) {
-	utils.Ffuf(domain, "", workDirectory+"/data/output/DirAndFileBruteForce.txt", "dir", false, 2, wordList)
-	var wg sync.WaitGroup
-	outputChan := make(chan string, 20)
-	var count int
-	var mu sync.Mutex
-	wg.Add(1)
-	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DirAndFileBruteForce.txt", outputChan, &count, &mu, 1)
-	var lengths []int
-	flagOdd := false //get the item in odd position, start =0
-	// domain 0
-	// length 1
-	// domain 2
-	// length 3
-	for result := range outputChan {
-		if flagOdd {
-			length, _ := strconv.Atoi(result)
-			lengths = append(lengths, length)
-			flagOdd = false
-		} else {
-			flagOdd = true
-		}
+func DirAndFileBruteForce(ctx context.Context, domain string, wordList string) map[string]int64 {
+	var outputMap map[string]int64
+	utils.Ffuf(domain, "", "DirAndFileBruteForce", "dir", false, 1, wordList)
+	outputMap = output.OutputDirAndFile
+	var lengths []int64
+
+	for _, value := range outputMap {
+		lengths = append(lengths, value)
 	}
-	length := FindMostFrequentElement(lengths)
-	wg.Wait()
+
+	length := FindMostFrequentElement(lengths) //get length most frequent to remove result have this length for the sencond run
 	// Get the length of the first 10 entries to check the most repeated length of the wrong domain then filter by length
-	utils.Ffuf(domain, length, workDirectory+"/data/output/DirAndFileBruteForce.txt", "dir", false, 0, wordList)
+	utils.Ffuf(domain, length, "DirAndFileBruteForce", "dir", false, 0, wordList)
+	return output.OutputDirAndFile
 }
 
-func FindMostFrequentElement(slice []int) string {
-	countMap := make(map[int]int)
-	var mostFrequent int
+func FindMostFrequentElement(slice []int64) string {
+	countMap := make(map[int64]int)
+	var mostFrequent int64
 	maxCount := 0
 	if len(slice) == 0 {
 		return ""
@@ -50,5 +37,5 @@ func FindMostFrequentElement(slice []int) string {
 			mostFrequent = value
 		}
 	}
-	return strconv.Itoa(mostFrequent)
+	return strconv.FormatInt(mostFrequent, 10)
 }

@@ -50,14 +50,14 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 	randomNumber := rand.Intn(100) + 1
 	var scanPortAndService string
 	var ports []*port.Port
-	nmapCLI := "nmap -O -sV -oX " + workDirectory + "/data/output/scanPortAndService" + strconv.Itoa(randomNumber) + ".txt"
+	//nmapCLI := "nmap -O -sV -oX " + workDirectory + "/data/output/scanPortAndService" + strconv.Itoa(randomNumber) + ".txt"
 	options := runner.Options{
 		Host:     goflags.StringSlice{subDomain},
 		ScanType: "s",
 		TopPorts: "1000",
-		Nmap:     true,
-		NmapCLI:  nmapCLI,
-		Silent:   true,
+		//Nmap:     true,
+		//NmapCLI:  nmapCLI,
+		Silent: true,
 		OnResult: func(hr *result.HostResult) {
 			// fmt.Println(hr.Host, hr.Ports)
 			ports = hr.Ports
@@ -70,11 +70,11 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 	}
 	defer naabuRunner.Close()
 
-	err = naabuRunner.RunEnumeration(ctx, &scanPortAndService)
+	_ = naabuRunner.RunEnumeration(ctx, &scanPortAndService)
 	if infoSubDomain.PortAndService == nil {
 		infoSubDomain.PortAndService = make(map[string]string)
 	}
-	if err != nil {
+	if true {
 		for _, port := range ports {
 			infoSubDomain.PortAndService[strconv.Itoa(port.Port)] = ""
 		}

@@ -95,22 +95,19 @@ func (s *Stdoutput) SaveFile(filename, format string) error {
 		s.Info("No results and -or defined, output file not written.")
 		return err
 	}
-	switch format {
-	case "json":
-		err = writeTxt(filename, s.config.OutputFile, append(s.Results, s.CurrentResults...))
-	}
+
+	err = outPutFfuf(s.config.OutputFile, append(s.Results, s.CurrentResults...))
+
 	return err
 }
 
 // Finalize gets run after all the ffuf jobs are completed
 func (s *Stdoutput) Finalize() error {
-	var err error
-	if s.config.OutputFile != "" {
-		err = s.SaveFile(s.config.OutputFile, s.config.OutputFormat)
-		if err != nil {
-			s.Error(err.Error())
-		}
+	err := s.SaveFile(s.config.OutputFile, s.config.OutputFormat)
+	if err != nil {
+		s.Error(err.Error())
 	}
+
 	if !s.config.Quiet {
 		fmt.Fprintf(os.Stderr, "\n")
 	}

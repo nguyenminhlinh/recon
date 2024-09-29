@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"sort"
 	"strings"
 
 	"recon/collector/dir"
@@ -13,7 +12,6 @@ import (
 	"recon/collector/domain"
 	"recon/collector/tech"
 	data "recon/data/type"
-	"recon/utils"
 	"sync"
 	"time"
 
@@ -26,22 +24,22 @@ var (
 	red   = color.New(color.FgHiRed).SprintFunc()
 )
 
-func Core(ctx context.Context, cancel context.CancelFunc, wg *sync.WaitGroup, domainName string, workDirectory string, nameFunc string) {
+func Core(ctx context.Context, cancel context.CancelFunc, wg *sync.WaitGroup, domainName string, workDirectory string, nameFunc string, chanResults chan string) {
 	wg.Add(1)
 	go func() {
 		start := time.Now()
 		fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", nameFunc, "Running....")
 
 		if nameFunc == "DomainBruteForceHttp" {
-			domain.DomainBruteForceHttp(domainName, workDirectory+"/data/input/subdomains-top1mil-110000.txt", workDirectory)
+			domain.DomainBruteForceHttp(domainName, workDirectory+"/data/input/subdomains-top1mil-110000.txt", chanResults)
 		} else if nameFunc == "DomainBruteForceDNS" {
-			domain.DomainBruteForceDNS(ctx, cancel, domainName, workDirectory+"/data/input/subdomains-top1mil-110000.txt", workDirectory) //combined_subdomains
+			domain.DomainBruteForceDNS(ctx, cancel, domainName, workDirectory+"/data/input/subdomains-top1mil-110000.txt", chanResults) //combined_subdomains
 		} else if nameFunc == "DomainOSINTAmass" {
-			domain.DomainOSINTAmass(ctx, cancel, domainName, workDirectory)
+			domain.DomainOSINTAmass(ctx, cancel, domainName, workDirectory, chanResults)
 		} else if nameFunc == "DomainOSINTSubfinder" {
-			domain.DomainOSINTSubfinder(ctx, cancel, domainName, workDirectory)
+			domain.DomainOSINTSubfinder(ctx, cancel, domainName, workDirectory, chanResults)
 		} else if nameFunc == "DirAndFileBruteForce" {
-			dir.DirAndFileBruteForce(ctx, domainName, workDirectory+"/data/input/common.txt", workDirectory)
+			dir.DirAndFileBruteForce(ctx, domainName, workDirectory+"/data/input/common.txt")
 		}
 
 		elapsed := time.Since(start)
@@ -56,6 +54,69 @@ func Core(ctx context.Context, cancel context.CancelFunc, wg *sync.WaitGroup, do
 		}
 		wg.Done()
 	}()
+}
+
+func ScanDomain(ctx context.Context, workDirectory string, rootDomain string, chanResults chan string) {
+	start := time.Now()
+	fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "ScanDomain", "Running....")
+
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	var subDomainsMap sync.Map // Create map to store unique line
+
+	subDomainChan := make(chan string, 100)
+	infoDomain := data.ListDomain[rootDomain]
+
+	if infoDomain.SubDomain == nil {
+		infoDomain.SubDomain = make(map[string]data.InfoSubDomain)
+	}
+	dns.DNS(rootDomain, &infoDomain) //Get information dns of rootdomain
+
+	data.ListDomain[rootDomain] = infoDomain
+	wg.Add(1)
+	go func() {
+		for subDomain := range chanResults {
+			line := strings.TrimSpace(subDomain)
+			line = strings.ToLower(line)
+			if line != "" {
+				if _, exists := subDomainsMap.Load(line); !exists { //Add new line if don"t have
+					subDomainsMap.Store(line, true)
+					//subDomainChan <- line
+					fmt.Printf("Added: %s\n", line)
+				}
+			}
+		}
+		//close(subDomainChan)
+		wg.Done()
+	}()
+	wg.Add(1)
+	go InformationOfAllSubDomain(ctx, &wg, subDomainChan, infoDomain.SubDomain, workDirectory, &mu)
+
+	wg.Wait()
+	// Convert ListDomain to JSON and write to file
+	file, err := os.Create("list_domain.json")
+	if err != nil {
+		fmt.Println("Error creating file:", err)
+		return
+	}
+	defer file.Close()
+
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ") // Set indentation for readability
+	err = encoder.Encode(data.ListDomain)
+	if err != nil {
+		fmt.Println("Error encoding JSON:", err)
+	}
+
+	elapsed := time.Since(start)
+	select {
+	case <-ctx.Done():
+		// If a signal is received from the context
+		fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "ScanDomain", red("Finished due to cancellation in "), elapsed)
+	default:
+		// If there is no cancel signal, take another action
+		fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "ScanDomain", green("Finished successfully in "), elapsed)
+	}
 }
 
 func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, workDirectory string, mu *sync.Mutex) {
@@ -100,93 +161,18 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 	wg.Wait()
 }
 
-func ScanDomain(ctx context.Context, workDirectory string, rootDomain string) {
-	start := time.Now()
-	fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "ScanDomain", "Running....")
-
-	var wg sync.WaitGroup
-	var count int
-	var mu sync.Mutex
-	subDomainsFile := make(chan string, 50)
-	subDomainChan := make(chan string, 50)
-	// Create map to store unique line
-	subDomainsMap := make(map[string]bool)
-
-	wg.Add(1)
-	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DomainBruteForceDNS.txt", subDomainsFile, &count, &mu, 4)
-	wg.Add(1)
-	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DomainBruteForceHttp.txt", subDomainsFile, &count, &mu, 4)
-	wg.Add(1)
-	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DomainOSINTAmass.txt", subDomainsFile, &count, &mu, 4)
-	wg.Add(1)
-	go utils.ReadFiles(ctx, &wg, workDirectory+"/data/output/DomainOSINTSubfinder.txt", subDomainsFile, &count, &mu, 4)
-
-	wg.Add(1)
-	go func() {
-		for subDomain := range subDomainsFile {
-			line := strings.TrimSpace(subDomain)
-			line = strings.ToLower(line)
-			//Add new line if don"t have
-			if line != "" {
-				subDomainsMap[line] = true
-			}
+func Transmit4into1chan(mu *sync.Mutex, wg *sync.WaitGroup, inputChan chan string, chanResults chan string, count *int, maxGoroutines int) {
+	defer wg.Done()
+	for input := range inputChan {
+		chanResults <- input
+	}
+	mu.Lock()
+	(*count)++
+	if *count == maxGoroutines {
+		for len(inputChan) > 0 {
+			<-inputChan // Read and skip data until the channel is empty
 		}
-		wg.Done()
-	}()
-
-	wg.Wait()
-	// create slice containing the key
-	var subDomains []string
-	for subDomainMap := range subDomainsMap {
-		subDomains = append(subDomains, subDomainMap)
+		close(chanResults) //Close the results channel after stop context
 	}
-
-	// Sort slice keys
-	sort.Strings(subDomains)
-	var wg1 sync.WaitGroup
-	infoDomain := data.ListDomain[rootDomain]
-
-	if infoDomain.SubDomain == nil {
-		infoDomain.SubDomain = make(map[string]data.InfoSubDomain)
-	}
-	dns.DNS(rootDomain, &infoDomain) //Get information dns of rootdomain
-
-	data.ListDomain[rootDomain] = infoDomain
-
-	wg1.Add(1)
-	go func() {
-		for _, subDomain := range subDomains {
-			subDomainChan <- subDomain
-		}
-		close(subDomainChan)
-		wg1.Done()
-	}()
-	wg1.Add(1)
-	go InformationOfAllSubDomain(ctx, &wg1, subDomainChan, infoDomain.SubDomain, workDirectory, &mu)
-
-	wg1.Wait()
-
-	// Convert ListDomain to JSON and write to file
-	file, err := os.Create("list_domain.json")
-	if err != nil {
-		fmt.Println("Error creating file:", err)
-		return
-	}
-	defer file.Close()
-
-	encoder := json.NewEncoder(file)
-	encoder.SetIndent("", "  ") // Set indentation for readability
-	err = encoder.Encode(data.ListDomain)
-	if err != nil {
-		fmt.Println("Error encoding JSON:", err)
-	}
-	elapsed := time.Since(start)
-	select {
-	case <-ctx.Done():
-		// If a signal is received from the context
-		fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "ScanDomain", red("Finished due to cancellation in "), elapsed)
-	default:
-		// If there is no cancel signal, take another action
-		fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "ScanDomain", green("Finished successfully in "), elapsed)
-	}
+	mu.Unlock()
 }
