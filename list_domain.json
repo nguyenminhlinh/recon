@@ -1,0 +1,1369 @@
+{
+  "hackerone.com": {
+    "mxrecords": [
+      "30 aspmx2.googlemail.com.",
+      "10 aspmx.l.google.com.",
+      "30 aspmx3.googlemail.com.",
+      "20 alt2.aspmx.l.google.com.",
+      "20 alt1.aspmx.l.google.com."
+    ],
+    "nsrecords": [
+      "a.ns.hackerone.com.",
+      "b.ns.hackerone.com."
+    ],
+    "soarecords": [
+      "ttl: 10000  email: dns.cloudflare.com."
+    ],
+    "txtrecords": [
+      "MS=ms75772789",
+      "0q8zpfvc64swgyy9wwwrjl7vgwrfffbf",
+      "4b7570f2564f4074b42872e1d78668ad",
+      "70gn9hp69jzpn3nkp42r8n9jwwtd1d70",
+      "c06l6z7hp4vk6bzpqb1j6b8w1m64nf84",
+      "ZOOM_verify_pzZpSwKqRx6pAD9lLkSl5g",
+      "wayback=verification for request #673161",
+      "wework-site-verification=e0czKzmn7ul5Cr9A",
+      "apple-domain-verification=YOO9EuQfVRiqtbWi",
+      "docusign=848c7864-3a91-42aa-8e30-2671086f7516"
+    ],
+    "subdomain": {
+      "a.ns.hackerone.com": {
+        "ips": [
+          "162.159.0.31 : cloudflareIPs"
+        ],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": []
+      },
+      "api.hackerone.com": {
+        "ips": [
+          "172.64.151.42 : cloudflareIPs",
+          "104.18.36.214 : cloudflareIPs"
+        ],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "https://api.hackerone.com": {
+            "technologydetails": {
+              "Algolia": {
+                "Description": "Algolia offers a hosted web search product delivering real-time results.",
+                "Website": "https://www.algolia.com",
+                "CPE": "",
+                "Icon": "Algolia.svg",
+                "Categories": [
+                  "Search engines"
+                ]
+              },
+              "Cloudflare": {
+                "Description": "Cloudflare is a web-infrastructure and website-security company, providing content-delivery-network services, DDoS mitigation, Internet security, and distributed domain-name-server services.",
+                "Website": "https://www.cloudflare.com",
+                "CPE": "cpe:2.3:a:cloudflare:cloudflare:*:*:*:*:*:*:*:*",
+                "Icon": "CloudFlare.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "HSTS": {
+                "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+                "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+                "CPE": "",
+                "Icon": "",
+                "Categories": [
+                  "Security"
+                ]
+              },
+              "jsDelivr": {
+                "Description": "JSDelivr is a free public CDN for open-source projects. It can serve web files directly from the npm registry and GitHub repositories without any configuration.",
+                "Website": "https://www.jsdelivr.com/",
+                "CPE": "",
+                "Icon": "jsdelivr-icon.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              }
+            },
+            "link": [
+              "http://api.hackerone.com/",
+              "https://api.hackerone.com/",
+              "http://api.hackerone.com/robots.txt",
+              "https://api.hackerone.com/robots.txt",
+              "https://api.hackerone.com/%0A",
+              "http://api.hackerone.com/.well-known/ai-plugin.json",
+              "http://api.hackerone.com/.well-known/assetlinks.json",
+              "http://api.hackerone.com/.well-known/dnt-policy.txt",
+              "http://api.hackerone.com/.well-known/gpc.json",
+              "http://api.hackerone.com/.well-known/nodeinfo",
+              "http://api.hackerone.com/.well-known/openid-configuration",
+              "http://api.hackerone.com/.well-known/security.txt",
+              "http://api.hackerone.com/.well-known/trust.txt",
+              "http://api.hackerone.com/ads.txt",
+              "http://api.hackerone.com/app-ads.txt",
+              "https://api.hackerone.com/assets/fonts/effra-medium-d33322a0.woff",
+              "https://api.hackerone.com/assets/fonts/effra-regular-7ebee9e1.woff",
+              "https://api.hackerone.com/assets/fonts/roboto-mono-regular-5d9f74e5.ttf",
+              "https://api.hackerone.com/assets/fonts/slate-33847ce5.woff2?-syv14m",
+              "https://api.hackerone.com/assets/fonts/slate-33847ce5.woff?-syv14m",
+              "https://api.hackerone.com/assets/fonts/slate-7b7da4fe.ttf?-syv14m",
+              "https://api.hackerone.com/assets/fonts/slate-cfc9d06b.eot",
+              "https://api.hackerone.com/assets/fonts/slate-cfc9d06b.eot?-syv14m",
+              "https://api.hackerone.com/assets/fonts/slate-e55b8307.svg?-syv14m",
+              "https://api.hackerone.com/assets/images/favicon.ico",
+              "https://api.hackerone.com/assets/images/getting-started-active-icon-8c622cd1.svg",
+              "https://api.hackerone.com/assets/images/getting-started-icon-8e568c9c.svg",
+              "https://api.hackerone.com/assets/images/home-active-icon-4456efcf.svg",
+              "https://api.hackerone.com/assets/images/home-icon-e212aeb8.svg",
+              "https://api.hackerone.com/assets/images/logo-b8de4ab7.svg",
+              "https://api.hackerone.com/assets/images/navbar-cad8cdcb.png",
+              "https://api.hackerone.com/assets/images/reference-active-icon-0c7da4a9.svg",
+              "https://api.hackerone.com/assets/images/reference-icon-740a9c21.svg",
+              "https://api.hackerone.com/assets/images/resources-active-icon-8f1980c4.svg",
+              "https://api.hackerone.com/assets/images/resources-icon-eb571889.svg",
+              "https://api.hackerone.com/assets/images/rss-feed-active-icon-54a5ccb1.svg",
+              "https://api.hackerone.com/assets/images/rss-feed-icon-565f423d.svg",
+              "https://api.hackerone.com/assets/images/use-cases-active-icon-f422508f.svg",
+              "https://api.hackerone.com/assets/images/use-cases-icon-27cdd84f.svg",
+              "https://api.hackerone.com/assets/images/webhooks-active-icon-6fb884a3.svg",
+              "https://api.hackerone.com/assets/images/webhooks-icon-b2932429.svg",
+              "https://api.hackerone.com/assets/javascripts/all-3193d32d.js",
+              "https://api.hackerone.com/assets/javascripts/all-55afcf84.js",
+              "https://api.hackerone.com/assets/javascripts/all-cc9d7a50.js",
+              "https://api.hackerone.com/assets/javascripts/google_analytics-d319b720.js",
+              "https://api.hackerone.com/assets/stylesheets/print-2da1ecc5.css",
+              "https://api.hackerone.com/assets/stylesheets/print-3db2b047.css",
+              "https://api.hackerone.com/assets/stylesheets/print-c3fe4d09.css",
+              "https://api.hackerone.com/assets/stylesheets/screen-0540c09c.css",
+              "https://api.hackerone.com/assets/stylesheets/screen-176a6d12.css",
+              "https://api.hackerone.com/assets/stylesheets/screen-4e8bb72e.css",
+              "https://api.hackerone.com/assets/stylesheets/screen-9606ca24.css",
+              "https://api.hackerone.com/assets/stylesheets/screen-bee96dd6.css",
+              "https://api.hackerone.com/assets/stylesheets/screen-fb7fa378.css",
+              "https://api.hackerone.com/changelog.rss",
+              "https://api.hackerone.com/core-resources/",
+              "https://api.hackerone.com/customer-customer-reference",
+              "https://api.hackerone.com/customer-reference/",
+              "https://api.hackerone.com/customer-resources/",
+              "https://api.hackerone.com/docs/v1",
+              "https://api.hackerone.com/favicon.ico",
+              "https://api.hackerone.com/getting-started/",
+              "https://api.hackerone.com/getting-started-hacker-api/",
+              "https://api.hackerone.com/hacker-reference/",
+              "https://api.hackerone.com/hacker-resources/",
+              "https://api.hackerone.com/main-4d664bd1abb44a687600.css",
+              "https://api.hackerone.com/main-4d664bd1abb44a687600.js",
+              "https://api.hackerone.com/main-5bd806ac677ea57eea5b.css",
+              "https://api.hackerone.com/main-5bd806ac677ea57eea5b.js",
+              "https://api.hackerone.com/main-71b11a887fec26ab0ef8.css",
+              "https://api.hackerone.com/main-71b11a887fec26ab0ef8.js",
+              "https://api.hackerone.com/main-96b79e99b3217578218b.css",
+              "https://api.hackerone.com/main-96b79e99b3217578218b.js",
+              "https://api.hackerone.com/main-bf0e790bffe7dc2e208b.css",
+              "https://api.hackerone.com/main-c3878c632ee65dcdc7a8.css",
+              "https://api.hackerone.com/main-c3878c632ee65dcdc7a8.js",
+              "https://api.hackerone.com/main-e8d9a7ae1d6552d8246b.css",
+              "https://api.hackerone.com/main-e8d9a7ae1d6552d8246b.js",
+              "https://api.hackerone.com/reference/",
+              "https://api.hackerone.com/sitemap.xml",
+              "https://api.hackerone.com/use-cases/",
+              "http://api.hackerone.com/v1/reports",
+              "http://api.hackerone.com/v1/reports?filter",
+              "https://api.hackerone.com/webhooks"
+            ],
+            "firewall": "",
+            "ttatus": "200 OK",
+            "title": "HackerOne API"
+          }
+        },
+        "cname": []
+      },
+      "b.ns.hackerone.com": {
+        "ips": [
+          "162.159.1.31 : cloudflareIPs"
+        ],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": []
+      },
+      "docs.hackerone.com": {
+        "ips": [
+          "104.18.36.214 : cloudflareIPs",
+          "172.64.151.42 : cloudflareIPs"
+        ],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "https://docs.hackerone.com": {
+            "technologydetails": {
+              "Cloudflare": {
+                "Description": "Cloudflare is a web-infrastructure and website-security company, providing content-delivery-network services, DDoS mitigation, Internet security, and distributed domain-name-server services.",
+                "Website": "https://www.cloudflare.com",
+                "CPE": "cpe:2.3:a:cloudflare:cloudflare:*:*:*:*:*:*:*:*",
+                "Icon": "CloudFlare.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "HSTS": {
+                "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+                "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+                "CPE": "",
+                "Icon": "",
+                "Categories": [
+                  "Security"
+                ]
+              }
+            },
+            "link": null,
+            "firewall": "",
+            "ttatus": "200 OK",
+            "title": "HackerOne Help Center"
+          }
+        },
+        "cname": []
+      },
+      "forwarding.hackerone.com": {
+        "ips": [],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": []
+      },
+      "gsemail.hackerone.com": {
+        "ips": [],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": [
+          "u18966564.wl065.sendgrid.net."
+        ]
+      },
+      "gslink.hackerone.com": {
+        "ips": [
+          "3.162.58.42 : awsCloudFrontIPs",
+          "3.162.58.88 : awsCloudFrontIPs",
+          "3.162.58.122 : awsCloudFrontIPs",
+          "3.162.58.55 : awsCloudFrontIPs"
+        ],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "https://gslink.hackerone.com": {
+            "technologydetails": {
+              "Amazon CloudFront": {
+                "Description": "Amazon CloudFront is a fast content delivery network (CDN) service that securely delivers data, videos, applications, and APIs to customers globally with low latency, high transfer speeds.",
+                "Website": "https://aws.amazon.com/cloudfront/",
+                "CPE": "",
+                "Icon": "Amazon Cloudfront.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "Amazon Web Services": {
+                "Description": "Amazon Web Services (AWS) is a comprehensive cloud services platform offering compute power, database storage, content delivery and other functionality.",
+                "Website": "https://aws.amazon.com/",
+                "CPE": "",
+                "Icon": "Amazon Web Services.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "Nginx": {
+                "Description": "Nginx is a web server that can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.",
+                "Website": "https://nginx.org/en",
+                "CPE": "cpe:2.3:a:f5:nginx:*:*:*:*:*:*:*:*",
+                "Icon": "Nginx.svg",
+                "Categories": [
+                  "Web servers",
+                  "Reverse proxies"
+                ]
+              }
+            },
+            "link": [
+              "http://gslink.hackerone.com/"
+            ],
+            "firewall": "",
+            "ttatus": "404 Not Found",
+            "title": "404 Not Found"
+          }
+        },
+        "cname": [
+          "d3rxkn2g2bbsjp.cloudfront.net."
+        ]
+      },
+      "hackerone.com": {
+        "ips": [
+          "104.18.36.214 : cloudflareIPs",
+          "172.64.151.42 : cloudflareIPs"
+        ],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "https://hackerone.com": {
+            "technologydetails": {
+              "Cloudflare": {
+                "Description": "Cloudflare is a web-infrastructure and website-security company, providing content-delivery-network services, DDoS mitigation, Internet security, and distributed domain-name-server services.",
+                "Website": "https://www.cloudflare.com",
+                "CPE": "cpe:2.3:a:cloudflare:cloudflare:*:*:*:*:*:*:*:*",
+                "Icon": "CloudFlare.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "Drupal:10": {
+                "Description": "Drupal is a free and open-source web content management framework.",
+                "Website": "https://www.drupal.org/",
+                "CPE": "cpe:2.3:a:drupal:drupal:*:*:*:*:*:*:*:*",
+                "Icon": "Drupal.svg",
+                "Categories": [
+                  "CMS"
+                ]
+              },
+              "Fastly": {
+                "Description": "Fastly is a cloud computing services provider. Fastly's cloud platform provides a content delivery network, Internet security services, load balancing, and video \u0026 streaming services.",
+                "Website": "https://www.fastly.com",
+                "CPE": "cpe:2.3:a:fastly:fastly:*:*:*:*:*:*:*:*",
+                "Icon": "Fastly.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "Google Tag Manager": {
+                "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+                "Website": "https://www.google.com/tagmanager",
+                "CPE": "",
+                "Icon": "Google Tag Manager.svg",
+                "Categories": [
+                  "Tag managers"
+                ]
+              },
+              "HSTS": {
+                "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+                "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+                "CPE": "",
+                "Icon": "",
+                "Categories": [
+                  "Security"
+                ]
+              },
+              "MariaDB": {
+                "Description": "MariaDB is an open-source relational database management system compatible with MySQL.",
+                "Website": "https://mariadb.org",
+                "CPE": "cpe:2.3:a:mariadb_project:mariadb:*:*:*:*:*:*:*:*",
+                "Icon": "mariadb.svg",
+                "Categories": [
+                  "Databases"
+                ]
+              },
+              "Marketo Forms:2": {
+                "Description": "Marketo Forms help create web forms without programming knowledge. Forms can reside on Marketo landing pages and also be embedded on any page of website.",
+                "Website": "https://www.marketo.com",
+                "CPE": "",
+                "Icon": "Marketo.svg",
+                "Categories": [
+                  "Widgets",
+                  "Form builders"
+                ]
+              },
+              "Nginx": {
+                "Description": "Nginx is a web server that can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.",
+                "Website": "https://nginx.org/en",
+                "CPE": "cpe:2.3:a:f5:nginx:*:*:*:*:*:*:*:*",
+                "Icon": "Nginx.svg",
+                "Categories": [
+                  "Web servers",
+                  "Reverse proxies"
+                ]
+              },
+              "Optimizely": {
+                "Description": "Optimizely is an experimentation platform that helps developers build and run A/B tests on websites.",
+                "Website": "https://www.optimizely.com",
+                "CPE": "",
+                "Icon": "Optimizely.svg",
+                "Categories": [
+                  "A/B Testing",
+                  "Personalisation"
+                ]
+              },
+              "PHP": {
+                "Description": "PHP is a general-purpose scripting language used for web development.",
+                "Website": "https://php.net",
+                "CPE": "cpe:2.3:a:php:php:*:*:*:*:*:*:*:*",
+                "Icon": "PHP.svg",
+                "Categories": [
+                  "Programming languages"
+                ]
+              },
+              "Pantheon": {
+                "Description": "Pantheon is a WebOps (Website Operations) and Management Platform for WordPress and Drupal.",
+                "Website": "https://pantheon.io/",
+                "CPE": "",
+                "Icon": "Pantheon.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "TrustArc": {
+                "Description": "TrustArc provides software and services to help corporations update their privacy management processes so they comply with government laws and best practices.",
+                "Website": "https://trustarc.com",
+                "CPE": "",
+                "Icon": "TrustArc.svg",
+                "Categories": [
+                  "Cookie compliance"
+                ]
+              },
+              "Varnish": {
+                "Description": "Varnish is a reverse caching proxy.",
+                "Website": "https://www.varnish-cache.org",
+                "CPE": "cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*",
+                "Icon": "Varnish.svg",
+                "Categories": [
+                  "Caching"
+                ]
+              },
+              "YouTube": {
+                "Description": "YouTube is a video sharing service where users can create their own profile, upload videos, watch, like and comment on other videos.",
+                "Website": "https://www.youtube.com",
+                "CPE": "",
+                "Icon": "YouTube.png",
+                "Categories": [
+                  "Video players"
+                ]
+              }
+            },
+            "link": [
+              "https://hackerone.com/",
+              "https://hackerone.com",
+              "https://hackerone.com/003random",
+              "https://hackerone.com/0xnan",
+              "https://hackerone.com/1337_inj3c70r",
+              "https://hackerone.com/1n3",
+              "https://hackerone.com/3p1c",
+              "https://hackerone.com/4cad",
+              "https://hackerone.com/7h0r4pp4n",
+              "https://hackerone.com/93c08539",
+              "https://hackerone.com/a0xnirudh",
+              "https://hackerone.com/a5tronaut",
+              "https://hackerone.com/aaditya_purani",
+              "https://hackerone.com/aaj__",
+              "https://hackerone.com/aaron_costello",
+              "https://hackerone.com/abdullah",
+              "https://hackerone.com/abr1k0s",
+              "https://hackerone.com/acaikam3",
+              "https://hackerone.com/adrianbelen",
+              "https://hackerone.com/adrianomarcmont",
+              "https://hackerone.com/aesteral",
+              "https://hackerone.com/agarri_fr",
+              "https://hackerone.com/ahihi",
+              "https://hackerone.com/ahmadsherif",
+              "https://hackerone.com/ahmed_abdalla",
+              "https://hackerone.com/ajaysinghnegi",
+              "https://hackerone.com/ak1t4",
+              "https://hackerone.com/albatraoz",
+              "https://hackerone.com/alex_gaynor",
+              "https://hackerone.com/alexbirsan",
+              "https://hackerone.com/alienvault_security",
+              "https://hackerone.com/alienvault_security/thanks",
+              "https://hackerone.com/alpha",
+              "https://hackerone.com/alvosec",
+              "https://hackerone.com/alyssa_herrera",
+              "https://hackerone.com/an0n-j",
+              "https://hackerone.com/andreapalazzo",
+              "https://hackerone.com/andrisatteka",
+              "https://hackerone.com/androm3da",
+              "https://hackerone.com/anish2good",
+              "https://hackerone.com/anshuman_bh",
+              "https://hackerone.com/apapedulimu",
+              "https://hackerone.com/apitest",
+              "https://hackerone.com/apok",
+              "https://hackerone.com/arhimason",
+              "https://hackerone.com/arrch",
+              "https://hackerone.com/artem",
+              "https://hackerone.com/asac",
+              "https://hackerone.com/asad90",
+              "https://hackerone.com/asaxena2190",
+              "https://hackerone.com/ashesh",
+              "https://hackerone.com/ashish_r_padelkar",
+              "https://hackerone.com/ashishdhaduk",
+              "https://hackerone.com/aspen",
+              "https://hackerone.com/atruba",
+              "https://hackerone.com/avlidienbrunn/thanks",
+              "https://hackerone.com/avlidienbrunn?sort_type=latest_disclosable_activity_at\u0026filter=type:all%20from:avlidienbrunn\u0026page=1\u0026range=forever",
+              "https://hackerone.com/b3nac",
+              "https://hackerone.com/bains",
+              "https://hackerone.com/bannedit",
+              "https://hackerone.com/bastianwelfrid",
+              "https://hackerone.com/batman",
+              "https://hackerone.com/batram",
+              "https://hackerone.com/bigbear",
+              "https://hackerone.com/bigbear_",
+              "https://hackerone.com/bigmonocle",
+              "https://hackerone.com/bigshaq",
+              "https://hackerone.com/billy_blaze",
+              "https://hackerone.com/biloulehibou",
+              "https://hackerone.com/binary",
+              "https://hackerone.com/bitaccess/thanks",
+              "https://hackerone.com/bitquark",
+              "https://hackerone.com/bl4de",
+              "https://hackerone.com/blake12356",
+              "https://hackerone.com/blinkms",
+              "https://hackerone.com/blog",
+              "http://hackerone.com/blog"
+            ],
+            "firewall": "",
+            "ttatus": "200 OK",
+            "title": "HackerOne | #1 Trusted Security Platform and Hacker Program"
+          }
+        },
+        "cname": []
+      },
+      "managed.hackerone.com": {
+        "ips": [],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": []
+      },
+      "mta-sts.forwarding.hackerone.com": {
+        "ips": [
+          "185.199.109.153",
+          "185.199.108.153",
+          "185.199.111.153",
+          "185.199.110.153"
+        ],
+        "portsandservice": {
+          "443": "Port:443/tcp State:open Service:ssl/http-proxy Version:Varnish ",
+          "80": "Port:80/tcp State:open Service:http-proxy Version:Varnish "
+        },
+        "os": [
+          "Name:Apple iOS 14.0 - 15.6 or tvOS 14.3 - 16.1 (Darwin 20.0.0 - 22.1.0) (87%) Devicetype:phone",
+          "Name:Apple macOS 11 (Big Sur) - 13 (Ventura) or iOS 16 (Darwin 20.6.0 - 22.4.0) (87%) Devicetype:general purpose",
+          "Name:OpenWrt Kamikaze 7.09 (Linux 2.6.22) (87%) Devicetype:WAP",
+          "Name:OpenBSD 4.3 (87%) Devicetype:general purpose",
+          "Name:Crestron XPanel control system (86%) Devicetype:specialized",
+          "Name:Android 9 - 10 (Linux 4.9 - 4.14) (86%) Devicetype:phone",
+          "Name:Android 8 - 9 (Linux 3.18 - 4.4) (86%) Devicetype:phone",
+          "Name:OpenWrt 0.9 - 7.09 (Linux 2.4.30 - 2.4.34) (86%) Devicetype:WAP",
+          "Name:OpenWrt White Russian 0.9 (Linux 2.4.30) (86%) Devicetype:WAP",
+          "Name:Linux 2.6.32 - 3.10 (85%) Devicetype:general purpose"
+        ],
+        "httporhttps": {
+          "https://mta-sts.forwarding.hackerone.com": {
+            "technologydetails": {
+              "Fastly": {
+                "Description": "Fastly is a cloud computing services provider. Fastly's cloud platform provides a content delivery network, Internet security services, load balancing, and video \u0026 streaming services.",
+                "Website": "https://www.fastly.com",
+                "CPE": "cpe:2.3:a:fastly:fastly:*:*:*:*:*:*:*:*",
+                "Icon": "Fastly.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "GitHub Pages": {
+                "Description": "GitHub Pages is a static site hosting service.",
+                "Website": "https://pages.github.com/",
+                "CPE": "",
+                "Icon": "GitHub.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "Varnish": {
+                "Description": "Varnish is a reverse caching proxy.",
+                "Website": "https://www.varnish-cache.org",
+                "CPE": "cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*",
+                "Icon": "Varnish.svg",
+                "Categories": [
+                  "Caching"
+                ]
+              }
+            },
+            "link": [
+              "http://mta-sts.forwarding.hackerone.com/",
+              "http://mta-sts.forwarding.hackerone.com/robots.txt"
+            ],
+            "firewall": "",
+            "ttatus": "404 Not Found",
+            "title": "Page not found · GitHub Pages"
+          }
+        },
+        "cname": [
+          "hacker0x01.github.io."
+        ]
+      },
+      "mta-sts.hackerone.com": {
+        "ips": [
+          "185.199.108.153",
+          "185.199.109.153",
+          "185.199.111.153",
+          "185.199.110.153"
+        ],
+        "portsandservice": {
+          "443": "Port:443/tcp State:open Service:ssl/http-proxy Version:Varnish ",
+          "80": "Port:80/tcp State:open Service:http-proxy Version:Varnish "
+        },
+        "os": [
+          "Name:Apple iOS 14.0 - 15.6 or tvOS 14.3 - 16.1 (Darwin 20.0.0 - 22.1.0) (87%) Devicetype:phone",
+          "Name:OpenWrt Kamikaze 7.09 (Linux 2.6.22) (87%) Devicetype:WAP",
+          "Name:Crestron XPanel control system (86%) Devicetype:specialized",
+          "Name:Android 9 - 10 (Linux 4.9 - 4.14) (86%) Devicetype:phone",
+          "Name:Android 8 - 9 (Linux 3.18 - 4.4) (86%) Devicetype:phone",
+          "Name:OpenWrt 0.9 - 7.09 (Linux 2.4.30 - 2.4.34) (86%) Devicetype:WAP",
+          "Name:OpenWrt White Russian 0.9 (Linux 2.4.30) (86%) Devicetype:WAP",
+          "Name:Linux 2.6.32 - 3.10 (85%) Devicetype:general purpose"
+        ],
+        "httporhttps": {
+          "https://mta-sts.hackerone.com": {
+            "technologydetails": {
+              "Fastly": {
+                "Description": "Fastly is a cloud computing services provider. Fastly's cloud platform provides a content delivery network, Internet security services, load balancing, and video \u0026 streaming services.",
+                "Website": "https://www.fastly.com",
+                "CPE": "cpe:2.3:a:fastly:fastly:*:*:*:*:*:*:*:*",
+                "Icon": "Fastly.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "GitHub Pages": {
+                "Description": "GitHub Pages is a static site hosting service.",
+                "Website": "https://pages.github.com/",
+                "CPE": "",
+                "Icon": "GitHub.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "Varnish": {
+                "Description": "Varnish is a reverse caching proxy.",
+                "Website": "https://www.varnish-cache.org",
+                "CPE": "cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*",
+                "Icon": "Varnish.svg",
+                "Categories": [
+                  "Caching"
+                ]
+              }
+            },
+            "link": [
+              "http://mta-sts.hackerone.com/",
+              "http://mta-sts.hackerone.com/.well-known/ai-plugin.json",
+              "http://mta-sts.hackerone.com/.well-known/assetlinks.json",
+              "http://mta-sts.hackerone.com/.well-known/dnt-policy.txt",
+              "http://mta-sts.hackerone.com/.well-known/gpc.json",
+              "http://mta-sts.hackerone.com/.well-known/nodeinfo",
+              "http://mta-sts.hackerone.com/.well-known/openid-configuration",
+              "http://mta-sts.hackerone.com/.well-known/security.txt",
+              "http://mta-sts.hackerone.com/.well-known/trust.txt",
+              "http://mta-sts.hackerone.com/ads.txt",
+              "http://mta-sts.hackerone.com/app-ads.txt",
+              "http://mta-sts.hackerone.com/favicon.ico",
+              "http://mta-sts.hackerone.com/robots.txt",
+              "http://mta-sts.hackerone.com/sitemap.xml"
+            ],
+            "firewall": "",
+            "ttatus": "404 Not Found",
+            "title": "Page not found · GitHub Pages"
+          }
+        },
+        "cname": [
+          "hacker0x01.github.io."
+        ]
+      },
+      "mta-sts.managed.hackerone.com": {
+        "ips": [
+          "185.199.111.153",
+          "185.199.108.153",
+          "185.199.110.153",
+          "185.199.109.153"
+        ],
+        "portsandservice": {
+          "443": "Port:443/tcp State:open Service:ssl/http-proxy Version:Varnish ",
+          "80": "Port:80/tcp State:open Service:http-proxy Version:Varnish "
+        },
+        "os": [
+          "Name:OpenBSD 4.0 (89%) Devicetype:general purpose",
+          "Name:Apple macOS 11 (Big Sur) - 12 (Monterey) (Darwin 20.6.0 - 21.3.0) (85%) Devicetype:general purpose"
+        ],
+        "httporhttps": {
+          "https://mta-sts.managed.hackerone.com": {
+            "technologydetails": {
+              "Fastly": {
+                "Description": "Fastly is a cloud computing services provider. Fastly's cloud platform provides a content delivery network, Internet security services, load balancing, and video \u0026 streaming services.",
+                "Website": "https://www.fastly.com",
+                "CPE": "cpe:2.3:a:fastly:fastly:*:*:*:*:*:*:*:*",
+                "Icon": "Fastly.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "GitHub Pages": {
+                "Description": "GitHub Pages is a static site hosting service.",
+                "Website": "https://pages.github.com/",
+                "CPE": "",
+                "Icon": "GitHub.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "Varnish": {
+                "Description": "Varnish is a reverse caching proxy.",
+                "Website": "https://www.varnish-cache.org",
+                "CPE": "cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*",
+                "Icon": "Varnish.svg",
+                "Categories": [
+                  "Caching"
+                ]
+              }
+            },
+            "link": [
+              "http://mta-sts.managed.hackerone.com/",
+              "https://mta-sts.managed.hackerone.com/.well-known/ai-plugin.json",
+              "https://mta-sts.managed.hackerone.com/.well-known/assetlinks.json",
+              "http://mta-sts.managed.hackerone.com/.well-known/dnt-policy.txt",
+              "http://mta-sts.managed.hackerone.com/.well-known/gpc.json",
+              "http://mta-sts.managed.hackerone.com/.well-known/nodeinfo",
+              "http://mta-sts.managed.hackerone.com/.well-known/openid-configuration",
+              "http://mta-sts.managed.hackerone.com/.well-known/security.txt",
+              "https://mta-sts.managed.hackerone.com/.well-known/trust.txt",
+              "https://mta-sts.managed.hackerone.com/ads.txt",
+              "http://mta-sts.managed.hackerone.com/app-ads.txt",
+              "https://mta-sts.managed.hackerone.com/favicon.ico",
+              "http://mta-sts.managed.hackerone.com/robots.txt",
+              "https://mta-sts.managed.hackerone.com/sitemap.xml"
+            ],
+            "firewall": "",
+            "ttatus": "404 Not Found",
+            "title": "Page not found · GitHub Pages"
+          }
+        },
+        "cname": [
+          "hacker0x01.github.io."
+        ]
+      },
+      "resources.hackerone.com": {
+        "ips": [
+          "52.60.165.183",
+          "52.60.160.16",
+          "3.98.63.202"
+        ],
+        "portsandservice": {
+          "443": "Port:443/tcp State:open Service:ssl/http Version:Golang net/http server ",
+          "80": "Port:80/tcp State:open Service:ssl/http Version: "
+        },
+        "os": [],
+        "httporhttps": {
+          "http://resources.hackerone.com": {
+            "technologydetails": {},
+            "link": [
+              "http://resources.hackerone.com/",
+              "http://resources.hackerone.com/read/account_titles/2763037"
+            ],
+            "firewall": "",
+            "ttatus": "404 Not Found",
+            "title": "Sorry, no Folders found."
+          }
+        },
+        "cname": [
+          "read.uberflip.com."
+        ]
+      },
+      "support.hackerone.com": {
+        "ips": [
+          "54.84.172.199",
+          "18.207.20.165",
+          "100.26.81.86",
+          "52.21.151.4",
+          "52.204.232.143"
+        ],
+        "portsandservice": {
+          "443": "Port:443/tcp State:open Service:ssl/http Version:nginx ",
+          "80": "Port:80/tcp State:open Service:http Version:nginx "
+        },
+        "os": [],
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": [
+          "2fe254e58a0ea8096400b2fda121ee35.freshdesk.com.",
+          "fwfd-use1-lb208.freshdesk.com."
+        ]
+      },
+      "www.hackerone.com": {
+        "ips": [
+          "172.64.151.42 : cloudflareIPs",
+          "104.18.36.214 : cloudflareIPs"
+        ],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "https://www.hackerone.com": {
+            "technologydetails": {
+              "Cloudflare": {
+                "Description": "Cloudflare is a web-infrastructure and website-security company, providing content-delivery-network services, DDoS mitigation, Internet security, and distributed domain-name-server services.",
+                "Website": "https://www.cloudflare.com",
+                "CPE": "cpe:2.3:a:cloudflare:cloudflare:*:*:*:*:*:*:*:*",
+                "Icon": "CloudFlare.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "Drupal:10": {
+                "Description": "Drupal is a free and open-source web content management framework.",
+                "Website": "https://www.drupal.org/",
+                "CPE": "cpe:2.3:a:drupal:drupal:*:*:*:*:*:*:*:*",
+                "Icon": "Drupal.svg",
+                "Categories": [
+                  "CMS"
+                ]
+              },
+              "Fastly": {
+                "Description": "Fastly is a cloud computing services provider. Fastly's cloud platform provides a content delivery network, Internet security services, load balancing, and video \u0026 streaming services.",
+                "Website": "https://www.fastly.com",
+                "CPE": "cpe:2.3:a:fastly:fastly:*:*:*:*:*:*:*:*",
+                "Icon": "Fastly.svg",
+                "Categories": [
+                  "CDN"
+                ]
+              },
+              "Google Tag Manager": {
+                "Description": "Google Tag Manager is a tag management system (TMS) that allows you to quickly and easily update measurement codes and related code fragments collectively known as tags on your website or mobile app.",
+                "Website": "https://www.google.com/tagmanager",
+                "CPE": "",
+                "Icon": "Google Tag Manager.svg",
+                "Categories": [
+                  "Tag managers"
+                ]
+              },
+              "HSTS": {
+                "Description": "HTTP Strict Transport Security (HSTS) informs browsers that the site should only be accessed using HTTPS.",
+                "Website": "https://www.rfc-editor.org/rfc/rfc6797#section-6.1",
+                "CPE": "",
+                "Icon": "",
+                "Categories": [
+                  "Security"
+                ]
+              },
+              "MariaDB": {
+                "Description": "MariaDB is an open-source relational database management system compatible with MySQL.",
+                "Website": "https://mariadb.org",
+                "CPE": "cpe:2.3:a:mariadb_project:mariadb:*:*:*:*:*:*:*:*",
+                "Icon": "mariadb.svg",
+                "Categories": [
+                  "Databases"
+                ]
+              },
+              "Marketo Forms:2": {
+                "Description": "Marketo Forms help create web forms without programming knowledge. Forms can reside on Marketo landing pages and also be embedded on any page of website.",
+                "Website": "https://www.marketo.com",
+                "CPE": "",
+                "Icon": "Marketo.svg",
+                "Categories": [
+                  "Widgets",
+                  "Form builders"
+                ]
+              },
+              "Nginx": {
+                "Description": "Nginx is a web server that can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.",
+                "Website": "https://nginx.org/en",
+                "CPE": "cpe:2.3:a:f5:nginx:*:*:*:*:*:*:*:*",
+                "Icon": "Nginx.svg",
+                "Categories": [
+                  "Web servers",
+                  "Reverse proxies"
+                ]
+              },
+              "Optimizely": {
+                "Description": "Optimizely is an experimentation platform that helps developers build and run A/B tests on websites.",
+                "Website": "https://www.optimizely.com",
+                "CPE": "",
+                "Icon": "Optimizely.svg",
+                "Categories": [
+                  "A/B Testing",
+                  "Personalisation"
+                ]
+              },
+              "PHP": {
+                "Description": "PHP is a general-purpose scripting language used for web development.",
+                "Website": "https://php.net",
+                "CPE": "cpe:2.3:a:php:php:*:*:*:*:*:*:*:*",
+                "Icon": "PHP.svg",
+                "Categories": [
+                  "Programming languages"
+                ]
+              },
+              "Pantheon": {
+                "Description": "Pantheon is a WebOps (Website Operations) and Management Platform for WordPress and Drupal.",
+                "Website": "https://pantheon.io/",
+                "CPE": "",
+                "Icon": "Pantheon.svg",
+                "Categories": [
+                  "PaaS"
+                ]
+              },
+              "TrustArc": {
+                "Description": "TrustArc provides software and services to help corporations update their privacy management processes so they comply with government laws and best practices.",
+                "Website": "https://trustarc.com",
+                "CPE": "",
+                "Icon": "TrustArc.svg",
+                "Categories": [
+                  "Cookie compliance"
+                ]
+              },
+              "Varnish": {
+                "Description": "Varnish is a reverse caching proxy.",
+                "Website": "https://www.varnish-cache.org",
+                "CPE": "cpe:2.3:a:varnish-software:varnish_cache:*:*:*:*:*:*:*:*",
+                "Icon": "Varnish.svg",
+                "Categories": [
+                  "Caching"
+                ]
+              },
+              "YouTube": {
+                "Description": "YouTube is a video sharing service where users can create their own profile, upload videos, watch, like and comment on other videos.",
+                "Website": "https://www.youtube.com",
+                "CPE": "",
+                "Icon": "YouTube.png",
+                "Categories": [
+                  "Video players"
+                ]
+              }
+            },
+            "link": [
+              "https://www.hackerone.com/",
+              "https://www.hackerone.com",
+              "https://www.hackerone.com/?page=0",
+              "https://www.hackerone.com/?page=1",
+              "https://www.hackerone.com/?page=14",
+              "https://www.hackerone.com/?page=17",
+              "https://www.hackerone.com/?page=2",
+              "https://www.hackerone.com/?page=3",
+              "https://www.hackerone.com/?page=4",
+              "https://www.hackerone.com/blog/",
+              "https://www.hackerone.com/blog",
+              "https://www.hackerone.com/blog/20M-in-bounties-paid-and-100M-in-sight",
+              "https://www.hackerone.com/blog/Alex-Rice-and-Zane-Lackey-Discuss-Modern-Security-Practitioners",
+              "https://www.hackerone.com/blog/Alexa-ask-HackerOne",
+              "https://www.hackerone.com/blog/AlienVault-streamlines-their-vulnerability-disclosure-with-HackerOne-Response",
+              "https://www.hackerone.com/blog/announcing-hack-the-army",
+              "https://www.hackerone.com/blog/Announcing-Hack-The-World-2017",
+              "https://www.hackerone.com/blog/Breach-Basics-Preparation-for-the-Inevitable",
+              "https://www.hackerone.com/blog/Breaking-Bank-Getting-Financial-Services-Companies-Embrace-Hacker-Powered-Security",
+              "https://www.hackerone.com/blog/Bringing-Private-sector-Security-US-Government-Security-Recaps",
+              "https://www.hackerone.com/blog/Bug-Bounty-or-Bust-Art-Triage",
+              "https://www.hackerone.com/blog/category/GDPR",
+              "https://www.hackerone.com/blog/CERT-People-and-Process-are-Essence-of-Coordinated-Vulnerability-Disclosure",
+              "https://www.hackerone.com/blog/Data-Breaches-Did-Not-Happen-2017",
+              "https://www.hackerone.com/blog/Double-your-signal-double-your-fun",
+              "https://www.hackerone.com/blog/GitHub-Embraces-Hacker-Powered-Security-To-Protect-55-million-projects",
+              "https://www.hackerone.com/blog/Google-Play-increases-bounties-and-expands-scope-Android-apps",
+              "https://www.hackerone.com/blog/h1-202-CTF-Winners-Announced",
+              "https://www.hackerone.com/blog/h1-212-ctf-results",
+              "https://www.hackerone.com/blog/H1-415-Recap-Oath-Pays-Over-400000-Hackers-One-Day",
+              "https://www.hackerone.com/blog/hack-the-pentagon-turns-one",
+              "https://www.hackerone.com/blog/Hack-Your-Way-White-House",
+              "https://www.hackerone.com/blog/Hacker-Powered-Pen-Tests-and-The-Power-of-More",
+              "https://www.hackerone.com/blog/hacker-powered-security-report-retail-edition",
+              "https://www.hackerone.com/blog/hacker-q-and-a-with-leetboy",
+              "https://www.hackerone.com/blog/Hacker-QA-Alyssa-We-are-all-still-learning",
+              "https://www.hackerone.com/blog/Hacker-QA-EdOverflow",
+              "https://www.hackerone.com/blog/Hacker-QA-Rachel-Tobac-Hacking-Companies-Through-Their-People",
+              "https://www.hackerone.com/blog/hackerone-ceo-joins-nodejs-foundation-board",
+              "https://www.hackerone.com/blog/Hacking-the-World-on-Halloween-and-every-day",
+              "https://www.hackerone.com/blog/How-Hackers-Spend-Their-Bounties",
+              "https://www.hackerone.com/blog/How-The-US-Government-is-Out-Innovating-Corporate-America",
+              "https://www.hackerone.com/blog/Hursti-hacks-DEF-CON-villages-and-Dubious-state-electronic-voting",
+              "https://www.hackerone.com/blog/Introducing-90-day-Hacker-Leaderboard-and-Revamped-Invitations",
+              "https://www.hackerone.com/blog/Introducing-Security-at-San-Francisco",
+              "https://www.hackerone.com/blog/Key-Findings-From-The-Hacker-Powered-Security-Report-Security-Vulnerabilities-Worry-Companies-The-Most-6-of-6",
+              "https://www.hackerone.com/blog/KPMGs-Cyber-Security-Expert-Offers-Advice-for-Bug-Bounty-Success",
+              "https://www.hackerone.com/blog/launching-the-hackerone-api",
+              "https://www.hackerone.com/blog/marten-mickos-tripwire-interview",
+              "https://www.hackerone.com/blog/more-than-just-security-451-research-webinar-recap",
+              "https://www.hackerone.com/blog/node-js-foundation",
+              "https://www.hackerone.com/blog/q-and-a-with-hacker-gerben-javado",
+              "https://www.hackerone.com/blog/QA-Jane-Frankland-GDPR-CISOs-and-Women-Cybersecurity",
+              "https://www.hackerone.com/blog/Ready-or-Not-Here-Comes-GDPR",
+              "https://www.hackerone.com/blog/resources-for-new-hackers",
+              "https://www.hackerone.com/blog/Samy-Kamkar-Security-at-San-Francisco-Keynote",
+              "https://www.hackerone.com/blog/Shifting-High-Gear-How-Automakers-are-Approaching-Cybersecurity",
+              "https://www.hackerone.com/blog/shopify-shares-how-hackers-help-secure-40B-in-transactions",
+              "https://www.hackerone.com/blog/slack-integration-update-2",
+              "https://www.hackerone.com/blog/Small-Beautiful-Minimizing-Attack-Surfaces",
+              "https://www.hackerone.com/blog/the-european-commissions-first-ever-bug-bounty-program",
+              "https://www.hackerone.com/blog/The-ICOs-12-Step-Guide-to-GDPR-Compliance",
+              "https://www.hackerone.com/blog/The-Voices-of-Vulnerability-Disclosure-Look-Whos-Talking-About-VDPs",
+              "https://www.hackerone.com/blog/time-to-split-bounties",
+              "https://www.hackerone.com/blog/toasting-security-at-sf-2017",
+              "https://www.hackerone.com/blog/top-20-upvoted-reports-on-hacktivity",
+              "https://www.hackerone.com/blog/uber-launches-first-of-its-kind-hacker-loyalty-program-with-hackerone-bonuses",
+              "https://www.hackerone.com/blog/Updated-Hacker-Invitations-Hack-more-hack-better",
+              "https://www.hackerone.com/blog/US-Senate-Hearing-Bug-Bounty-Lessons-Learned",
+              "https://www.hackerone.com/blog/Using-Hackers-Tip-Cybersecurity-Asymmetry-Your-Favor",
+              "https://www.hackerone.com/blog/Watch-All-The-Security-At-Videos-Featuring-Samy-Kamkar-and-Natalie-Silvanovich",
+              "https://www.hackerone.com/blog/we-love-coinbase-for-loving-bug-bounties",
+              "https://www.hackerone.com/blog/What-Hackers-Want-Bounty-Program-Security-Recaps",
+              "https://www.hackerone.com/blog/what-happens-in-vegas-stays-on-hacktivity",
+              "https://www.hackerone.com/blog/Why-Riot-Games-Pays-Hackers-to-Break-Them",
+              "https://www.hackerone.com/blog/Your-TLDR-Summary-of-The-CERT-Guide-to-Coordinated-Vulnerability-Disclosure",
+              "https://www.hackerone.com/blog/?page=0",
+              "https://www.hackerone.com/blog/?page=1",
+              "https://www.hackerone.com/blog/?page=11",
+              "https://www.hackerone.com/blog/?page=12",
+              "https://www.hackerone.com/blog/?page=13",
+              "https://www.hackerone.com/blog/?page=14",
+              "https://www.hackerone.com/blog/?page=15",
+              "https://www.hackerone.com/blog/?page=16",
+              "https://www.hackerone.com/blog?page=17",
+              "https://www.hackerone.com/blog/?page=17",
+              "https://www.hackerone.com/blog?page=18",
+              "https://www.hackerone.com/blog?page=19",
+              "https://www.hackerone.com/blog/?page=2",
+              "https://www.hackerone.com/blog/?page=3",
+              "https://www.hackerone.com/blog/?page=4",
+              "https://www.hackerone.com/blog/?page=5",
+              "https://www.hackerone.com/blog/?page=6",
+              "https://www.hackerone.com/blog/?page=7",
+              "https://www.hackerone.com/blog/?page=8",
+              "https://www.hackerone.com/burp-suite-partnership",
+              "https://www.hackerone.com/careers?gh_jid=591116",
+              "https://www.hackerone.com/careers?gh_jid=596336",
+              "https://www.hackerone.com/careers?gh_jid=602938",
+              "https://www.hackerone.com/careers?gh_jid=610319",
+              "https://www.hackerone.com/careers?gh_jid=657716",
+              "https://www.hackerone.com/careers?gh_jid=657730",
+              "https://www.hackerone.com/careers?gh_jid=666247",
+              "https://www.hackerone.com/careers?gh_jid=676991",
+              "https://www.hackerone.com/careers?gh_jid=757700",
+              "https://www.hackerone.com/careers?gh_jid=793795",
+              "https://www.hackerone.com/careers?gh_jid=818139",
+              "https://www.hackerone.com/careers?gh_jid=847329",
+              "https://www.hackerone.com/careers?gh_jid=857967",
+              "https://www.hackerone.com/careers?gh_jid=857980",
+              "https://www.hackerone.com/careers?gh_jid=857995",
+              "https://www.hackerone.com/careers?gh_jid=925971",
+              "https://www.hackerone.com/careers?gh_jid=946265",
+              "https://www.hackerone.com/dmca",
+              "https://www.hackerone.com/hacktheworld/2017",
+              "https://www.hackerone.com/node/",
+              "https://www.hackerone.com/node/386",
+              "https://www.hackerone.com/product/overview",
+              "https://www.hackerone.com/resources/",
+              "https://www.hackerone.com/resources/100-facts-from-the-2017-hacker-powered-security-report",
+              "https://www.hackerone.com/resources/2016-bug-bounty-hacker-report",
+              "https://www.hackerone.com/resources/451-pathfinder-research-report",
+              "https://www.hackerone.com/resources/hack-the-pentagon",
+              "https://www.hackerone.com/resources/hacking-america",
+              "https://www.hackerone.com/resources/how-to-run-a-bug-bounty-program",
+              "https://www.hackerone.com/resources/how-to-succeed-with-your-bug-bounty-program",
+              "https://www.hackerone.com/resources/localtapiola-case-study",
+              "https://www.hackerone.com/resources/pictet-groups-security-in-a-digital-world",
+              "https://www.hackerone.com/resources/pullstring-and-toytalk-case-study",
+              "https://www.hackerone.com/resources/the-github-bug-bounty-story",
+              "https://www.hackerone.com/resources/visual-guide-to-bug-bounty-success",
+              "https://www.hackerone.com/resources/yahoo-bug-bounty-case-study",
+              "https://www.hackerone.com/resources/zenefits-casestudy",
+              "https://www.hackerone.com/robots.txt",
+              "https://www.hackerone.com/sites/default/files/2017-05/HackerOne_CaseStudy_ownCloud_0.pdf",
+              "https://www.hackerone.com/sites/default/files/2017-05/Shopify%20HackerOne%20Case%20Study.pdf",
+              "https://www.hackerone.com/sites/default/files/2018-01/Shopify-HackerOne.pdf",
+              "https://www.hackerone.com/sites/default/files/2018-03/Hacker-Vetting-HackerOne.pdf",
+              "https://www.hackerone.com/sites/default/files/2018-03/US%20Senate%20Hearing%20on%20Data%20Security%20and%20Bug%20Bounty%20programs.pdf",
+              "https://www.hackerone.com/sites/default/files/2018-04/CISO%27s%20Guide%20to%20GDPR%20-%20Q%26A%20with%20Thomas%20Fischer.pdf",
+              "https://www.hackerone.com/sites/default/files/2018-04/Qualcomm%20Bug%20Bounty%20Program.pdf",
+              "https://www.hackerone.com/sites/default/files/2018-05/Pen%20Test%20One%20Page.pdf",
+              "https://www.hackerone.com/terms/",
+              "https://www.hackerone.com/terms/finder",
+              "https://www.hackerone.com/terms/general",
+              "https://www.hackerone.com/terms/services",
+              "https://www.hackerone.com/zerodaily/",
+              "https://www.hackerone.com/zerodaily/2017-02-09",
+              "https://www.hackerone.com/zerodaily/2017-04-03",
+              "https://www.hackerone.com/zerodaily/2017-04-04",
+              "https://www.hackerone.com/zerodaily/2017-04-05",
+              "https://www.hackerone.com/zerodaily/2017-04-06",
+              "https://www.hackerone.com/zerodaily/2017-04-07",
+              "https://www.hackerone.com/zerodaily/2017-04-10",
+              "https://www.hackerone.com/zerodaily/2017-04-11",
+              "https://www.hackerone.com/zerodaily/2017-04-12",
+              "https://www.hackerone.com/zerodaily/2017-04-13",
+              "https://www.hackerone.com/zerodaily/2017-04-14",
+              "https://www.hackerone.com/zerodaily/2017-04-17",
+              "https://www.hackerone.com/zerodaily/2017-04-18",
+              "https://www.hackerone.com/zerodaily/2017-04-19",
+              "https://www.hackerone.com/zerodaily/2017-04-20",
+              "https://www.hackerone.com/zerodaily/2017-04-21",
+              "https://www.hackerone.com/zerodaily/2017-04-24",
+              "https://www.hackerone.com/zerodaily/2017-04-25",
+              "https://www.hackerone.com/zerodaily/2017-04-26",
+              "https://www.hackerone.com/zerodaily/2017-04-27",
+              "https://www.hackerone.com/zerodaily/2017-04-28",
+              "https://www.hackerone.com/zerodaily/2017-05-01",
+              "https://www.hackerone.com/zerodaily/2017-05-02",
+              "https://www.hackerone.com/zerodaily/2017-05-03",
+              "https://www.hackerone.com/zerodaily/2017-05-04",
+              "https://www.hackerone.com/zerodaily/2017-05-05",
+              "https://www.hackerone.com/zerodaily/2017-05-08",
+              "https://www.hackerone.com/zerodaily/2017-05-09",
+              "https://www.hackerone.com/zerodaily/2017-05-10",
+              "https://www.hackerone.com/zerodaily/2017-05-12",
+              "https://www.hackerone.com/zerodaily/2017-05-15",
+              "https://www.hackerone.com/zerodaily/2017-05-16",
+              "https://www.hackerone.com/zerodaily/2017-05-17",
+              "https://www.hackerone.com/zerodaily/2017-05-18",
+              "https://www.hackerone.com/zerodaily/2017-05-19",
+              "https://www.hackerone.com/zerodaily/2017-05-22",
+              "https://www.hackerone.com/zerodaily/2017-05-23",
+              "https://www.hackerone.com/zerodaily/2017-05-24",
+              "https://www.hackerone.com/zerodaily/2017-05-25",
+              "https://www.hackerone.com/zerodaily/2017-05-26",
+              "https://www.hackerone.com/zerodaily/2017-05-30",
+              "https://www.hackerone.com/zerodaily/2017-05-31",
+              "https://www.hackerone.com/zerodaily/2017-06-01",
+              "https://www.hackerone.com/zerodaily/2017-06-02",
+              "https://www.hackerone.com/zerodaily/2017-06-05",
+              "https://www.hackerone.com/zerodaily/2017-06-06",
+              "https://www.hackerone.com/zerodaily/2017-06-07",
+              "https://www.hackerone.com/zerodaily/2017-06-08",
+              "https://www.hackerone.com/zerodaily/2017-06-09",
+              "https://www.hackerone.com/zerodaily/2017-06-12",
+              "https://www.hackerone.com/zerodaily/2017-06-13",
+              "https://www.hackerone.com/zerodaily/2017-06-14",
+              "https://www.hackerone.com/zerodaily/2017-06-15",
+              "https://www.hackerone.com/zerodaily/2017-06-16",
+              "https://www.hackerone.com/zerodaily/2017-06-19",
+              "https://www.hackerone.com/zerodaily/2017-06-20",
+              "https://www.hackerone.com/zerodaily/2017-06-21",
+              "https://www.hackerone.com/zerodaily/2017-06-22",
+              "https://www.hackerone.com/zerodaily/2017-06-23",
+              "https://www.hackerone.com/zerodaily/2017-06-26",
+              "https://www.hackerone.com/zerodaily/2017-06-27",
+              "https://www.hackerone.com/zerodaily/2017-06-28",
+              "https://www.hackerone.com/zerodaily/2017-06-29",
+              "https://www.hackerone.com/zerodaily/2017-06-30",
+              "https://www.hackerone.com/zerodaily/2017-07-05",
+              "https://www.hackerone.com/zerodaily/2017-07-06",
+              "https://www.hackerone.com/zerodaily/2017-07-07",
+              "https://www.hackerone.com/zerodaily/2017-07-10",
+              "https://www.hackerone.com/zerodaily/2017-07-12",
+              "https://www.hackerone.com/zerodaily/2017-07-13",
+              "https://www.hackerone.com/zerodaily/2017-07-14",
+              "https://www.hackerone.com/zerodaily/2017-07-17",
+              "https://www.hackerone.com/zerodaily/2017-07-18",
+              "https://www.hackerone.com/zerodaily/2017-07-19",
+              "https://www.hackerone.com/zerodaily/2017-07-20",
+              "https://www.hackerone.com/zerodaily/2017-07-24",
+              "https://www.hackerone.com/zerodaily/2017-07-25",
+              "https://www.hackerone.com/zerodaily/2017-07-26",
+              "https://www.hackerone.com/zerodaily/2017-07-27",
+              "https://www.hackerone.com/zerodaily/2017-07-28",
+              "https://www.hackerone.com/zerodaily/2017-08-01",
+              "https://www.hackerone.com/zerodaily/2017-08-02",
+              "https://www.hackerone.com/zerodaily/2017-08-03",
+              "https://www.hackerone.com/zerodaily/2017-08-04",
+              "https://www.hackerone.com/zerodaily/2017-08-07",
+              "https://www.hackerone.com/zerodaily/2017-08-08",
+              "https://www.hackerone.com/zerodaily/2017-08-09",
+              "https://www.hackerone.com/zerodaily/2017-08-10",
+              "https://www.hackerone.com/zerodaily/2017-08-11",
+              "https://www.hackerone.com/zerodaily/2017-08-14",
+              "https://www.hackerone.com/zerodaily/2017-08-15",
+              "https://www.hackerone.com/zerodaily/2017-08-16",
+              "https://www.hackerone.com/zerodaily/2017-08-17",
+              "https://www.hackerone.com/zerodaily/2017-08-18",
+              "https://www.hackerone.com/zerodaily/2017-08-21",
+              "https://www.hackerone.com/zerodaily/2017-08-22",
+              "https://www.hackerone.com/zerodaily/2017-08-23",
+              "https://www.hackerone.com/zerodaily/2017-08-24",
+              "https://www.hackerone.com/zerodaily/2017-08-25",
+              "https://www.hackerone.com/zerodaily/2017-08-28",
+              "https://www.hackerone.com/zerodaily/2017-08-29",
+              "https://www.hackerone.com/zerodaily/2017-08-30",
+              "https://www.hackerone.com/zerodaily/2017-08-31",
+              "https://www.hackerone.com/zerodaily/2017-09-01",
+              "https://www.hackerone.com/zerodaily/2017-09-06",
+              "https://www.hackerone.com/zerodaily/2017-09-07",
+              "https://www.hackerone.com/zerodaily/2017-09-08",
+              "https://www.hackerone.com/zerodaily/2017-09-11",
+              "https://www.hackerone.com/zerodaily/2017-09-12",
+              "https://www.hackerone.com/zerodaily/2017-09-13",
+              "https://www.hackerone.com/zerodaily/2017-09-14",
+              "https://www.hackerone.com/zerodaily/2017-09-15",
+              "https://www.hackerone.com/zerodaily/2017-09-18",
+              "https://www.hackerone.com/zerodaily/2017-09-19",
+              "https://www.hackerone.com/zerodaily/2017-09-20",
+              "https://www.hackerone.com/zerodaily/2017-09-21",
+              "https://www.hackerone.com/zerodaily/2017-09-22",
+              "https://www.hackerone.com/zerodaily/2017-10-09",
+              "https://www.hackerone.com/zerodaily/2017-10-10",
+              "https://www.hackerone.com/zerodaily/2017-10-11",
+              "https://www.hackerone.com/zerodaily/2017-10-12",
+              "https://www.hackerone.com/zerodaily/2017-10-13",
+              "https://www.hackerone.com/zerodaily/2017-10-16",
+              "https://www.hackerone.com/zerodaily/2017-10-17",
+              "https://www.hackerone.com/zerodaily/2017-10-18",
+              "https://www.hackerone.com/zerodaily/2017-10-19",
+              "https://www.hackerone.com/zerodaily/2017-10-20",
+              "https://www.hackerone.com/zerodaily/2017-10-23",
+              "https://www.hackerone.com/zerodaily/2017-10-24",
+              "https://www.hackerone.com/zerodaily/2017-10-25",
+              "https://www.hackerone.com/zerodaily/2017-10-26",
+              "https://www.hackerone.com/zerodaily/2017-10-27",
+              "https://www.hackerone.com/zerodaily/2017-10-30",
+              "https://www.hackerone.com/zerodaily/2017-10-31",
+              "https://www.hackerone.com/zerodaily/2017-11-01",
+              "https://www.hackerone.com/zerodaily/2017-11-02",
+              "https://www.hackerone.com/zerodaily/2017-11-03",
+              "https://www.hackerone.com/zerodaily/2017-11-06",
+              "https://www.hackerone.com/zerodaily/2017-11-07",
+              "https://www.hackerone.com/zerodaily/2017-11-08",
+              "https://www.hackerone.com/zerodaily/2017-11-09",
+              "https://www.hackerone.com/zerodaily/2017-11-10",
+              "https://www.hackerone.com/zerodaily/2017-11-13",
+              "https://www.hackerone.com/zerodaily/2017-11-14",
+              "https://www.hackerone.com/zerodaily/2017-11-15",
+              "https://www.hackerone.com/zerodaily/2017-11-16",
+              "https://www.hackerone.com/zerodaily/2017-11-17",
+              "https://www.hackerone.com/zerodaily/2017-11-20",
+              "https://www.hackerone.com/zerodaily/2017-11-21",
+              "https://www.hackerone.com/zerodaily/2017-11-22",
+              "https://www.hackerone.com/zerodaily/2017-11-27",
+              "https://www.hackerone.com/zerodaily/2017-11-28",
+              "https://www.hackerone.com/zerodaily/2017-11-29",
+              "https://www.hackerone.com/zerodaily/2017-11-30",
+              "https://www.hackerone.com/zerodaily/2017-12-01",
+              "https://www.hackerone.com/zerodaily/2017-12-04",
+              "https://www.hackerone.com/zerodaily/2017-12-05",
+              "https://www.hackerone.com/zerodaily/2017-12-06",
+              "https://www.hackerone.com/zerodaily/2017-12-07",
+              "https://www.hackerone.com/zerodaily/2018-01-29",
+              "https://www.hackerone.com/zerodaily/2018-01-30",
+              "https://www.hackerone.com/zerodaily/2018-01-31",
+              "https://www.hackerone.com/zerodaily/2018-02-01",
+              "https://www.hackerone.com/zerodaily/2018-02-04",
+              "https://www.hackerone.com/zerodaily/2018-02-06",
+              "https://www.hackerone.com/zerodaily/2018-02-07",
+              "https://www.hackerone.com/zerodaily/2018-02-08",
+              "https://www.hackerone.com/zerodaily/2018-02-13",
+              "https://www.hackerone.com/zerodaily/2018-02-14",
+              "https://www.hackerone.com/zerodaily/2018-04-19",
+              "https://www.hackerone.com/zerodaily/2018-05-09",
+              "https://www.hackerone.com/zerodaily/2018-05-10",
+              "https://www.hackerone.com/zerodaily/2018-05-11",
+              "https://www.hackerone.com/zerodaily/2018-05-14",
+              "https://www.hackerone.com/zerodaily/2018-05-15"
+            ],
+            "firewall": "",
+            "ttatus": "200 OK",
+            "title": "HackerOne | #1 Trusted Security Platform and Hacker Program"
+          }
+        },
+        "cname": []
+      },
+      "zendesk1.hackerone.com": {
+        "ips": [
+          "162.159.128.7 : cloudflareIPs",
+          "162.159.138.6 : cloudflareIPs"
+        ],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": [
+          "mail1.zendesk.com."
+        ]
+      },
+      "zendesk2.hackerone.com": {
+        "ips": [
+          "162.159.138.6 : cloudflareIPs",
+          "162.159.128.7 : cloudflareIPs"
+        ],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": [
+          "mail2.zendesk.com."
+        ]
+      },
+      "zendesk4.hackerone.com": {
+        "ips": [
+          "162.159.128.7 : cloudflareIPs",
+          "162.159.138.6 : cloudflareIPs"
+        ],
+        "portsandservice": {},
+        "os": [],
+        "httporhttps": {
+          "": {
+            "technologydetails": {},
+            "link": null,
+            "firewall": "",
+            "ttatus": "",
+            "title": ""
+          }
+        },
+        "cname": [
+          "mail4.zendesk.com."
+        ]
+      }
+    }
+  }
+}
