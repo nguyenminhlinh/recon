@@ -35,9 +35,9 @@ func main() {
 	var mu sync.Mutex
 	const maxChanResults = 100 // Limit the number of elements in chan results
 	const maxChanResult = 50   // Limit the number of elements in chan results
-	const maxGoroutines = 3
+	const maxGoroutines = 4
 	chanResults := make(chan string, maxChanResults)
-	// chanResultsDNS := make(chan string, maxChanResult)
+	chanResultsDNS := make(chan string, maxChanResult)
 	chanResultsHttp := make(chan string, maxChanResult)
 	chanResultsAmass := make(chan string, maxChanResult)
 	chanResultsSubfinder := make(chan string, maxChanResult)
@@ -54,14 +54,14 @@ func main() {
 	fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "Scanning target", domainName)
 
 	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainBruteForceHttp", chanResultsHttp)
-	// core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainBruteForceDNS", chanResultsDNS)
+	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainBruteForceDNS", chanResultsDNS)
 	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainOSINTAmass", chanResultsAmass)
 	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DomainOSINTSubfinder", chanResultsSubfinder)
 	core.Core(ctx, cancel, &wg, domainName, workDirectory, "DirAndFileBruteForce", chanResultsDirAndFile)
 	wg.Add(1)
 	go core.Transmit4into1chan(&mu, &wg, chanResultsHttp, chanResults, &count, maxGoroutines)
-	// wg.Add(1)
-	// go core.Transmit4into1chan(&mu, &wg, chanResultsDNS, chanResults, &count, maxGoroutines)
+	wg.Add(1)
+	go core.Transmit4into1chan(&mu, &wg, chanResultsDNS, chanResults, &count, maxGoroutines)
 	wg.Add(1)
 	go core.Transmit4into1chan(&mu, &wg, chanResultsAmass, chanResults, &count, maxGoroutines)
 	wg.Add(1)

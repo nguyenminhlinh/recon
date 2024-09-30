@@ -62,8 +62,9 @@ func ScanDomain(ctx context.Context, workDirectory string, rootDomain string, ch
 
 	var wg sync.WaitGroup
 	var mu sync.Mutex
-	var subDomainsMap sync.Map // Create map to store unique line
+	//var subDomainsMap sync.Map // Create map to store unique line
 
+	subDomainsMap := make(map[string]bool)
 	subDomainChan := make(chan string, 100)
 	infoDomain := data.ListDomain[rootDomain]
 
@@ -74,27 +75,45 @@ func ScanDomain(ctx context.Context, workDirectory string, rootDomain string, ch
 
 	data.ListDomain[rootDomain] = infoDomain
 
+	// for subDomain := range chanResults {
+	// 	line := strings.TrimSpace(subDomain)
+	// 	line = strings.ToLower(line)
+	// 	if line != "" {
+	// 		if _, exists := subDomainsMap.Load(line); !exists { //Add new line if don"t have
+	// 			subDomainsMap.Store(line, true)
+	// 			//subDomainChan <- line
+	// 			fmt.Printf("Added: %s\n", line)
+	// 		}
+	// 	}
+	// }
 	for subDomain := range chanResults {
 		line := strings.TrimSpace(subDomain)
 		line = strings.ToLower(line)
+		//Add new line if don"t have
 		if line != "" {
-			if _, exists := subDomainsMap.Load(line); !exists { //Add new line if don"t have
-				subDomainsMap.Store(line, true)
-				//subDomainChan <- line
-				fmt.Printf("Added: %s\n", line)
-			}
+			subDomainsMap[line] = true
+			fmt.Println(line)
 		}
 	}
+
 	wg.Add(1)
-	func() {
-		subDomainsMap.Range(func(key, value interface{}) bool {
-			//fmt.Printf("Key: %s, Value: %v\n", key, value)
-			subDomainChan <- key.(string)
-			return true // Trả về true để tiếp tục duyệt
-		})
+	go func() {
+		for subDomain := range subDomainsMap {
+			subDomainChan <- subDomain
+		}
 		wg.Done()
 		close(subDomainChan)
 	}()
+	// wg.Add(1)
+	// go func() {
+	// 	subDomainsMap.Range(func(key, value interface{}) bool {
+	// 		//fmt.Printf("Key: %s, Value: %v\n", key, value)
+	// 		subDomainChan <- key.(string)
+	// 		return true // Trả về true để tiếp tục duyệt
+	// 	})
+	// 	wg.Done()
+	// 	close(subDomainChan)
+	// }()
 
 	wg.Add(1)
 	go InformationOfAllSubDomain(ctx, &wg, subDomainChan, infoDomain.SubDomain, workDirectory, &mu)
@@ -131,7 +150,6 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 	var wg sync.WaitGroup
 	const maxGoroutines = 10
 	cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs := dns.GetIntermediaryIpRange()
-
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
 		go func() {
@@ -179,6 +197,7 @@ func Transmit4into1chan(mu *sync.Mutex, wg *sync.WaitGroup, inputChan chan strin
 		for len(inputChan) > 0 {
 			<-inputChan // Read and skip data until the channel is empty
 		}
+		fmt.Println("close chanResults")
 		close(chanResults) //Close the results channel after stop context
 	}
 	mu.Unlock()

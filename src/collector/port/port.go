@@ -25,9 +25,11 @@ type OsMatch struct {
 	Name     string `xml:"name,attr"`
 	Accuracy string `xml:"accuracy,attr"`
 }
+
 type OsClass struct {
 	Type string `xml:"type,attr"`
 }
+
 type Port struct {
 	Protocol string  `xml:"protocol,attr"`
 	PortID   string  `xml:"portid,attr"`
@@ -96,9 +98,7 @@ func nmap(nmapCLI string) bool {
 }
 
 func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, workDirectory string) {
-	fmt.Println(subDomain)
 	start := time.Now()
-	defer fmt.Println("done", subDomain)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -139,7 +139,7 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 				if strings.Contains(instance, "<osmatch") {
 					instance = instance + "</osmatch>"
 					var osMatch OsMatch
-					// Giải mã XML
+					// Decode XML
 					err := xml.Unmarshal([]byte(instance), &osMatch)
 					if err != nil {
 						fmt.Println("Error osmatch decoding XML:", err)
@@ -150,7 +150,7 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 				}
 				if strings.Contains(instance, "<osclass") && flagGetType {
 					var osClass OsClass
-					// Giải mã XML
+					// Decode XML
 					err := xml.Unmarshal([]byte(instance), &osClass)
 					if err != nil {
 						fmt.Println("Error osclass decoding XML:", err)
