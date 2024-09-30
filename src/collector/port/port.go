@@ -13,7 +13,6 @@ import (
 	"recon/utils/runner"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/projectdiscovery/goflags"
 	"github.com/projectdiscovery/naabu/v2/pkg/port"
@@ -98,7 +97,6 @@ func nmap(nmapCLI string) bool {
 }
 
 func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, workDirectory string) {
-	start := time.Now()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -167,8 +165,6 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 			fmt.Println("Error when deleting files:", err)
 			return
 		}
-		elapsed := time.Since(start)
-		fmt.Println("nmapCLI", subDomain, elapsed)
 	} else { //Use Naabu to scan port
 		options := runner.Options{
 			Host:     goflags.StringSlice{subDomain},
@@ -190,7 +186,5 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 		for _, port := range ports {
 			infoSubDomain.PortAndService[strconv.Itoa(port.Port)] = ""
 		}
-		elapsed := time.Since(start)
-		fmt.Println("naabu", subDomain, elapsed)
 	}
 }

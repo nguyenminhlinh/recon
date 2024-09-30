@@ -62,10 +62,10 @@ func ScanDomain(ctx context.Context, workDirectory string, rootDomain string, ch
 
 	var wg sync.WaitGroup
 	var mu sync.Mutex
-	//var subDomainsMap sync.Map // Create map to store unique line
+	var subDomainsMap sync.Map // Create map to store unique line
 
-	subDomainsMap := make(map[string]bool)
-	subDomainChan := make(chan string, 100)
+	//subDomainsMap := make(map[string]bool)
+	subDomainChan := make(chan string, 500)
 	infoDomain := data.ListDomain[rootDomain]
 
 	if infoDomain.SubDomain == nil {
@@ -74,36 +74,43 @@ func ScanDomain(ctx context.Context, workDirectory string, rootDomain string, ch
 	dns.DNS(rootDomain, &infoDomain) //Get information dns of rootdomain
 
 	data.ListDomain[rootDomain] = infoDomain
-
+	wg.Add(1)
+	go func() {
+		for subDomain := range chanResults {
+			line := strings.TrimSpace(subDomain)
+			line = strings.ToLower(line)
+			if line != "" {
+				if _, exists := subDomainsMap.Load(line); !exists { //Add new line if don"t have
+					subDomainsMap.Store(line, true)
+					subDomainChan <- line
+					fmt.Printf("Added: %s\n", line)
+				}
+			}
+			fmt.Println("chanResults", len(chanResults))
+			fmt.Println("subDomainChan", len(subDomainChan))
+		}
+		close(subDomainChan)
+		fmt.Println("Added done")
+		wg.Done()
+	}()
 	// for subDomain := range chanResults {
 	// 	line := strings.TrimSpace(subDomain)
 	// 	line = strings.ToLower(line)
+	// 	//Add new line if don"t have
 	// 	if line != "" {
-	// 		if _, exists := subDomainsMap.Load(line); !exists { //Add new line if don"t have
-	// 			subDomainsMap.Store(line, true)
-	// 			//subDomainChan <- line
-	// 			fmt.Printf("Added: %s\n", line)
-	// 		}
+	// 		subDomainsMap[line] = true
+	// 		fmt.Println(line)
 	// 	}
 	// }
-	for subDomain := range chanResults {
-		line := strings.TrimSpace(subDomain)
-		line = strings.ToLower(line)
-		//Add new line if don"t have
-		if line != "" {
-			subDomainsMap[line] = true
-			fmt.Println(line)
-		}
-	}
 
-	wg.Add(1)
-	go func() {
-		for subDomain := range subDomainsMap {
-			subDomainChan <- subDomain
-		}
-		wg.Done()
-		close(subDomainChan)
-	}()
+	// wg.Add(1)
+	// go func() {
+	// 	for subDomain := range subDomainsMap {
+	// 		subDomainChan <- subDomain
+	// 	}
+	// 	wg.Done()
+	// 	close(subDomainChan)
+	// }()
 	// wg.Add(1)
 	// go func() {
 	// 	subDomainsMap.Range(func(key, value interface{}) bool {
@@ -148,7 +155,7 @@ func ScanDomain(ctx context.Context, workDirectory string, rootDomain string, ch
 func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, workDirectory string, mu *sync.Mutex) {
 	defer wg1.Done()
 	var wg sync.WaitGroup
-	const maxGoroutines = 10
+	const maxGoroutines = 20
 	cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs := dns.GetIntermediaryIpRange()
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)

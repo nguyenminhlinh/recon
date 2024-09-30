@@ -75,15 +75,14 @@ func extractTitle(resp *http.Response) string {
 }
 
 func HttpxSimple(wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain) {
+	fmt.Println("HttpxSimple", subDomain)
 	start := time.Now()
+	defer wgSubDomain.Done()
 
 	url, status, title, tech, flagGetURL := HttpAndHttps(subDomain)
 	var allLink []string
 	if flagGetURL { //Only getURL if subdomain have type http or https
-		start := time.Now()
 		allLink = link.GetURL(subDomain)
-		elapsed := time.Since(start)
-		fmt.Println("GetURL", subDomain, elapsed)
 	}
 	if infoSubDomain.HttpOrHttps == nil {
 		infoSubDomain.HttpOrHttps = make(map[string]data.InfoWeb)
@@ -103,7 +102,6 @@ func HttpxSimple(wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *d
 
 	infoSubDomain.HttpOrHttps[url] = infoWeb
 
-	wgSubDomain.Done()
 	elapsed := time.Since(start)
 	fmt.Println("HttpxSimple", subDomain, elapsed)
 }

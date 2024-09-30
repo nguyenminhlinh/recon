@@ -40,6 +40,8 @@ func Dig(domain string, qtype uint16) []dns.RR {
 }
 
 func GetIpAndcName(ctx context.Context, wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, workDirectory string) {
+	start := time.Now()
+	fmt.Println("GetIpAndcName", subDomain)
 	defer wgDomain.Done()
 	infoDigs := Dig(subDomain, dns.TypeA)
 	flagScanPort := false
@@ -62,6 +64,8 @@ func GetIpAndcName(ctx context.Context, wgDomain *sync.WaitGroup, subDomain stri
 	if flagScanPort {
 		port.ScanPortAndService(subDomain, infoSubDomain, workDirectory)
 	}
+	elapsed := time.Since(start)
+	fmt.Println("GetIpAndcName", subDomain, elapsed)
 }
 
 func DNS(RootDomain string, infoDomain *data.InfoDomain) {
