@@ -6,11 +6,12 @@ type InfoWeb struct {
 	TechnologyDetails map[string]wappalyzer.AppInfo `json:"technologydetails"`
 	Link              []string                      `json:"link"`
 	FireWall          string                        `json:"firewall"`
-	Status            string                        `json:"ttatus"`
+	Status            string                        `json:"status"`
 	Title             string                        `json:"title"`
 }
 
 type InfoSubDomain struct {
+	NameSubDomain  string             `json:"namesubdomain"`
 	Ips            []string           `json:"ips"`
 	PortAndService map[string]string  `json:"portsandservice"`
 	Os             []string           `json:"os"`

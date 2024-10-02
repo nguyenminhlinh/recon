@@ -1,6 +1,6 @@
-# SOURCE
+# 🌐 SOURCE
 
-## COLLECT INFORMATION
+## 🔍 COLLECT INFORMATION
 
 - [ffuf](https://github.com/ffuf/ffuf)
 - [miekg/dns](github.com/miekg/dns)
@@ -12,10 +12,10 @@
 - [goquery](github.com/PuerkitoBio/goquery)
 - [nuclei](https://github.com/projectdiscovery/nuclei)
 
-## DISPLAY DASHBOARD
+## 📊 DISPLAY DASHBOARD
 
 - [grafana](https://github.com/grafana/grafana)
 
-## DISPLAY REPORT
+## 📝 DISPLAY REPORT
 
 - [overleaf](https://www.overleaf.com)

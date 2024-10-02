@@ -76,6 +76,8 @@ func main() {
 
 	wg.Wait()
 
+	//core.DashBoard(workDirectory)
+
 	elapsed := time.Since(start)
 	fmt.Println("\nComplete all missions with time ", elapsed)
 }

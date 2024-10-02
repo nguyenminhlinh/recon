@@ -4,6 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"log"
+	"net/http"
 	"os"
 	"strings"
 
@@ -181,6 +184,7 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 
 				if !exists {
 					infoSubDomain = data.InfoSubDomain{
+						NameSubDomain:  "",
 						Ips:            []string{},
 						PortAndService: make(map[string]string),
 						Os:             []string{},
@@ -188,7 +192,7 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 						CName:          []string{},
 					}
 				}
-
+				infoSubDomain.NameSubDomain = subDomain
 				wgsubDomain.Add(1)
 				go dns.GetIpAndcName(ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, workDirectory)
 
@@ -223,4 +227,86 @@ func Transmit4into1chan(mu *sync.Mutex, wg *sync.WaitGroup, inputChan chan strin
 		close(chanResults) //Close the results channel after stop context
 	}
 	mu.Unlock()
+}
+
+// Cấu trúc dữ liệu InfoWeb, InfoSubDomain, InfoDomain giống với file JSON của bạn
+type InfoWeb struct {
+	TechnologyDetails map[string]interface{} `json:"technologydetails"`
+	FireWall          string                 `json:"firewall"`
+	Status            string                 `json:"status"`
+	Title             string                 `json:"title"`
+}
+
+type InfoSubDomain struct {
+	NameSubDomain  string             `json:"namesubdomain"`
+	Ips            []string           `json:"ips"`
+	PortAndService map[string]string  `json:"portsandservice"`
+	Os             []string           `json:"os"`
+	HttpOrHttps    map[string]InfoWeb `json:"httporhttps"`
+	CName          []string           `json:"cname"`
+}
+
+type InfoDomain struct {
+	MXRecords  []string                 `json:"mxrecords"`
+	NSRecords  []string                 `json:"nsrecords"`
+	SOARecords []string                 `json:"soarecords"`
+	TXTRecords []string                 `json:"txtrecords"`
+	SubDomain  map[string]InfoSubDomain `json:"subdomain"`
+}
+
+var ListDomain map[string]InfoDomain
+
+// Function to read JSON file
+func loadJSONFile(fileName string) error {
+	//Open JSON file
+	jsonFile, err := os.Open(fileName)
+	if err != nil {
+		return fmt.Errorf("error open file: %v", err)
+	}
+	defer jsonFile.Close()
+
+	// Read content file
+	byteValue, err := io.ReadAll(jsonFile)
+	if err != nil {
+		return fmt.Errorf("error read file: %v", err)
+	}
+
+	// Decode JSON data into map
+	err = json.Unmarshal(byteValue, &ListDomain)
+	if err != nil {
+		return fmt.Errorf("error decode JSON: %v", err)
+	}
+
+	return nil
+}
+
+// Handler for endpoint returns JSON data
+func jsonHandler(w http.ResponseWriter, r *http.Request) {
+	// Set headers for response
+	w.Header().Set("Content-Type", "application/json")
+
+	// Convert ListDomain data to JSON
+	jsonData, err := json.MarshalIndent(ListDomain, "", "  ")
+	if err != nil {
+		http.Error(w, "Cannot convert data to JSON", http.StatusInternalServerError)
+		return
+	}
+
+	// Sen data JSON to client
+	w.Write(jsonData)
+}
+
+func DashBoard(workDirectory string) {
+	err := loadJSONFile(workDirectory + "list_domain.json")
+	if err != nil {
+		log.Fatalf("error load file: %v", err)
+	}
+
+	// Initialize HTTP server on port 8080
+	http.HandleFunc("/data", jsonHandler)
+
+	fmt.Println("Server run on http://localhost:8080/data")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatalf("Not run server: %v", err)
+	}
 }

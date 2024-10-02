@@ -4,7 +4,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"recon/pkg/collector/link"
 	data "recon/pkg/data/type"
 	"sync"
 
@@ -75,18 +74,18 @@ func extractTitle(resp *http.Response) string {
 func HttpxSimple(wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain) {
 	defer wgSubDomain.Done()
 
-	url, status, title, tech, flagGetURL := HttpAndHttps(subDomain)
-	var allLink []string
-	if flagGetURL { //Only getURL if subdomain have type http or https
-		allLink = link.GetURL(subDomain)
-	}
+	url, status, title, tech, _ := HttpAndHttps(subDomain)
+	//var allLink []string
+	// if flagGetURL { //Only getURL if subdomain have type http or https
+	//allLink = link.GetURL(subDomain)
+	// }
 
 	if infoSubDomain.HttpOrHttps == nil {
 		infoSubDomain.HttpOrHttps = make(map[string]data.InfoWeb)
 	}
 
 	infoWeb := infoSubDomain.HttpOrHttps[url]
-	infoWeb.Link = allLink
+	//infoWeb.Link = allLink
 	infoWeb.Status = status
 	infoWeb.Title = title
 
