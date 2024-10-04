@@ -29,6 +29,18 @@ $ go mod tidy
 
 ---
 
+## ✅ Function
+
+This tool helps you collect data about:
+
+1. **DomainOSINTAmass**: 
+2. **DomainBruteForceDNS**: 
+3. **DomainOSINTSubfinder**: 
+4. **DomainBruteForceHttp**: 
+5. **DirAndFileBruteForce**:
+
+---
+
 ## 📖 Usage
 
 Run with cmd or powershell
