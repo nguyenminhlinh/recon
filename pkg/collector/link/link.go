@@ -2,6 +2,7 @@ package link
 
 import (
 	"bufio"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,9 +11,10 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"time"
 )
 
-func GetURL(subDomain string) []string {
+func GetURL(ctx context.Context, subDomain string) []string {
 	noSubs := true
 	fetchFns := []fetchFn{
 		getWaybackURLs,
@@ -22,13 +24,16 @@ func GetURL(subDomain string) []string {
 
 	var wg sync.WaitGroup
 	wurls := make(chan wurl, 100)
+	const timeOut = 7 * time.Minute // Set the timeout by configuring the time for the context
+	ctxTimeout1, cancelTimeout := context.WithTimeout(context.Background(), timeOut)
+	defer cancelTimeout()
 
 	for _, fn := range fetchFns {
 		wg.Add(1)
 		fetch := fn
-		go func() {
+		go func(ctxTimeout1 context.Context) {
 			defer wg.Done()
-			resp, err := fetch(subDomain, noSubs)
+			resp, err := fetch(subDomain, noSubs, ctxTimeout1)
 			if err != nil {
 				return
 			}
@@ -38,7 +43,7 @@ func GetURL(subDomain string) []string {
 				}
 				wurls <- r
 			}
-		}()
+		}(ctxTimeout1)
 	}
 
 	go func() {
@@ -63,9 +68,9 @@ type wurl struct {
 	url  string
 }
 
-type fetchFn func(string, bool) ([]wurl, error)
+type fetchFn func(string, bool, context.Context) ([]wurl, error)
 
-func getWaybackURLs(domain string, noSubs bool) ([]wurl, error) {
+func getWaybackURLs(domain string, noSubs bool, ctxTimeout1 context.Context) ([]wurl, error) {
 	subsWildcard := "*."
 	if noSubs {
 		subsWildcard = ""
@@ -98,13 +103,18 @@ func getWaybackURLs(domain string, noSubs bool) ([]wurl, error) {
 			skip = false
 			continue
 		}
-		out = append(out, wurl{date: urls[1], url: urls[2]})
+		select {
+		case <-ctxTimeout1.Done():
+			return out, nil
+		default:
+			out = append(out, wurl{date: urls[1], url: urls[2]})
+		}
 	}
 
 	return out, nil
 }
 
-func getCommonCrawlURLs(domain string, noSubs bool) ([]wurl, error) {
+func getCommonCrawlURLs(domain string, noSubs bool, ctxTimeout1 context.Context) ([]wurl, error) {
 	subsWildcard := "*."
 	if noSubs {
 		subsWildcard = ""
@@ -133,14 +143,18 @@ func getCommonCrawlURLs(domain string, noSubs bool) ([]wurl, error) {
 		if err != nil {
 			continue
 		}
-
-		out = append(out, wurl{date: wrapper.Timestamp, url: wrapper.URL})
+		select {
+		case <-ctxTimeout1.Done():
+			return out, nil
+		default:
+			out = append(out, wurl{date: wrapper.Timestamp, url: wrapper.URL})
+		}
 	}
 
 	return out, nil
 }
 
-func getVirusTotalURLs(domain string, noSubs bool) ([]wurl, error) {
+func getVirusTotalURLs(domain string, noSubs bool, ctxTimeout1 context.Context) ([]wurl, error) {
 	out := make([]wurl, 0)
 
 	apiKey := os.Getenv("VT_API_KEY")
@@ -175,7 +189,12 @@ func getVirusTotalURLs(domain string, noSubs bool) ([]wurl, error) {
 	_ = dec.Decode(&wrapper)
 
 	for _, u := range wrapper.URLs {
-		out = append(out, wurl{url: u.URL})
+		select {
+		case <-ctxTimeout1.Done():
+			return out, nil
+		default:
+			out = append(out, wurl{url: u.URL})
+		}
 	}
 
 	return out, nil

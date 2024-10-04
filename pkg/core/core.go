@@ -5,12 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"strings"
 
-	"recon/pkg/collector/dir"
 	"recon/pkg/collector/dns"
 	"recon/pkg/collector/domain"
 	"recon/pkg/collector/tech"
@@ -23,26 +22,26 @@ import (
 
 var (
 	// Colors used to ease the reading of program output
-	green = color.New(color.FgHiGreen).SprintFunc()
-	red   = color.New(color.FgHiRed).SprintFunc()
+	green            = color.New(color.FgHiGreen).SprintFunc()
+	red              = color.New(color.FgHiRed).SprintFunc()
+	countToCloseChan = 0
+	maxGoroutines    = 4
 )
 
-func Core(ctx context.Context, cancel context.CancelFunc, wg *sync.WaitGroup, domainName string, workDirectory string, nameFunc string, chanResults chan string) {
+func Core(ctx context.Context, cancel context.CancelFunc, mu *sync.Mutex, wg *sync.WaitGroup, domainName string, workDirectory string, nameFunc string, chanSingle chan string, chanResults chan string) {
 	wg.Add(1)
 	go func() {
 		start := time.Now()
 		fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", nameFunc, "Running....")
 
 		if nameFunc == "DomainBruteForceHttp" {
-			domain.DomainBruteForceHttp(domainName, workDirectory+"/pkg/data/input/subdomains-top1mil-110000.txt", chanResults)
+			domain.DomainBruteForceHttp(domainName, workDirectory+"/pkg/data/input/subdomains-top1mil-110000.txt", chanSingle)
 		} else if nameFunc == "DomainBruteForceDNS" {
-			domain.DomainBruteForceDNS(ctx, cancel, domainName, workDirectory+"/pkg/data/input/subdomains-top1mil-110000.txt", chanResults) //combined_subdomains
+			domain.DomainBruteForceDNS(ctx, cancel, domainName, workDirectory+"/pkg/data/input/subdomains-top1mil-110000.txt", chanSingle) //combined_subdomains
 		} else if nameFunc == "DomainOSINTAmass" {
-			domain.DomainOSINTAmass(ctx, cancel, domainName, workDirectory, chanResults)
+			domain.DomainOSINTAmass(ctx, cancel, domainName, workDirectory, chanSingle)
 		} else if nameFunc == "DomainOSINTSubfinder" {
-			domain.DomainOSINTSubfinder(ctx, cancel, domainName, workDirectory, chanResults)
-		} else if nameFunc == "DirAndFileBruteForce" {
-			dir.DirAndFileBruteForce(ctx, domainName, workDirectory+"/pkg/data/input/common.txt")
+			domain.DomainOSINTSubfinder(ctx, cancel, domainName, workDirectory, chanSingle)
 		}
 
 		elapsed := time.Since(start)
@@ -50,16 +49,21 @@ func Core(ctx context.Context, cancel context.CancelFunc, wg *sync.WaitGroup, do
 		select {
 		case <-ctx.Done():
 			// If a signal is received from the context
-			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", nameFunc, red("Finished due to cancellation in "), elapsed)
+			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v", nameFunc, red("Finished due to cancellation in "), elapsed)
+			fmt.Println()
 		default:
 			// If there is no cancel signal, take another action
-			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", nameFunc, green("Finished successfully in "), elapsed)
+			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v", nameFunc, green("Finished successfully in "), elapsed)
+			fmt.Println()
 		}
 		wg.Done()
 	}()
+
+	wg.Add(1)
+	go Transmit4into1chan(mu, wg, chanSingle, chanResults, &countToCloseChan, maxGoroutines)
 }
 
-func ScanDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory string, rootDomain string, chanResults chan string) {
+func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory string, rootDomain string, chanResults chan string) {
 	defer wgScanDomain.Done()
 
 	start := time.Now()
@@ -101,7 +105,6 @@ func ScanDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory
 			subDomainChan <- buffer[0] // Push from slice to chan
 			buffer = buffer[1:]        // Delete element has pushed to chan
 		}
-
 		close(subDomainChan)
 		wg.Done()
 	}()
@@ -174,7 +177,7 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
-		go func() {
+		go func(countWorker int) {
 			for subDomain := range subDomainChan {
 				var wgsubDomain sync.WaitGroup
 
@@ -194,10 +197,10 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 				}
 				infoSubDomain.NameSubDomain = subDomain
 				wgsubDomain.Add(1)
-				go dns.GetIpAndcName(ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, workDirectory)
+				go dns.GetIpAndcName(countWorker, ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, workDirectory)
 
 				wgsubDomain.Add(1)
-				go tech.HttpxSimple(&wgsubDomain, subDomain, &infoSubDomain)
+				go tech.HttpxSimple(ctx, &wgsubDomain, subDomain, &infoSubDomain)
 
 				wgsubDomain.Wait()
 
@@ -206,7 +209,7 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 				mu.Unlock()
 			}
 			wg.Done()
-		}()
+		}(i)
 	}
 	wg.Wait()
 }
@@ -229,55 +232,26 @@ func Transmit4into1chan(mu *sync.Mutex, wg *sync.WaitGroup, inputChan chan strin
 	mu.Unlock()
 }
 
-// Cấu trúc dữ liệu InfoWeb, InfoSubDomain, InfoDomain giống với file JSON của bạn
-type InfoWeb struct {
-	TechnologyDetails map[string]interface{} `json:"technologydetails"`
-	FireWall          string                 `json:"firewall"`
-	Status            string                 `json:"status"`
-	Title             string                 `json:"title"`
-}
-
-type InfoSubDomain struct {
-	NameSubDomain  string             `json:"namesubdomain"`
-	Ips            []string           `json:"ips"`
-	PortAndService map[string]string  `json:"portsandservice"`
-	Os             []string           `json:"os"`
-	HttpOrHttps    map[string]InfoWeb `json:"httporhttps"`
-	CName          []string           `json:"cname"`
-}
-
-type InfoDomain struct {
-	MXRecords  []string                 `json:"mxrecords"`
-	NSRecords  []string                 `json:"nsrecords"`
-	SOARecords []string                 `json:"soarecords"`
-	TXTRecords []string                 `json:"txtrecords"`
-	SubDomain  map[string]InfoSubDomain `json:"subdomain"`
-}
-
-var ListDomain map[string]InfoDomain
-
 // Function to read JSON file
-func loadJSONFile(fileName string) error {
+func loadJSONFile(fileName string) {
 	//Open JSON file
 	jsonFile, err := os.Open(fileName)
 	if err != nil {
-		return fmt.Errorf("error open file: %v", err)
+		fmt.Println("error open file:", err)
 	}
 	defer jsonFile.Close()
 
 	// Read content file
 	byteValue, err := io.ReadAll(jsonFile)
 	if err != nil {
-		return fmt.Errorf("error read file: %v", err)
+		fmt.Println("error read file:", err)
 	}
 
 	// Decode JSON data into map
-	err = json.Unmarshal(byteValue, &ListDomain)
+	err = json.Unmarshal(byteValue, &data.ListDomain)
 	if err != nil {
-		return fmt.Errorf("error decode JSON: %v", err)
+		fmt.Println("error decode JSON:", err)
 	}
-
-	return nil
 }
 
 // Handler for endpoint returns JSON data
@@ -286,7 +260,7 @@ func jsonHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	// Convert ListDomain data to JSON
-	jsonData, err := json.MarshalIndent(ListDomain, "", "  ")
+	jsonData, err := json.MarshalIndent(data.ListDomain, "", "  ")
 	if err != nil {
 		http.Error(w, "Cannot convert data to JSON", http.StatusInternalServerError)
 		return
@@ -296,17 +270,42 @@ func jsonHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
-func DashBoard(workDirectory string) {
-	err := loadJSONFile(workDirectory + "list_domain.json")
-	if err != nil {
-		log.Fatalf("error load file: %v", err)
-	}
+func DashBoard(workDirectory string, ctx context.Context) {
+	var wg sync.WaitGroup
+	loadJSONFile(workDirectory + "/list_domain.json")
 
 	// Initialize HTTP server on port 8080
 	http.HandleFunc("/data", jsonHandler)
 
-	fmt.Println("Server run on http://localhost:8080/data")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatalf("Not run server: %v", err)
-	}
+	wg.Add(1)
+	go func() {
+		fmt.Fprintf(os.Stderr, "[*] %-22s : %s", "Server data run on", green("http://localhost:8080/data"))
+		fmt.Println()
+		if err := http.ListenAndServe(":8080", nil); err != nil {
+			fmt.Println("Not run server: ", err)
+		}
+		wg.Done()
+	}()
+
+	wg.Add(1)
+	go func() {
+		fmt.Fprintf(os.Stderr, "[*] %-22s : %s", "Server Grafana run on", green("http://localhost:3000/goto/_HLZmhkNg?orgId=1"))
+		fmt.Println()
+		exePath := workDirectory + "/grafana-11.2.1.windows-amd64/grafana-v11.2.1/bin/grafana-server.exe"
+		homePath := workDirectory + "/grafana-11.2.1.windows-amd64/grafana-v11.2.1"
+
+		cmd := exec.Command(exePath, "--homepath", homePath)
+		// Execute the command and get the output
+		_, err := cmd.Output()
+		if err != nil {
+			fmt.Println("Error when run file .exe: ", err)
+		}
+		wg.Done()
+	}()
+
+	wg.Wait()
+}
+
+func Report(workDirectory string) {
+
 }

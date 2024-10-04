@@ -34,8 +34,17 @@ import (
 
 func DomainBruteForceHttp(domain string, wordList string, results chan string) {
 	//Using the wrong host to get length web content "C:/Users/minhl/recon/src/data/common.txt"
-	lengthResponse := utils.LengthResponse(domain, "abcdefghiklm."+domain)
-	utils.Ffuf(domain, strconv.Itoa(lengthResponse), "DomainBruteForceHttp", "domain", true, 0, wordList)
+	var url string
+
+	lengthResponse, flaghttp := utils.LengthResponse(domain, "abcdefghiklm."+domain)
+
+	if flaghttp {
+		url = "http://" + domain
+	} else {
+		url = "https://" + domain
+	}
+
+	utils.Ffuf(url, domain, strconv.Itoa(lengthResponse), "DomainBruteForceHttp", "domain", true, 0, wordList)
 	for _, output := range output.OutputDomain {
 		results <- output
 	}
@@ -94,7 +103,7 @@ func DomainBruteForceDNS(ctx context.Context, cancel context.CancelFunc, domain 
 	var countReadFiles int
 	var muReadFiles sync.Mutex
 
-	const maxGoroutines = 50    // Limit the number of concurrent goroutines
+	const maxGoroutines = 100   // Limit the number of concurrent goroutines
 	const maxChanSemaphore = 50 // Limit the number of elements in the chan semaphore
 	// Create semaphore channel to receive info from file and sen to checkDomain
 	semaphore := make(chan string, maxChanSemaphore)

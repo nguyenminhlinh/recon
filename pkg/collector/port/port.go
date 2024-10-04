@@ -5,7 +5,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
-	"math/rand"
 	"os"
 	"os/exec"
 	data "recon/pkg/data/type"
@@ -96,26 +95,21 @@ func nmap(nmapCLI string) bool {
 	return false
 }
 
-func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, workDirectory string) {
+func ScanPortAndService(countWorker int, subDomain string, infoSubDomain *data.InfoSubDomain, workDirectory string) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	randomNumber := rand.Intn(1000) + 1 // Generate random numbers between 1 and 100
+	//randomNumber := rand.Intn(1000) + 1 // Generate random numbers between 1 and 100
 	var ports []*port.Port
-	nmapCLI := "nmap -O -sV -top-ports 1000 -oX " + workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(randomNumber) + ".txt " + subDomain
+	nmapCLI := "nmap -O -sV -top-ports 1000 -oX " + workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(countWorker) + ".txt " + subDomain
 
 	if infoSubDomain.PortAndService == nil {
 		infoSubDomain.PortAndService = make(map[string]string)
 	}
 
 	if nmap(nmapCLI) { //If have nmap on device and complete run
-		output := utils.ReadFilesSimple(workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(randomNumber) + ".txt")
-		// remove file
-		err := os.Remove(workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(randomNumber) + ".txt")
-		if err != nil {
-			fmt.Println("Error when deleting files:", err)
-			return
-		}
+		output := utils.ReadFilesSimple(workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(countWorker) + ".txt")
+
 		instances := strings.TrimSpace(output)
 
 		if instances != "" {
@@ -128,7 +122,7 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 					var port Port
 					err := xml.Unmarshal([]byte(instance), &port)
 					if err != nil {
-						fmt.Println("Error port protocol:", err)
+						fmt.Println("Error port protocol:", strconv.Itoa(countWorker), err)
 						return
 					}
 					service := ""
@@ -145,7 +139,7 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 					var osMatch OsMatch
 					err := xml.Unmarshal([]byte(instance), &osMatch)
 					if err != nil {
-						fmt.Println("Error osmatch decoding XML:", err)
+						fmt.Println("Error osmatch decoding XML:", strconv.Itoa(countWorker), err)
 						return
 					}
 					os = "Name:" + osMatch.Name + " (" + osMatch.Accuracy + "%)"
@@ -156,13 +150,19 @@ func ScanPortAndService(subDomain string, infoSubDomain *data.InfoSubDomain, wor
 					var osClass OsClass
 					err := xml.Unmarshal([]byte(instance), &osClass)
 					if err != nil {
-						fmt.Println("Error osclass decoding XML:", err)
+						fmt.Println("Error osclass decoding XML:", strconv.Itoa(countWorker), err)
 						return
 					}
 					infoSubDomain.Os = append(infoSubDomain.Os, os+" Devicetype:"+osClass.Type)
 					flagGetType = false
 				}
 			}
+		}
+		// remove file
+		err := os.Remove(workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(countWorker) + ".txt")
+		if err != nil {
+			fmt.Println("Error when deleting files:", strconv.Itoa(countWorker), err)
+			return
 		}
 	} else { //Use Naabu to scan port
 		options := runner.Options{

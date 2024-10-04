@@ -161,7 +161,7 @@ func ParseFlags(opts *ffuf.ConfigOptions, flagrun bool) *ffuf.ConfigOptions {
 	return opts
 }
 
-func Ffuf(domain string, size string, outputfile string, mode string, flagrun bool, maxtime int, wordlist string) {
+func Ffuf(url string, domain string, size string, outputfile string, mode string, flagrun bool, maxtime int, wordlist string) {
 	var err, optserr error
 	// prepare the default config options from default config file
 	var opts *ffuf.ConfigOptions
@@ -169,7 +169,7 @@ func Ffuf(domain string, size string, outputfile string, mode string, flagrun bo
 	defer cancel()
 	opts, optserr = ffuf.ReadDefaultConfig()
 	if mode == "domain" {
-		opts.HTTP.URL = "https://" + domain
+		opts.HTTP.URL = url
 		opts.HTTP.Headers = []string{"Host: FUZZ." + domain}
 		opts.Input.Wordlists = []string{wordlist}
 		opts.Filter.Size = size
@@ -177,7 +177,7 @@ func Ffuf(domain string, size string, outputfile string, mode string, flagrun bo
 		opts.General.MaxTime = maxtime
 	}
 	if mode == "dir" {
-		opts.HTTP.URL = "https://" + domain + "/FUZZ"
+		opts.HTTP.URL = url + "/FUZZ"
 		opts.Input.Wordlists = []string{wordlist}
 		opts.Filter.Size = size
 		opts.Output.OutputFile = outputfile

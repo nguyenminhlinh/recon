@@ -15,29 +15,55 @@ import (
 	"syscall"
 )
 
-func LengthResponse(domain string, host string) int {
-	req, err := http.NewRequest("GET", "https://"+domain, nil)
-	if err != nil {
-		fmt.Println("Error creating request:", err)
-		os.Exit(1)
-	}
+func LengthResponse(domain string, host string) (int, bool) {
+	var flaghttp = false
 
-	req.Host = host
+	// Create request for HTTPS
+	reqhttps, err := http.NewRequest("GET", "https://"+domain, nil)
+	if err != nil {
+		return 0, false
+	}
+	reqhttps.Host = host
+
+	// Create request for HTTP
+	reqhttp, err := http.NewRequest("GET", "http://"+domain, nil)
+	if err != nil {
+		return 0, false
+	}
+	reqhttp.Host = host
+
 	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println("Error sending request:", err)
-		os.Exit(1)
-	}
-	defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println("Error reading response body:", err)
-		os.Exit(1)
+	// Send request for HTTPS
+	resp, err := client.Do(reqhttps)
+	if err == nil {
+		defer resp.Body.Close()
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return 0, false
+		}
+		return len(body), false // No need to send HTTP if HTTPS is successful
+	} else {
+		flaghttp = true
 	}
 
-	return len(body)
+	// Send HTTP request if HTTPS fails
+	if flaghttp {
+		resp, err = client.Do(reqhttp)
+		if err != nil {
+			return 0, true
+		}
+		defer resp.Body.Close()
+
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return 0, true
+		}
+
+		return len(body), true
+	}
+
+	return 0, false // Returns 0 if both requests fail
 }
 
 func ReadFilesSimple(file string) string {
@@ -185,4 +211,8 @@ func StopRun() {
 		fmt.Println("Received an interrupt, stopping...")
 		os.Exit(1) // Exit the program immediately
 	}()
+}
+
+func HasRootPrivilege() bool {
+	return true
 }
