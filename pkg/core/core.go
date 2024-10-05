@@ -7,7 +7,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"os/exec"
 	"strings"
 
 	"recon/pkg/collector/dns"
@@ -287,21 +286,21 @@ func DashBoard(workDirectory string, ctx context.Context) {
 		wg.Done()
 	}()
 
-	wg.Add(1)
-	go func() {
-		fmt.Fprintf(os.Stderr, "[*] %-22s : %s", "Server Grafana run on", green("http://localhost:3000/goto/_HLZmhkNg?orgId=1"))
-		fmt.Println()
-		exePath := workDirectory + "/grafana-11.2.1.windows-amd64/grafana-v11.2.1/bin/grafana-server.exe"
-		homePath := workDirectory + "/grafana-11.2.1.windows-amd64/grafana-v11.2.1"
+	// wg.Add(1)
+	// go func() {
+	// 	fmt.Fprintf(os.Stderr, "[*] %-22s : %s", "Server Grafana run on", green("http://localhost:3000/goto/_HLZmhkNg?orgId=1"))
+	// 	fmt.Println()
+	// 	exePath := workDirectory + "/grafana-11.2.1.windows-amd64/grafana-v11.2.1/bin/grafana-server.exe"
+	// 	homePath := workDirectory + "/grafana-11.2.1.windows-amd64/grafana-v11.2.1"
 
-		cmd := exec.Command(exePath, "--homepath", homePath)
-		// Execute the command and get the output
-		_, err := cmd.Output()
-		if err != nil {
-			fmt.Println("Error when run file .exe: ", err)
-		}
-		wg.Done()
-	}()
+	// 	cmd := exec.Command(exePath, "--homepath", homePath)
+	// 	// Execute the command and get the output
+	// 	_, err := cmd.Output()
+	// 	if err != nil {
+	// 		fmt.Println("Error when run file .exe: ", err)
+	// 	}
+	// 	wg.Done()
+	// }()
 
 	wg.Wait()
 }

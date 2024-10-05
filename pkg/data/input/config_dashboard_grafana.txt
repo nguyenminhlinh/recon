@@ -1,0 +1,688 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "default": false,
+        "type": "marcusolsson-json-datasource",
+        "uid": "your_uid"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "shades"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byValue",
+              "options": {
+                "op": "eq",
+                "reducer": "uniqueValues",
+                "value": 1
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Description"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 244
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 9,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Description"
+          }
+        ]
+      },
+      "pluginVersion": "11.2.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "your_uid"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].[\"subdomain\"][*].[\"httporhttps\"][*].[\"technologydetails\"][*].Description",
+              "language": "jsonpath",
+              "name": ""
+            },
+            {
+              "jsonPath": "$[*].[\"subdomain\"][*].[\"httporhttps\"][*].[\"technologydetails\"][*].CPE",
+              "language": "jsonpath",
+              "name": ""
+            },
+            {
+              "jsonPath": "$[*].[\"subdomain\"][*].[\"httporhttps\"][*].[\"technologydetails\"][*].Categories",
+              "language": "jsonpath",
+              "name": ""
+            },
+            {
+              "jsonPath": "$[*].[\"subdomain\"][*].[\"httporhttps\"][*].[\"technologydetails\"][*].Website",
+              "language": "jsonpath",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "Info Technology",
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "CPE": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Categories": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Description": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Website": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "marcusolsson-json-datasource",
+        "uid": "your_uid"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 9,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true
+      },
+      "pluginVersion": "11.2.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "your_uid"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].namesubdomain"
+            },
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].ips",
+              "language": "jsonpath",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "Domain have ip",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "your_uid"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].namesubdomain"
+            },
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].ips",
+              "language": "jsonpath",
+              "name": ""
+            }
+          ],
+          "hide": false,
+          "method": "GET",
+          "queryParams": "",
+          "refId": "Domain don't have ip",
+          "urlPath": ""
+        }
+      ],
+      "title": "Type Domain",
+      "transformations": [
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "Domain have ip"
+          },
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "notEqual",
+                  "options": {
+                    "value": "[]"
+                  }
+                },
+                "fieldName": "ips"
+              }
+            ],
+            "match": "any",
+            "type": "include"
+          },
+          "topic": "series"
+        },
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "Domain don't have ip"
+          },
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "equal",
+                  "options": {
+                    "value": "[]"
+                  }
+                },
+                "fieldName": "ips"
+              }
+            ],
+            "match": "any",
+            "type": "include"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "marcusolsson-json-datasource",
+        "uid": "your_uid"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 7,
+        "x": 17,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "11.2.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "your_uid"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].link[*]",
+              "name": "Info"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "Link & Directory & File",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "marcusolsson-json-datasource",
+        "uid": "your_uid"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "color-text",
+              "wrapText": false
+            },
+            "filterable": true,
+            "inspect": true
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "[]": {
+                  "index": 4,
+                  "text": "N/A"
+                },
+                "{}": {
+                  "index": 3,
+                  "text": "N/A"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "match": "empty",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "index": 1,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "match": "nan",
+                "result": {
+                  "index": 2,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "STATUS"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "200 OK": {
+                        "color": "#1eff00",
+                        "index": 0,
+                        "text": "200 OK"
+                      },
+                      "201 Created": {
+                        "color": "#0066ff",
+                        "index": 1,
+                        "text": "201 Created"
+                      },
+                      "202 Accepted": {
+                        "color": "#5794F2",
+                        "index": 2
+                      },
+                      "204 No Content": {
+                        "color": "#808080",
+                        "index": 3
+                      },
+                      "400 Bad Request": {
+                        "color": "#ff001e",
+                        "index": 4
+                      },
+                      "401 Unauthorized": {
+                        "color": "#ff001e",
+                        "index": 5
+                      },
+                      "403 Forbidden": {
+                        "color": "#ff001e",
+                        "index": 6
+                      },
+                      "404 Not Found": {
+                        "color": "#ff001e",
+                        "index": 7
+                      },
+                      "405 Method Not Allowed": {
+                        "color": "#ff001e",
+                        "index": 8
+                      },
+                      "409 Conflict": {
+                        "color": "#ffcc00",
+                        "index": 9
+                      },
+                      "500 Internal Server Error": {
+                        "color": "#7b000e",
+                        "index": 10
+                      },
+                      "501 Not Implemented": {
+                        "color": "#7b000e",
+                        "index": 11
+                      },
+                      "502 Bad Gateway": {
+                        "color": "#7b000e",
+                        "index": 12
+                      },
+                      "503 Service Unavailable": {
+                        "color": "#7b000e",
+                        "index": 13
+                      },
+                      "504 Gateway Timeout": {
+                        "color": "#7b000e",
+                        "index": 14
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "match": "empty",
+                      "result": {
+                        "index": 15,
+                        "text": "N/A"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 115
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "OS"
+          }
+        ]
+      },
+      "pluginVersion": "11.2.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "your_uid"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].namesubdomain",
+              "language": "jsonpath",
+              "name": "SUB DOMAIN",
+              "type": "string"
+            },
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].ips",
+              "language": "jsonpath",
+              "name": "IP"
+            },
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].portsandservice",
+              "language": "jsonpath",
+              "name": "PORT"
+            },
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].os",
+              "language": "jsonpath",
+              "name": "OS"
+            },
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].technologydetails",
+              "language": "jsonpath",
+              "name": "TECH"
+            },
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].status",
+              "language": "jsonpath",
+              "name": "STATUS"
+            },
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].title",
+              "language": "jsonpath",
+              "name": "TITLE"
+            },
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].firewall",
+              "language": "jsonpath",
+              "name": "Vulnerabilities"
+            },
+            {
+              "jsonPath": "$[*].$[\"subdomain\"][*].cname",
+              "language": "jsonpath",
+              "name": "CNAME"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "Domain List",
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Recon1",
+  "uid": "cdzj1y7b5rqiod",
+  "version": 21,
+  "weekStart": ""
+}
