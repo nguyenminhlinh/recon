@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func GetURL(ctx context.Context, subDomain string) []string {
+func GetURL(ctx context.Context, subDomain string, typeScan int) []string {
 	noSubs := true
 	fetchFns := []fetchFn{
 		getWaybackURLs,
@@ -24,16 +24,13 @@ func GetURL(ctx context.Context, subDomain string) []string {
 
 	var wg sync.WaitGroup
 	wurls := make(chan wurl, 100)
-	const timeOut = 7 * time.Minute // Set the timeout by configuring the time for the context
-	ctxTimeout1, cancelTimeout := context.WithTimeout(context.Background(), timeOut)
-	defer cancelTimeout()
 
 	for _, fn := range fetchFns {
 		wg.Add(1)
 		fetch := fn
-		go func(ctxTimeout1 context.Context) {
+		go func(typeScan int) {
 			defer wg.Done()
-			resp, err := fetch(subDomain, noSubs, ctxTimeout1)
+			resp, err := fetch(subDomain, noSubs, typeScan)
 			if err != nil {
 				return
 			}
@@ -43,7 +40,7 @@ func GetURL(ctx context.Context, subDomain string) []string {
 				}
 				wurls <- r
 			}
-		}(ctxTimeout1)
+		}(typeScan)
 	}
 
 	go func() {
@@ -60,6 +57,7 @@ func GetURL(ctx context.Context, subDomain string) []string {
 		seen[w.url] = true
 		link = append(link, w.url)
 	}
+
 	return link
 }
 
@@ -68,24 +66,43 @@ type wurl struct {
 	url  string
 }
 
-type fetchFn func(string, bool, context.Context) ([]wurl, error)
+type fetchFn func(string, bool, int) ([]wurl, error)
 
-func getWaybackURLs(domain string, noSubs bool, ctxTimeout1 context.Context) ([]wurl, error) {
+func getWaybackURLs(domain string, noSubs bool, typeScan int) ([]wurl, error) {
+	var timeOut time.Duration
+	if typeScan == 1 {
+		timeOut = 7 * time.Minute
+	} else if typeScan == 2 {
+		timeOut = 12 * time.Minute
+	} else if typeScan == 3 {
+		timeOut = 20 * time.Minute
+	}
+	ctxTimeout, cancelTimeout := context.WithTimeout(context.Background(), timeOut)
+	defer cancelTimeout()
+
 	subsWildcard := "*."
 	if noSubs {
 		subsWildcard = ""
 	}
 
-	res, err := http.Get(
+	// Create request with context so it can be canceled upon timeout
+	req, err := http.NewRequestWithContext(ctxTimeout, "GET",
 		fmt.Sprintf("http://web.archive.org/cdx/search/cdx?url=%s%s/*&output=json&collapse=urlkey", subsWildcard, domain),
-	)
+		nil)
 	if err != nil {
 		return []wurl{}, err
 	}
 
+	// Make request
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return []wurl{}, err
+	}
+	defer res.Body.Close()
+
+	// Read data directly from res.Body
 	raw, err := io.ReadAll(res.Body)
 
-	res.Body.Close()
 	if err != nil {
 		return []wurl{}, err
 	}
@@ -103,18 +120,13 @@ func getWaybackURLs(domain string, noSubs bool, ctxTimeout1 context.Context) ([]
 			skip = false
 			continue
 		}
-		select {
-		case <-ctxTimeout1.Done():
-			return out, nil
-		default:
-			out = append(out, wurl{date: urls[1], url: urls[2]})
-		}
+		out = append(out, wurl{date: urls[1], url: urls[2]})
 	}
 
 	return out, nil
 }
 
-func getCommonCrawlURLs(domain string, noSubs bool, ctxTimeout1 context.Context) ([]wurl, error) {
+func getCommonCrawlURLs(domain string, noSubs bool, typeScan int) ([]wurl, error) {
 	subsWildcard := "*."
 	if noSubs {
 		subsWildcard = ""
@@ -143,18 +155,13 @@ func getCommonCrawlURLs(domain string, noSubs bool, ctxTimeout1 context.Context)
 		if err != nil {
 			continue
 		}
-		select {
-		case <-ctxTimeout1.Done():
-			return out, nil
-		default:
-			out = append(out, wurl{date: wrapper.Timestamp, url: wrapper.URL})
-		}
+		out = append(out, wurl{date: wrapper.Timestamp, url: wrapper.URL})
 	}
 
 	return out, nil
 }
 
-func getVirusTotalURLs(domain string, noSubs bool, ctxTimeout1 context.Context) ([]wurl, error) {
+func getVirusTotalURLs(domain string, noSubs bool, typeScan int) ([]wurl, error) {
 	out := make([]wurl, 0)
 
 	apiKey := os.Getenv("VT_API_KEY")
@@ -189,12 +196,7 @@ func getVirusTotalURLs(domain string, noSubs bool, ctxTimeout1 context.Context) 
 	_ = dec.Decode(&wrapper)
 
 	for _, u := range wrapper.URLs {
-		select {
-		case <-ctxTimeout1.Done():
-			return out, nil
-		default:
-			out = append(out, wurl{url: u.URL})
-		}
+		out = append(out, wurl{url: u.URL})
 	}
 
 	return out, nil

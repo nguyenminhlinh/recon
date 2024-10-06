@@ -5,7 +5,7 @@ import wappalyzer "github.com/projectdiscovery/wappalyzergo"
 type InfoWeb struct {
 	TechnologyDetails map[string]wappalyzer.AppInfo `json:"technologydetails"`
 	Link              []string                      `json:"link"`
-	FireWall          string                        `json:"firewall"`
+	Vulnerability     string                        `json:"vulnerability"`
 	Status            string                        `json:"status"`
 	Title             string                        `json:"title"`
 }

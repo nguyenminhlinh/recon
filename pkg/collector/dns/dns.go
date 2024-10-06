@@ -38,7 +38,7 @@ func Dig(domain string, qtype uint16) []dns.RR {
 	return response.Answer
 }
 
-func GetIpAndcName(countWorker int, ctx context.Context, wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, workDirectory string) {
+func GetIpAndcName(countWorker int, ctx context.Context, wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, googleIPS *[]string, workDirectory string) {
 	defer wgDomain.Done()
 
 	infoDigs := Dig(subDomain, dns.TypeA)
@@ -48,7 +48,7 @@ func GetIpAndcName(countWorker int, ctx context.Context, wgDomain *sync.WaitGrou
 		for _, infoDig := range infoDigs {
 			if aRecord, ok := infoDig.(*dns.A); ok {
 				ip := aRecord.A.String()
-				checkIntermediaryIp, nameOrganisation := CheckIntermediaryIp(ip, cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs)
+				checkIntermediaryIp, nameOrganisation := CheckIntermediaryIp(ip, cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS)
 				if checkIntermediaryIp {
 					infoSubDomain.Ips = append(infoSubDomain.Ips, ip+" : "+nameOrganisation)
 				} else {
@@ -124,6 +124,12 @@ type GcoreIPs struct {
 
 type FastlyIPs struct {
 	Addresses []string `json:"addresses"`
+}
+
+type GoogleIPs struct {
+	Prefixes []struct {
+		Ipv4Prefix string `json:"ipv4Prefix"`
+	} `json:"prefixes"`
 }
 
 func getCloudflareIPs() ([]string, error) {
@@ -208,6 +214,28 @@ func getFastlyIPs() ([]string, error) {
 	return fastly.Addresses, nil
 }
 
+func getGoogleIPs() ([]string, error) {
+	resp, err := http.Get("https://www.gstatic.com/ipranges/goog.json")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var google GoogleIPs
+	if err := json.NewDecoder(resp.Body).Decode(&google); err != nil {
+		return nil, err
+	}
+
+	var Ipv4Prefix []string
+	for _, prefix := range google.Prefixes {
+		if prefix.Ipv4Prefix != "" {
+			Ipv4Prefix = append(Ipv4Prefix, prefix.Ipv4Prefix)
+		}
+	}
+
+	return Ipv4Prefix, nil
+}
+
 func isIPInRange(ip string, ranges []string) bool {
 	ipAddr := net.ParseIP(ip)
 	if ipAddr == nil {
@@ -229,7 +257,7 @@ func isIPInRange(ip string, ranges []string) bool {
 	return false
 }
 
-func GetIntermediaryIpRange() ([]string, []string, []string, []string, []string) {
+func GetIntermediaryIpRange() ([]string, []string, []string, []string, []string, []string) {
 	cloudflareIPs, err := getCloudflareIPs()
 	if err != nil {
 		fmt.Println("Error getting Cloudflare IPs:", err)
@@ -255,20 +283,27 @@ func GetIntermediaryIpRange() ([]string, []string, []string, []string, []string)
 		fmt.Println("Error getting Fastly IPs:", err)
 	}
 
-	return cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs
+	googleIPS, err := getGoogleIPs()
+	if err != nil {
+		fmt.Println("Error getting Fastly IPs:", err)
+	}
+
+	return cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS
 }
 
-func CheckIntermediaryIp(ipToCheck string, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string) (bool, string) {
+func CheckIntermediaryIp(ipToCheck string, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, googleIPS *[]string) (bool, string) {
 	if isIPInRange(ipToCheck, *cloudflareIPs) {
 		return true, "cloudflareIPs"
 	} else if isIPInRange(ipToCheck, *incapsulaIPs) {
-		return true, "IncapsulaIPs"
+		return true, "incapsulaIPs"
 	} else if isIPInRange(ipToCheck, *awsCloudFrontIPs) {
 		return true, "awsCloudFrontIPs"
 	} else if isIPInRange(ipToCheck, *gcoreIPs) {
-		return true, "GcoreIPs"
+		return true, "gcoreIPs"
 	} else if isIPInRange(ipToCheck, *fastlyIPs) {
 		return true, "fastlyIPs"
+	} else if isIPInRange(ipToCheck, *googleIPS) {
+		return true, "googleIPS"
 	} else {
 		return false, ""
 	}

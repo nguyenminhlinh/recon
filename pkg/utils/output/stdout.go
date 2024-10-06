@@ -108,9 +108,9 @@ func (s *Stdoutput) Finalize() error {
 		s.Error(err.Error())
 	}
 
-	if !s.config.Quiet {
-		fmt.Fprintf(os.Stderr, "\n")
-	}
+	// if !s.config.Quiet {
+	// 	fmt.Fprintf(os.Stderr, "\n")
+	// }
 	return nil
 }
 

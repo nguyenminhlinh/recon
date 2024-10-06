@@ -73,13 +73,13 @@ func extractTitle(resp *http.Response) string {
 	return title
 }
 
-func HttpxSimple(ctx context.Context, wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain) {
+func HttpxSimple(ctx context.Context, wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, typeScan int) {
 	defer wgSubDomain.Done()
 
 	url, status, title, tech, flagGetURL := HttpAndHttps(subDomain)
 	var allLink []string
 	if flagGetURL { //Only getURL if subdomain have type http or https
-		allLink = link.GetURL(ctx, subDomain)
+		allLink = link.GetURL(ctx, subDomain, typeScan)
 	}
 
 	if infoSubDomain.HttpOrHttps == nil {

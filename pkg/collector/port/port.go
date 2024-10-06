@@ -99,7 +99,6 @@ func ScanPortAndService(countWorker int, subDomain string, infoSubDomain *data.I
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	//randomNumber := rand.Intn(1000) + 1 // Generate random numbers between 1 and 100
 	var ports []*port.Port
 	nmapCLI := "nmap -O -sV -top-ports 1000 -oX " + workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(countWorker) + ".txt " + subDomain
 

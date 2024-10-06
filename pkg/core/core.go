@@ -25,21 +25,22 @@ var (
 	red              = color.New(color.FgHiRed).SprintFunc()
 	countToCloseChan = 0
 	maxGoroutines    = 4
+	wordList         = []string{"/pkg/data/input/subdomains-top1mil-20000.txt", "/pkg/data/input/subdomains-top1mil-110000.txt", "/pkg/data/input/combined_subdomains_653919.txt"}
 )
 
-func Core(ctx context.Context, cancel context.CancelFunc, mu *sync.Mutex, wg *sync.WaitGroup, domainName string, workDirectory string, nameFunc string, chanSingle chan string, chanResults chan string) {
+func Core(ctx context.Context, cancel context.CancelFunc, mu *sync.Mutex, wg *sync.WaitGroup, domainName string, workDirectory string, nameFunc string, chanSingle chan string, chanResults chan string, typeScan int) {
 	wg.Add(1)
 	go func() {
 		start := time.Now()
-		fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", nameFunc, "Running....")
+		fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", nameFunc, "Running....")
 
-		if nameFunc == "DomainBruteForceHttp" {
-			domain.DomainBruteForceHttp(domainName, workDirectory+"/pkg/data/input/subdomains-top1mil-110000.txt", chanSingle)
-		} else if nameFunc == "DomainBruteForceDNS" {
-			domain.DomainBruteForceDNS(ctx, cancel, domainName, workDirectory+"/pkg/data/input/subdomains-top1mil-110000.txt", chanSingle) //combined_subdomains
-		} else if nameFunc == "DomainOSINTAmass" {
-			domain.DomainOSINTAmass(ctx, cancel, domainName, workDirectory, chanSingle)
-		} else if nameFunc == "DomainOSINTSubfinder" {
+		if nameFunc == "Domain BruteForce Over Http" {
+			domain.DomainBruteForceHttp(domainName, workDirectory+wordList[typeScan-1], chanSingle)
+		} else if nameFunc == "Domain BruteForce Over DNS" {
+			domain.DomainBruteForceDNS(ctx, cancel, domainName, workDirectory+wordList[typeScan-1], chanSingle)
+		} else if nameFunc == "Domain OSINT Amass" {
+			domain.DomainOSINTAmass(ctx, cancel, domainName, workDirectory, chanSingle, typeScan)
+		} else if nameFunc == "Domain OSINT Subfinder" {
 			domain.DomainOSINTSubfinder(ctx, cancel, domainName, workDirectory, chanSingle)
 		}
 
@@ -48,12 +49,10 @@ func Core(ctx context.Context, cancel context.CancelFunc, mu *sync.Mutex, wg *sy
 		select {
 		case <-ctx.Done():
 			// If a signal is received from the context
-			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v", nameFunc, red("Finished due to cancellation in "), elapsed)
-			fmt.Println()
+			fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc, red("Finished due to cancellation in "), elapsed)
 		default:
 			// If there is no cancel signal, take another action
-			fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v", nameFunc, green("Finished successfully in "), elapsed)
-			fmt.Println()
+			fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc, green("Finished successfully in "), elapsed)
 		}
 		wg.Done()
 	}()
@@ -62,11 +61,11 @@ func Core(ctx context.Context, cancel context.CancelFunc, mu *sync.Mutex, wg *sy
 	go Transmit4into1chan(mu, wg, chanSingle, chanResults, &countToCloseChan, maxGoroutines)
 }
 
-func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory string, rootDomain string, chanResults chan string) {
+func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory string, rootDomain string, chanResults chan string, typeScan int) {
 	defer wgScanDomain.Done()
 
 	start := time.Now()
-	fmt.Fprintf(os.Stderr, "[*] %-22s : %s\n", "ScanDomain", "Running....")
+	fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "ScanDomain", "Running....")
 
 	var wg sync.WaitGroup
 	var mu sync.Mutex
@@ -107,37 +106,9 @@ func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirec
 		close(subDomainChan)
 		wg.Done()
 	}()
-	// for subDomain := range chanResults {
-	// 	line := strings.TrimSpace(subDomain)
-	// 	line = strings.ToLower(line)
-	// 	//Add new line if don"t have
-	// 	if line != "" {
-	// 		subDomainsMap[line] = true
-	// 		fmt.Println(line)
-	// 	}
-	// }
-
-	// wg.Add(1)
-	// go func() {
-	// 	for subDomain := range subDomainsMap {
-	// 		subDomainChan <- subDomain
-	// 	}
-	// 	wg.Done()
-	// 	close(subDomainChan)
-	// }()
-	// wg.Add(1)
-	// go func() {
-	// 	subDomainsMap.Range(func(key, value interface{}) bool {
-	// 		//fmt.Printf("Key: %s, Value: %v\n", key, value)
-	// 		subDomainChan <- key.(string)
-	// 		return true // Trả về true để tiếp tục duyệt
-	// 	})
-	// 	wg.Done()
-	// 	close(subDomainChan)
-	// }()
 
 	wg.Add(1)
-	go InformationOfAllSubDomain(ctx, &wg, subDomainChan, infoDomain.SubDomain, workDirectory, &mu)
+	go InformationOfAllSubDomain(ctx, &wg, subDomainChan, infoDomain.SubDomain, workDirectory, &mu, typeScan)
 
 	wg.Wait()
 
@@ -160,19 +131,19 @@ func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirec
 	select {
 	case <-ctx.Done():
 		// If a signal is received from the context
-		fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "ScanDomain", red("Finished due to cancellation in "), elapsed)
+		fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", "ScanDomain", red("Finished due to cancellation in "), elapsed)
 	default:
 		// If there is no cancel signal, take another action
-		fmt.Fprintf(os.Stderr, "[*] %-22s : %s%v\n", "ScanDomain", green("Finished successfully in "), elapsed)
+		fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", "ScanDomain", green("Finished successfully in "), elapsed)
 	}
 }
 
-func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, workDirectory string, mu *sync.Mutex) {
+func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, workDirectory string, mu *sync.Mutex, typeScan int) {
 	defer wg1.Done()
 
 	var wg sync.WaitGroup
-	const maxGoroutines = 20
-	cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs := dns.GetIntermediaryIpRange()
+	const maxGoroutines = 30
+	cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS := dns.GetIntermediaryIpRange()
 
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
@@ -196,10 +167,10 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 				}
 				infoSubDomain.NameSubDomain = subDomain
 				wgsubDomain.Add(1)
-				go dns.GetIpAndcName(countWorker, ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, workDirectory)
+				go dns.GetIpAndcName(countWorker, ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, &googleIPS, workDirectory)
 
 				wgsubDomain.Add(1)
-				go tech.HttpxSimple(ctx, &wgsubDomain, subDomain, &infoSubDomain)
+				go tech.HttpxSimple(ctx, &wgsubDomain, subDomain, &infoSubDomain, typeScan)
 
 				wgsubDomain.Wait()
 
@@ -270,20 +241,16 @@ func jsonHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DashBoard(workDirectory string, ctx context.Context) {
-	var wg sync.WaitGroup
 	loadJSONFile(workDirectory + "/list_domain.json")
 
 	// Initialize HTTP server on port 8080
 	http.HandleFunc("/data", jsonHandler)
 
-	wg.Add(1)
 	go func() {
-		fmt.Fprintf(os.Stderr, "[*] %-22s : %s", "Server data run on", green("http://localhost:8080/data"))
-		fmt.Println()
+		fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Server data run on", green("http://localhost:8080/data"))
 		if err := http.ListenAndServe(":8080", nil); err != nil {
 			fmt.Println("Not run server: ", err)
 		}
-		wg.Done()
 	}()
 
 	// wg.Add(1)
@@ -301,8 +268,6 @@ func DashBoard(workDirectory string, ctx context.Context) {
 	// 	}
 	// 	wg.Done()
 	// }()
-
-	wg.Wait()
 }
 
 func Report(workDirectory string) {

@@ -8,8 +8,8 @@ import (
 	"log"
 	"os"
 	"os/signal"
-
 	"strconv"
+
 	"strings"
 	"sync"
 	"syscall"
@@ -198,7 +198,7 @@ func processOutput(ctx context.Context, ctxTimeout context.Context, g *netmap.Gr
 	}
 }
 
-func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain string, workDirectory string, chanResults chan string) {
+func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain string, workDirectory string, chanResults chan string, typeScan int) {
 	// Create configuration for Amass
 	cfg := config.NewConfig()
 
@@ -219,7 +219,14 @@ func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain str
 		os.Exit(1)
 	}
 
-	const timeOut = 15 * time.Minute // Set the timeout by configuring the time for the context
+	var timeOut time.Duration
+	if typeScan == 1 {
+		timeOut = 5 * time.Minute // Set the timeout by configuring the time for the context
+	} else if typeScan == 2 {
+		timeOut = 10 * time.Minute // Set the timeout by configuring the time for the context
+	} else if typeScan == 3 {
+		timeOut = 20 * time.Minute // Set the timeout by configuring the time for the context
+	}
 	ctxTimeout, cancelTimeout := context.WithTimeout(ctx, timeOut)
 	defer cancelTimeout()
 
