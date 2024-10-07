@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"recon/pkg/collector/dns"
@@ -17,55 +18,69 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+	"github.com/inancgumus/screen"
+	"github.com/olekukonko/tablewriter"
 )
 
 var (
 	// Colors used to ease the reading of program output
-	green            = color.New(color.FgHiGreen).SprintFunc()
-	red              = color.New(color.FgHiRed).SprintFunc()
+	green            = color.New(color.FgGreen).SprintFunc()
+	red              = color.New(color.FgRed).SprintFunc()
+	blue             = color.New(color.FgBlue).SprintFunc()
 	countToCloseChan = 0
 	maxGoroutines    = 4
 	wordList         = []string{"/pkg/data/input/subdomains-top1mil-20000.txt", "/pkg/data/input/subdomains-top1mil-110000.txt", "/pkg/data/input/combined_subdomains_653919.txt"}
+	nameFunc         = []string{"Domain BruteForce Over Http", "Domain BruteForce Over DNS", "Domain OSINT Amass", "Domain OSINT Subfinder", "Collect all domain information"}
+	typeScan         = []string{"Basic", "Moderate", "Comprehensive"}
 )
 
-func Core(ctx context.Context, cancel context.CancelFunc, mu *sync.Mutex, wg *sync.WaitGroup, domainName string, workDirectory string, nameFunc string, chanSingle chan string, chanResults chan string, typeScan int) {
+const (
+	BANNER_HEADER = `
+ █████╗ ██╗   ██╗████████╗ ██████╗     ██████╗ ███████╗ ██████╗ ██████╗ ███╗   ██╗
+██╔══██╗██║   ██║╚══██╔══╝██╔═══██╗    ██╔══██╗██╔════╝██╔════╝██╔═══██╗████╗  ██║
+███████║██║   ██║   ██║   ██║   ██║    ██████╔╝█████╗  ██║     ██║   ██║██╔██╗ ██║
+██╔══██║██║   ██║   ██║   ██║   ██║    ██╔══██╗██╔══╝  ██║     ██║   ██║██║╚██╗██║
+██║  ██║╚██████╔╝   ██║   ╚██████╔╝    ██║  ██║███████╗╚██████╗╚██████╔╝██║ ╚████║
+╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝     ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝`
+	BANNER_SEP = "__________________________________________________________________________________"
+)
+
+func Core(ctx context.Context, cancel context.CancelFunc, mu *sync.Mutex, wg *sync.WaitGroup, domainName string, workDirectory string, nameFunc string, chanSingle chan string, chanResults chan string, typeScanInt int, flag *[5]int, elapsed *[5]time.Duration, stt int) {
+	(*flag)[stt] = 0
 	wg.Add(1)
-	go func() {
+	go func(flag *[5]int, elapsed *[5]time.Duration, stt int) {
 		start := time.Now()
-		fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", nameFunc, "Running....")
 
 		if nameFunc == "Domain BruteForce Over Http" {
-			domain.DomainBruteForceHttp(domainName, workDirectory+wordList[typeScan-1], chanSingle)
+			domain.DomainBruteForceHttp(domainName, workDirectory+wordList[typeScanInt-1], chanSingle)
 		} else if nameFunc == "Domain BruteForce Over DNS" {
-			domain.DomainBruteForceDNS(ctx, cancel, domainName, workDirectory+wordList[typeScan-1], chanSingle)
+			domain.DomainBruteForceDNS(ctx, cancel, domainName, workDirectory+wordList[typeScanInt-1], chanSingle)
 		} else if nameFunc == "Domain OSINT Amass" {
-			domain.DomainOSINTAmass(ctx, cancel, domainName, workDirectory, chanSingle, typeScan)
+			domain.DomainOSINTAmass(ctx, cancel, domainName, workDirectory, chanSingle, typeScanInt)
 		} else if nameFunc == "Domain OSINT Subfinder" {
 			domain.DomainOSINTSubfinder(ctx, cancel, domainName, workDirectory, chanSingle)
 		}
 
-		elapsed := time.Since(start)
-
+		(*elapsed)[stt] = time.Since(start)
 		select {
 		case <-ctx.Done():
-			// If a signal is received from the context
-			fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc, red("Finished due to cancellation in "), elapsed)
+			(*flag)[stt] = 1 // If a signal is received from the context
 		default:
-			// If there is no cancel signal, take another action
-			fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc, green("Finished successfully in "), elapsed)
+			(*flag)[stt] = 2 // If there is no cancel signal, take another action
 		}
 		wg.Done()
-	}()
+	}(flag, elapsed, stt)
 
 	wg.Add(1)
 	go Transmit4into1chan(mu, wg, chanSingle, chanResults, &countToCloseChan, maxGoroutines)
+
 }
 
-func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory string, rootDomain string, chanResults chan string, typeScan int) {
+func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory string, rootDomain string, chanResults chan string, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain, flag *[5]int, elapsed *[5]time.Duration, stt int) {
+	(*flag)[stt] = 0
 	defer wgScanDomain.Done()
 
 	start := time.Now()
-	fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "ScanDomain", "Running....")
 
 	var wg sync.WaitGroup
 	var mu sync.Mutex
@@ -81,7 +96,6 @@ func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirec
 
 	dns.DNS(rootDomain, &infoDomain) //Get information dns of rootdomain
 	data.ListDomain[rootDomain] = infoDomain
-
 	wg.Add(1)
 	go func() {
 		for subDomain := range chanResults {
@@ -108,10 +122,9 @@ func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirec
 	}()
 
 	wg.Add(1)
-	go InformationOfAllSubDomain(ctx, &wg, subDomainChan, infoDomain.SubDomain, workDirectory, &mu, typeScan)
+	go InformationOfAllSubDomain(ctx, &wg, subDomainChan, infoDomain.SubDomain, workDirectory, &mu, typeScanInt, infoSubDomainChan)
 
 	wg.Wait()
-
 	// Convert ListDomain to JSON and write to file
 	file, err := os.Create("list_domain.json")
 	if err != nil {
@@ -127,24 +140,31 @@ func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirec
 		fmt.Println("Error encoding JSON:", err)
 	}
 
-	elapsed := time.Since(start)
+	(*elapsed)[stt] = time.Since(start)
+
 	select {
 	case <-ctx.Done():
-		// If a signal is received from the context
-		fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", "ScanDomain", red("Finished due to cancellation in "), elapsed)
+		(*flag)[stt] = 1 // If a signal is received from the context
 	default:
-		// If there is no cancel signal, take another action
-		fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", "ScanDomain", green("Finished successfully in "), elapsed)
+		(*flag)[stt] = 2 // If there is no cancel signal, take another action
 	}
+
+	for {
+		if flag[0] == 2 && flag[1] == 2 && flag[2] == 2 && flag[3] == 2 {
+			*infoSubDomainChan <- data.InfoSubDomain{}
+			close(*infoSubDomainChan)
+			break
+		}
+	}
+
 }
 
-func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, workDirectory string, mu *sync.Mutex, typeScan int) {
+func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, workDirectory string, mu *sync.Mutex, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain) {
 	defer wg1.Done()
 
 	var wg sync.WaitGroup
 	const maxGoroutines = 30
 	cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS := dns.GetIntermediaryIpRange()
-
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
 		go func(countWorker int) {
@@ -170,18 +190,158 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 				go dns.GetIpAndcName(countWorker, ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, &googleIPS, workDirectory)
 
 				wgsubDomain.Add(1)
-				go tech.HttpxSimple(ctx, &wgsubDomain, subDomain, &infoSubDomain, typeScan)
+				go tech.HttpxSimple(ctx, &wgsubDomain, subDomain, &infoSubDomain, typeScanInt)
 
 				wgsubDomain.Wait()
 
 				mu.Lock() // Lock map before updating it
 				infoAllSubDomain[subDomain] = infoSubDomain
+				*infoSubDomainChan <- infoSubDomain
 				mu.Unlock()
 			}
 			wg.Done()
 		}(i)
 	}
 	wg.Wait()
+}
+
+func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, flag *[5]int, elapsed *[5]time.Duration, domainName string, dashBoard bool, report bool, typeScanInt int) {
+	defer wg.Done()
+
+	var numberOrder int
+	var options string
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"NO.", "Sub Domain", "Ip", "Port", "Os", "Tech", "Link", "Status", "Title", "Cname"})
+
+	if report {
+		options = options + "ReportLatex "
+	}
+
+	if dashBoard {
+		options = options + "DashBoard "
+	}
+
+	// Add rows
+	for infoSubDomain := range *infoSubDomainChan {
+		if infoSubDomain.NameSubDomain == "" {
+			continue
+		}
+		numberOrder++
+		screen.Clear()
+		screen.MoveTopLeft()
+		fmt.Fprintf(os.Stderr, "%s\n       %+60s\n%s\n", BANNER_HEADER, blue("Made by MinhLinh"), BANNER_SEP)
+		fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Scanning target", domainName)
+		if dashBoard || report {
+			fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Options", options)
+		}
+		fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Type Scan", typeScan[typeScanInt-1])
+
+		for i := 0; i < 5; i++ {
+			if (*flag)[i] == 0 {
+				fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", nameFunc[i], blue("Running..."))
+			}
+			if (*flag)[i] == 1 {
+				fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc[i], red("Finished due to cancellation in "), (*elapsed)[i])
+			}
+			if (*flag)[i] == 2 {
+				fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc[i], green("Finished successfully in "), (*elapsed)[i])
+			}
+		}
+
+		var ips string
+		var ports string
+		var os string
+		var tech string
+		var link string
+		var status string
+		var title string
+		var cname string
+		for _, ip := range infoSubDomain.Ips {
+			ips = ips + ip + "\n"
+		}
+		if len(infoSubDomain.PortAndService) > 0 {
+			ports = green("✔")
+		} else {
+			ports = red("✘")
+		}
+		if len(infoSubDomain.Os) > 0 {
+			os = green("✔")
+		} else {
+			os = red("✘")
+		}
+		if len(infoSubDomain.CName) > 0 {
+			cname = green("✔")
+		} else {
+			cname = red("✘")
+		}
+		for _, httpOrHttps := range infoSubDomain.HttpOrHttps {
+			if len(httpOrHttps.TechnologyDetails) > 0 {
+				tech = green("✔")
+			} else {
+				tech = red("✘")
+			}
+			if len(httpOrHttps.Link) > 0 {
+				link = green("✔")
+			} else {
+				link = red("✘")
+			}
+			if len(httpOrHttps.Status) > 0 {
+				status = green("✔")
+			} else {
+				status = red("✘")
+			}
+			if len(httpOrHttps.Title) > 0 {
+				title = green("✔")
+			} else {
+				title = red("✘")
+			}
+		}
+
+		// Add each row to the table
+		table.Append([]string{
+			strconv.Itoa(numberOrder),
+			infoSubDomain.NameSubDomain + "\n",
+			ips,
+			ports,
+			os,
+			tech,
+			link,
+			status,
+			title,
+			cname,
+		})
+
+		// Render the table after all rows have been added
+		table.Render()
+	}
+	screen.Clear()
+	screen.MoveTopLeft()
+	fmt.Fprintf(os.Stderr, "%s\n       %+60s\n%s\n", BANNER_HEADER, blue("Made by MinhLinh"), BANNER_SEP)
+	fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Scanning target", domainName)
+
+	if dashBoard {
+		options = options + green("(http://localhost:8080/data)")
+	}
+
+	if dashBoard || report {
+		fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Options", options)
+	}
+
+	fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Type Scan", typeScan[typeScanInt-1])
+
+	for i := 0; i < 5; i++ {
+		if (*flag)[i] == 0 {
+			fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", nameFunc[i], blue("Running..."))
+		}
+		if (*flag)[i] == 1 {
+			fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc[i], red("Finished due to cancellation in "), (*elapsed)[i])
+		}
+		if (*flag)[i] == 2 {
+			fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc[i], green("Finished successfully in "), (*elapsed)[i])
+		}
+	}
+	table.Render()
+
 }
 
 func Transmit4into1chan(mu *sync.Mutex, wg *sync.WaitGroup, inputChan chan string, chanResults chan string, count *int, maxGoroutines int) {
@@ -246,12 +406,12 @@ func DashBoard(workDirectory string, ctx context.Context) {
 	// Initialize HTTP server on port 8080
 	http.HandleFunc("/data", jsonHandler)
 
-	go func() {
-		fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Server data run on", green("http://localhost:8080/data"))
-		if err := http.ListenAndServe(":8080", nil); err != nil {
-			fmt.Println("Not run server: ", err)
-		}
-	}()
+	//go func() {
+	// fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Server data run on", green("http://localhost:8080/data"))
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		fmt.Println("Not run server: ", err)
+	}
+	//}()
 
 	// wg.Add(1)
 	// go func() {

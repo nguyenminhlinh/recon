@@ -50,7 +50,7 @@ func GetIpAndcName(countWorker int, ctx context.Context, wgDomain *sync.WaitGrou
 				ip := aRecord.A.String()
 				checkIntermediaryIp, nameOrganisation := CheckIntermediaryIp(ip, cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS)
 				if checkIntermediaryIp {
-					infoSubDomain.Ips = append(infoSubDomain.Ips, ip+" : "+nameOrganisation)
+					infoSubDomain.Ips = append(infoSubDomain.Ips, ip+":"+nameOrganisation)
 				} else {
 					infoSubDomain.Ips = append(infoSubDomain.Ips, ip)
 					flagScanPort = true //If domain have ip is not intermediary ip
@@ -293,17 +293,17 @@ func GetIntermediaryIpRange() ([]string, []string, []string, []string, []string,
 
 func CheckIntermediaryIp(ipToCheck string, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, googleIPS *[]string) (bool, string) {
 	if isIPInRange(ipToCheck, *cloudflareIPs) {
-		return true, "cloudflareIPs"
+		return true, "cloudflare"
 	} else if isIPInRange(ipToCheck, *incapsulaIPs) {
-		return true, "incapsulaIPs"
+		return true, "incapsula"
 	} else if isIPInRange(ipToCheck, *awsCloudFrontIPs) {
-		return true, "awsCloudFrontIPs"
+		return true, "cloudfront"
 	} else if isIPInRange(ipToCheck, *gcoreIPs) {
-		return true, "gcoreIPs"
+		return true, "gcore"
 	} else if isIPInRange(ipToCheck, *fastlyIPs) {
-		return true, "fastlyIPs"
+		return true, "fastly"
 	} else if isIPInRange(ipToCheck, *googleIPS) {
-		return true, "googleIPS"
+		return true, "google"
 	} else {
 		return false, ""
 	}

@@ -227,7 +227,7 @@ func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain str
 	} else if typeScan == 3 {
 		timeOut = 20 * time.Minute // Set the timeout by configuring the time for the context
 	}
-	ctxTimeout, cancelTimeout := context.WithTimeout(ctx, timeOut)
+	ctxTimeout, cancelTimeout := context.WithTimeout(context.Background(), timeOut)
 	defer cancelTimeout()
 
 	// Setup the new enumeration

@@ -71,9 +71,9 @@ type fetchFn func(string, bool, int) ([]wurl, error)
 func getWaybackURLs(domain string, noSubs bool, typeScan int) ([]wurl, error) {
 	var timeOut time.Duration
 	if typeScan == 1 {
-		timeOut = 7 * time.Minute
+		timeOut = 5 * time.Minute
 	} else if typeScan == 2 {
-		timeOut = 12 * time.Minute
+		timeOut = 10 * time.Minute
 	} else if typeScan == 3 {
 		timeOut = 20 * time.Minute
 	}

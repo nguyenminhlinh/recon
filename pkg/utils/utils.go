@@ -216,3 +216,19 @@ func StopRun() {
 func HasRootPrivilege() bool {
 	return true
 }
+
+func WriteFile(fileName, data string) error {
+	// Mở file để ghi, nếu file không tồn tại thì tạo mới, với quyền ghi và đọc
+	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// Ghi dữ liệu vào file
+	_, err = file.WriteString(data)
+	if err != nil {
+		return err
+	}
+	return nil
+}

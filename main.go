@@ -6,24 +6,14 @@ import (
 	"fmt"
 	"os"
 	"recon/pkg/core"
+	data "recon/pkg/data/type"
 	"recon/pkg/utils"
 	"sync"
 	"time"
 )
 
-const (
-	BANNER_HEADER = `
- █████╗ ██╗   ██╗████████╗ ██████╗     ██████╗ ███████╗ ██████╗ ██████╗ ███╗   ██╗
-██╔══██╗██║   ██║╚══██╔══╝██╔═══██╗    ██╔══██╗██╔════╝██╔════╝██╔═══██╗████╗  ██║
-███████║██║   ██║   ██║   ██║   ██║    ██████╔╝█████╗  ██║     ██║   ██║██╔██╗ ██║
-██╔══██║██║   ██║   ██║   ██║   ██║    ██╔══██╗██╔══╝  ██║     ██║   ██║██║╚██╗██║
-██║  ██║╚██████╔╝   ██║   ╚██████╔╝    ██║  ██║███████╗╚██████╗╚██████╔╝██║ ╚████║
-╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝     ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝`
-	BANNER_SEP = "__________________________________________________________________________________"
-)
-
 func main() {
-	start := time.Now()
+	//start := time.Now()
 
 	if !utils.HasRootPrivilege() {
 		println("This script must be run as root")
@@ -109,17 +99,19 @@ func main() {
 
 	// domainName := os.Args[1]
 
-	fmt.Fprintf(os.Stderr, "%s\n       %+60s\n%s\n", BANNER_HEADER, "Made by MinhLinh", BANNER_SEP)
-	fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Scanning target", domainName)
+	infoSubDomainChan := make(chan data.InfoSubDomain)
+	var flag [5]int
+	var elapsed [5]time.Duration
+	core.Core(ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain BruteForce Over Http", chanResultsHttp, chanResults, typeScan, &flag, &elapsed, 0)
+	core.Core(ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain BruteForce Over DNS", chanResultsDNS, chanResults, typeScan, &flag, &elapsed, 1)
+	core.Core(ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain OSINT Amass", chanResultsAmass, chanResults, typeScan, &flag, &elapsed, 2)
+	core.Core(ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain OSINT Subfinder", chanResultsSubfinder, chanResults, typeScan, &flag, &elapsed, 3)
 
-	core.Core(ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain BruteForce Over Http", chanResultsHttp, chanResults, typeScan)
-	core.Core(ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain BruteForce Over DNS", chanResultsDNS, chanResults, typeScan)
-	core.Core(ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain OSINT Amass", chanResultsAmass, chanResults, typeScan)
-	core.Core(ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain OSINT Subfinder", chanResultsSubfinder, chanResults, typeScan)
-
-	time.Sleep(1 * time.Second)
 	wg.Add(1)
-	go core.ScanInfoDomain(ctx, &wg, workDirectory, domainName, chanResults, typeScan)
+	go core.ScanInfoDomain(ctx, &wg, workDirectory, domainName, chanResults, typeScan, &infoSubDomainChan, &flag, &elapsed, 4)
+
+	wg.Add(1)
+	go core.Display(&wg, &infoSubDomainChan, &flag, &elapsed, domainName, dashBoard, report, typeScan)
 
 	wg.Wait()
 
@@ -131,6 +123,6 @@ func main() {
 		core.Report(workDirectory)
 	}
 
-	elapsed := time.Since(start)
-	fmt.Println("\nComplete all missions with time ", elapsed)
+	//elapsed := time.Since(start)
+	//fmt.Println("\nComplete all missions with time ", elapsed)
 }
