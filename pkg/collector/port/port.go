@@ -108,12 +108,7 @@ func ScanPortAndService(countWorker int, subDomain string, infoSubDomain *data.I
 
 	if nmap(nmapCLI) { //If have nmap on device and complete run
 		output := utils.ReadFilesSimple(workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(countWorker) + ".txt")
-		// remove file
-		err := os.Remove(workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(countWorker) + ".txt")
-		if err != nil {
-			fmt.Println("Error when deleting files:", strconv.Itoa(countWorker), err)
-			return
-		}
+
 		instances := strings.TrimSpace(output)
 
 		if instances != "" {
@@ -184,5 +179,11 @@ func ScanPortAndService(countWorker int, subDomain string, infoSubDomain *data.I
 		for _, port := range ports {
 			infoSubDomain.PortAndService[strconv.Itoa(port.Port)] = ""
 		}
+	}
+	// remove file
+	err := os.Remove(workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(countWorker) + ".txt")
+	if err != nil {
+		fmt.Println("Error when deleting files:", strconv.Itoa(countWorker), err)
+		return
 	}
 }

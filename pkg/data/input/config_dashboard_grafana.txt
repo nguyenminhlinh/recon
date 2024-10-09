@@ -18,12 +18,12 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 5,
   "links": [],
   "panels": [
     {
       "datasource": {
-        "default": false,
+        "default": true,
         "type": "marcusolsson-json-datasource",
         "uid": "your_uid"
       },
@@ -79,15 +79,39 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 244
+                "value": 519
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Categories"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 264
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPE"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 344
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 7,
-        "w": 9,
+        "h": 6,
+        "w": 24,
         "x": 0,
         "y": 0
       },
@@ -121,17 +145,17 @@
           },
           "fields": [
             {
+              "jsonPath": "$[*].[\"subdomain\"][*].[\"httporhttps\"][*].[\"technologydetails\"][*].Categories",
+              "language": "jsonpath",
+              "name": ""
+            },
+            {
               "jsonPath": "$[*].[\"subdomain\"][*].[\"httporhttps\"][*].[\"technologydetails\"][*].Description",
               "language": "jsonpath",
               "name": ""
             },
             {
               "jsonPath": "$[*].[\"subdomain\"][*].[\"httporhttps\"][*].[\"technologydetails\"][*].CPE",
-              "language": "jsonpath",
-              "name": ""
-            },
-            {
-              "jsonPath": "$[*].[\"subdomain\"][*].[\"httporhttps\"][*].[\"technologydetails\"][*].Categories",
               "language": "jsonpath",
               "name": ""
             },
@@ -177,7 +201,99 @@
     },
     {
       "datasource": {
-        "default": false,
+        "default": true,
+        "type": "marcusolsson-json-datasource",
+        "uid": "your_uid"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 9,
+        "x": 0,
+        "y": 6
+      },
+      "id": 5,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "11.2.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "your_uid"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].$[\"mxrecords\"]",
+              "name": "MX Records"
+            },
+            {
+              "jsonPath": "$[*].$[\"nsrecords\"]",
+              "language": "jsonpath",
+              "name": "NS Records"
+            },
+            {
+              "jsonPath": "$[*].$[\"soarecords\"]",
+              "language": "jsonpath",
+              "name": "SOA Records"
+            },
+            {
+              "jsonPath": "$[*].$[\"txtrecords\"]",
+              "language": "jsonpath",
+              "name": "TXT Records"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "DNS Records",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "default": true,
         "type": "marcusolsson-json-datasource",
         "uid": "your_uid"
       },
@@ -214,7 +330,7 @@
         "h": 7,
         "w": 8,
         "x": 9,
-        "y": 0
+        "y": 6
       },
       "id": 3,
       "options": {
@@ -240,12 +356,13 @@
           },
           "fields": [
             {
-              "jsonPath": "$[*].$[\"subdomain\"][*].namesubdomain"
+              "jsonPath": "$[*].$[\"subdomain\"][*].namesubdomain",
+              "name": "Sub Domain"
             },
             {
               "jsonPath": "$[*].$[\"subdomain\"][*].ips",
               "language": "jsonpath",
-              "name": ""
+              "name": "Ip"
             }
           ],
           "method": "GET",
@@ -261,12 +378,14 @@
           },
           "fields": [
             {
-              "jsonPath": "$[*].$[\"subdomain\"][*].namesubdomain"
+              "jsonPath": "$[*].$[\"subdomain\"][*].namesubdomain",
+              "name": "Sub Domain"
             },
             {
               "jsonPath": "$[*].$[\"subdomain\"][*].ips",
               "language": "jsonpath",
-              "name": ""
+              "name": "Ip",
+              "type": "string"
             }
           ],
           "hide": false,
@@ -293,7 +412,7 @@
                     "value": "[]"
                   }
                 },
-                "fieldName": "ips"
+                "fieldName": "Ip"
               }
             ],
             "match": "any",
@@ -316,7 +435,7 @@
                     "value": "[]"
                   }
                 },
-                "fieldName": "ips"
+                "fieldName": "Ip"
               }
             ],
             "match": "any",
@@ -328,7 +447,7 @@
     },
     {
       "datasource": {
-        "default": false,
+        "default": true,
         "type": "marcusolsson-json-datasource",
         "uid": "your_uid"
       },
@@ -366,7 +485,7 @@
         "h": 7,
         "w": 7,
         "x": 17,
-        "y": 0
+        "y": 6
       },
       "id": 4,
       "options": {
@@ -392,7 +511,7 @@
           "fields": [
             {
               "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].link[*]",
-              "name": "Info"
+              "name": "URL"
             }
           ],
           "method": "GET",
@@ -406,7 +525,7 @@
     },
     {
       "datasource": {
-        "default": false,
+        "default": true,
         "type": "marcusolsson-json-datasource",
         "uid": "your_uid"
       },
@@ -581,7 +700,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 7
+        "y": 13
       },
       "id": 1,
       "options": {
@@ -616,48 +735,48 @@
             {
               "jsonPath": "$[*].$[\"subdomain\"][*].namesubdomain",
               "language": "jsonpath",
-              "name": "SUB DOMAIN",
+              "name": "Sub Domain",
               "type": "string"
             },
             {
               "jsonPath": "$[*].$[\"subdomain\"][*].ips",
               "language": "jsonpath",
-              "name": "IP"
+              "name": "Ip"
             },
             {
               "jsonPath": "$[*].$[\"subdomain\"][*].portsandservice",
               "language": "jsonpath",
-              "name": "PORT"
+              "name": "Port"
             },
             {
               "jsonPath": "$[*].$[\"subdomain\"][*].os",
               "language": "jsonpath",
-              "name": "OS"
+              "name": "Os"
             },
             {
               "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].technologydetails",
               "language": "jsonpath",
-              "name": "TECH"
+              "name": "Tech"
             },
             {
               "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].status",
               "language": "jsonpath",
-              "name": "STATUS"
+              "name": "Status"
             },
             {
               "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].title",
               "language": "jsonpath",
-              "name": "TITLE"
+              "name": "Title"
             },
             {
-              "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].firewall",
+              "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].vulnerability",
               "language": "jsonpath",
               "name": "Vulnerabilities"
             },
             {
               "jsonPath": "$[*].$[\"subdomain\"][*].cname",
               "language": "jsonpath",
-              "name": "CNAME"
+              "name": "Cname"
             }
           ],
           "method": "GET",
@@ -681,8 +800,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Recon1",
-  "uid": "cdzj1y7b5rqiod",
-  "version": 21,
+  "title": "Recon",
+  "uid": "cdzj1y7b5rqiod12",
+  "version": 11,
   "weekStart": ""
 }

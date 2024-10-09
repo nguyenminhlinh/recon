@@ -13,6 +13,8 @@ import (
 	"path/filepath"
 	"sync"
 	"syscall"
+
+	"github.com/fatih/color"
 )
 
 func LengthResponse(domain string, host string) (int, bool) {
@@ -208,7 +210,7 @@ func StopRun() {
 	// Capture signal Ctrl+C
 	go func() {
 		<-stopChan
-		fmt.Println("Received an interrupt, stopping...")
+		fmt.Println(color.New(color.FgRed).SprintFunc()("Received an interrupt, stopping..."))
 		os.Exit(1) // Exit the program immediately
 	}()
 }

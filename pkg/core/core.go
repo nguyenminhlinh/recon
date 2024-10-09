@@ -7,7 +7,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 
 	"recon/pkg/collector/dns"
@@ -18,8 +17,6 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/inancgumus/screen"
-	"github.com/olekukonko/tablewriter"
 )
 
 var (
@@ -27,6 +24,8 @@ var (
 	green            = color.New(color.FgGreen).SprintFunc()
 	red              = color.New(color.FgRed).SprintFunc()
 	blue             = color.New(color.FgBlue).SprintFunc()
+	yellow           = color.New(color.FgYellow).SprintFunc()
+	cyan             = color.New(color.FgCyan).SprintFunc()
 	countToCloseChan = 0
 	maxGoroutines    = 4
 	wordList         = []string{"/pkg/data/input/subdomains-top1mil-20000.txt", "/pkg/data/input/subdomains-top1mil-110000.txt", "/pkg/data/input/combined_subdomains_653919.txt"}
@@ -205,13 +204,24 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 	wg.Wait()
 }
 
+func splitIntoChunks(s string, chunkSize int) []string {
+	var chunks []string
+	for i := 0; i < len(s); i += chunkSize {
+		// Tính toán chiều dài cho chunk hiện tại
+		end := i + chunkSize
+		if end > len(s) {
+			end = len(s)
+		}
+		chunks = append(chunks, s[i:end]) // Thêm chunk vào danh sách
+	}
+	return chunks
+}
+
 func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, flag *[5]int, elapsed *[5]time.Duration, domainName string, dashBoard bool, report bool, typeScanInt int) {
 	defer wg.Done()
 
 	var numberOrder int
 	var options string
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"NO.", "Sub Domain", "Ip", "Port", "Os", "Tech", "Link", "Status", "Title", "Cname"})
 
 	if report {
 		options = options + "ReportLatex "
@@ -221,43 +231,38 @@ func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, fla
 		options = options + "DashBoard "
 	}
 
+	fmt.Fprintf(os.Stderr, "%s\n       %+60s\n%s\n", BANNER_HEADER, cyan("Made by MinhLinh"), BANNER_SEP)
+	fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Scanning target", blue(domainName))
+	if dashBoard || report {
+		fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Options", options)
+	}
+	fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Scan type", typeScan[typeScanInt-1])
+
+	for i := 0; i < 5; i++ {
+		fmt.Fprintf(os.Stderr, "[*] %-30s : %s%s\n", nameFunc[i], "Start", yellow("..."))
+	}
+	head := "+------+--------------------------+--------------------------+--------+------+--------+--------+----------+---------+---------+\n"
+	head += "|  NO. |        Sub Domain        |             IP           |  PORT  |  OS  |  TECH  |  LINK  |  STATUS  |  TITLE  |  CNAME  |\n"
+	head += "+------+--------------------------+--------------------------+--------+------+--------+--------+----------+---------+---------+\n"
+	fmt.Print(head)
+
 	// Add rows
 	for infoSubDomain := range *infoSubDomainChan {
 		if infoSubDomain.NameSubDomain == "" {
 			continue
 		}
 		numberOrder++
-		screen.Clear()
-		screen.MoveTopLeft()
-		fmt.Fprintf(os.Stderr, "%s\n       %+60s\n%s\n", BANNER_HEADER, blue("Made by MinhLinh"), BANNER_SEP)
-		fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Scanning target", domainName)
-		if dashBoard || report {
-			fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Options", options)
-		}
-		fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Type Scan", typeScan[typeScanInt-1])
-
-		for i := 0; i < 5; i++ {
-			if (*flag)[i] == 0 {
-				fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", nameFunc[i], blue("Running..."))
-			}
-			if (*flag)[i] == 1 {
-				fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc[i], red("Finished due to cancellation in "), (*elapsed)[i])
-			}
-			if (*flag)[i] == 2 {
-				fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc[i], green("Finished successfully in "), (*elapsed)[i])
-			}
-		}
-
 		var ips string
 		var ports string
-		var os string
+		var oss string
 		var tech string
 		var link string
 		var status string
 		var title string
 		var cname string
+
 		for _, ip := range infoSubDomain.Ips {
-			ips = ips + ip + "\n"
+			ips = ips + ip + ","
 		}
 		if len(infoSubDomain.PortAndService) > 0 {
 			ports = green("✔")
@@ -265,9 +270,9 @@ func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, fla
 			ports = red("✘")
 		}
 		if len(infoSubDomain.Os) > 0 {
-			os = green("✔")
+			oss = green("✔")
 		} else {
-			os = red("✘")
+			oss = red("✘")
 		}
 		if len(infoSubDomain.CName) > 0 {
 			cname = green("✔")
@@ -296,43 +301,57 @@ func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, fla
 				title = red("✘")
 			}
 		}
-
-		// Add each row to the table
-		table.Append([]string{
-			strconv.Itoa(numberOrder),
-			infoSubDomain.NameSubDomain + "\n",
-			ips,
-			ports,
-			os,
-			tech,
-			link,
-			status,
-			title,
-			cname,
-		})
-
-		// Render the table after all rows have been added
-		table.Render()
-	}
-	screen.Clear()
-	screen.MoveTopLeft()
-	fmt.Fprintf(os.Stderr, "%s\n       %+60s\n%s\n", BANNER_HEADER, blue("Made by MinhLinh"), BANNER_SEP)
-	fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Scanning target", domainName)
-
-	if dashBoard {
-		options = options + green("(http://localhost:8080/data)")
-	}
-
-	if dashBoard || report {
-		fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Options", options)
-	}
-
-	fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Type Scan", typeScan[typeScanInt-1])
-
-	for i := 0; i < 5; i++ {
-		if (*flag)[i] == 0 {
-			fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", nameFunc[i], blue("Running..."))
+		var ip []string
+		nameSubDomain := splitIntoChunks(infoSubDomain.NameSubDomain, 22)
+		lengthNameSubDomain := len(nameSubDomain)
+		if len(ips) != 0 {
+			ip = strings.Split(ips[:len(ips)-1], ",")
+			fmt.Fprintf(os.Stderr, "| %-4v | %-24s | %-24s | %-15s | %-13s | %-15s | %-15s | %-17s | %-16s | %-16s |\n", numberOrder, nameSubDomain[0], ip[0], ports, oss, tech, link, status, title, cname)
+		} else {
+			fmt.Fprintf(os.Stderr, "| %-4v | %-24s | %-24s | %-15s | %-13s | %-15s | %-15s | %-17s | %-16s | %-16s |\n", numberOrder, nameSubDomain[0], " ", ports, oss, tech, link, status, title, cname)
 		}
+		lengthIp := len(ip)
+		if lengthNameSubDomain > lengthIp {
+			for i := 1; i < lengthIp; i++ {
+				fmt.Fprintf(os.Stderr, "| %-4v | %-24s | %-24s | %-6s | %-4s | %-6s | %-6s | %-8s | %-7s | %-7s |\n", " ", nameSubDomain[i], ip[i], " ", " ", " ", " ", " ", " ", " ")
+			}
+			if lengthIp == 0 {
+				lengthIp = 1
+			}
+			for i := lengthIp; i < lengthNameSubDomain; i++ {
+				fmt.Fprintf(os.Stderr, "| %-4v | %-24s | %-24s | %-6s | %-4s | %-6s | %-6s | %-8s | %-7s | %-7s |\n", " ", nameSubDomain[i], " ", " ", " ", " ", " ", " ", " ", " ")
+			}
+		} else if lengthNameSubDomain <= lengthIp {
+			for i := 1; i < lengthNameSubDomain; i++ {
+				fmt.Fprintf(os.Stderr, "| %-4v | %-24s | %-24s | %-6s | %-4s | %-6s | %-6s | %-8s | %-7s | %-7s |\n", " ", nameSubDomain[i], ip[i], " ", " ", " ", " ", " ", " ", " ")
+			}
+
+			for i := lengthNameSubDomain; i < lengthIp; i++ {
+				fmt.Fprintf(os.Stderr, "| %-4v | %-24s | %-24s | %-6s | %-4s | %-6s | %-6s | %-8s | %-7s | %-7s |\n", " ", " ", ip[i], " ", " ", " ", " ", " ", " ", " ")
+			}
+		}
+		fmt.Fprintf(os.Stderr, "| %-4v | %-24s | %-24s | %-6s | %-4s | %-6s | %-6s | %-8s | %-7s | %-7s |\n", " ", "", " ", " ", " ", " ", " ", " ", " ", " ")
+		fmt.Print("+------+--------------------------+--------------------------+--------+------+--------+--------+----------+---------+---------+\n")
+		// Add each row to the table
+
+		for i := 0; i < 5; i++ {
+			if (*flag)[i] == 1 {
+				fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc[i], red("Finished due to cancellation in "), (*elapsed)[i])
+			}
+			if (*flag)[i] == 2 {
+				fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc[i], green("Finished successfully in "), (*elapsed)[i])
+			}
+		}
+
+		for i := 0; i < 5; i++ {
+			if (*flag)[i] == 1 || (*flag)[i] == 2 {
+				fmt.Print("\033[F")
+			}
+		}
+		fmt.Print("\033[F")
+	}
+	fmt.Print("\033[B")
+	for i := 0; i < 5; i++ {
 		if (*flag)[i] == 1 {
 			fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc[i], red("Finished due to cancellation in "), (*elapsed)[i])
 		}
@@ -340,8 +359,7 @@ func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, fla
 			fmt.Fprintf(os.Stderr, "[*] %-30s : %s%v\n", nameFunc[i], green("Finished successfully in "), (*elapsed)[i])
 		}
 	}
-	table.Render()
-
+	fmt.Fprintf(os.Stderr, "[*] %-30s : %s\n", "Data server run on", green("http://localhost:8080/data"))
 }
 
 func Transmit4into1chan(mu *sync.Mutex, wg *sync.WaitGroup, inputChan chan string, chanResults chan string, count *int, maxGoroutines int) {

@@ -13,8 +13,6 @@ import (
 )
 
 func main() {
-	//start := time.Now()
-
 	if !utils.HasRootPrivilege() {
 		println("This script must be run as root")
 		return
@@ -43,7 +41,7 @@ func main() {
 		// fetch for a single domain
 		domainName = flag.Arg(0)
 	} else {
-		fmt.Println("Please run with command: go run . [option] domain ")
+		fmt.Println("Please run with command: go run . [type scan] [option] <domain> ")
 	}
 
 	// Check if the user has selected more than 1 flag
@@ -59,7 +57,7 @@ func main() {
 	}
 
 	if selectedFlags != 1 {
-		fmt.Println("Error: You must specify exactly one of the following flags: --basic, --moderate, or --comprehensive.")
+		fmt.Println("Error scan type: You must specify exactly one of the following flags: --basic, --moderate, or --comprehensive.")
 		os.Exit(1)
 	}
 
@@ -91,14 +89,6 @@ func main() {
 	chanResultsAmass := make(chan string, maxChanResult)
 	chanResultsSubfinder := make(chan string, maxChanResult)
 
-	// Get command from console
-	// if len(os.Args) < 2 {
-	// 	fmt.Println("Usage: go run . <domain>")
-	// 	os.Exit(1)
-	// }
-
-	// domainName := os.Args[1]
-
 	infoSubDomainChan := make(chan data.InfoSubDomain)
 	var flag [5]int
 	var elapsed [5]time.Duration
@@ -122,7 +112,4 @@ func main() {
 	if report {
 		core.Report(workDirectory)
 	}
-
-	//elapsed := time.Since(start)
-	//fmt.Println("\nComplete all missions with time ", elapsed)
 }
