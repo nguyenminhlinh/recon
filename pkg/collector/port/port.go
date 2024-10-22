@@ -9,7 +9,7 @@ import (
 	"os/exec"
 	data "recon/pkg/data/type"
 	"recon/pkg/utils"
-	"recon/pkg/utils/runner"
+	runner "recon/pkg/utils/runner_naabu"
 	"strconv"
 	"strings"
 
@@ -98,7 +98,14 @@ func nmap(nmapCLI string) bool {
 func ScanPortAndService(countWorker int, subDomain string, infoSubDomain *data.InfoSubDomain, workDirectory string) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-
+	defer func() {
+		// remove file
+		err := os.Remove(workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(countWorker) + ".txt")
+		if err != nil {
+			fmt.Println("Error when deleting files:", strconv.Itoa(countWorker), err)
+			return
+		}
+	}()
 	var ports []*port.Port
 	nmapCLI := "nmap -O -sV -top-ports 1000 -oX " + workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(countWorker) + ".txt " + subDomain
 
@@ -179,11 +186,5 @@ func ScanPortAndService(countWorker int, subDomain string, infoSubDomain *data.I
 		for _, port := range ports {
 			infoSubDomain.PortAndService[strconv.Itoa(port.Port)] = ""
 		}
-	}
-	// remove file
-	err := os.Remove(workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(countWorker) + ".txt")
-	if err != nil {
-		fmt.Println("Error when deleting files:", strconv.Itoa(countWorker), err)
-		return
 	}
 }

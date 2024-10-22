@@ -1,13 +1,9 @@
 package tech
 
 import (
-	"context"
 	"io"
 	"log"
 	"net/http"
-	"recon/pkg/collector/link"
-	data "recon/pkg/data/type"
-	"sync"
 
 	"github.com/PuerkitoBio/goquery"
 	wappalyzer "github.com/projectdiscovery/wappalyzergo"
@@ -71,33 +67,4 @@ func extractTitle(resp *http.Response) string {
 	// Get the title from the <title> tag
 	title := doc.Find("title").Text()
 	return title
-}
-
-func HttpxSimple(ctx context.Context, wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, typeScan int) {
-	defer wgSubDomain.Done()
-
-	url, status, title, tech, flagGetURL := HttpAndHttps(subDomain)
-	var allLink []string
-	if flagGetURL { //Only getURL if subdomain have type http or https
-		allLink = link.GetURL(ctx, subDomain, typeScan)
-	}
-
-	if infoSubDomain.HttpOrHttps == nil {
-		infoSubDomain.HttpOrHttps = make(map[string]data.InfoWeb)
-	}
-
-	infoWeb := infoSubDomain.HttpOrHttps[url]
-	infoWeb.Link = allLink
-	infoWeb.Status = status
-	infoWeb.Title = title
-
-	if infoWeb.TechnologyDetails == nil {
-		infoWeb.TechnologyDetails = make(map[string]wappalyzer.AppInfo)
-	}
-
-	for key, value := range tech {
-		infoWeb.TechnologyDetails[key] = value
-	}
-
-	infoSubDomain.HttpOrHttps[url] = infoWeb
 }

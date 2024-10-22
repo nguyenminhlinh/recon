@@ -17,7 +17,7 @@ import (
 
 	dnsrecon "recon/pkg/collector/dns"
 	"recon/pkg/utils"
-	"recon/pkg/utils/output"
+	output "recon/pkg/utils/output_ffuf"
 
 	"github.com/caffix/netmap"
 	"github.com/caffix/stringset"

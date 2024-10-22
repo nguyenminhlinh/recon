@@ -1,17 +1,14 @@
 package dns
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net"
 	"net/http"
-	"recon/pkg/collector/port"
 	data "recon/pkg/data/type"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/miekg/dns"
@@ -36,34 +33,6 @@ func Dig(domain string, qtype uint16) []dns.RR {
 		return []dns.RR{}
 	}
 	return response.Answer
-}
-
-func GetIpAndcName(countWorker int, ctx context.Context, wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, googleIPS *[]string, workDirectory string) {
-	defer wgDomain.Done()
-
-	infoDigs := Dig(subDomain, dns.TypeA)
-	flagScanPort := false
-
-	if len(infoDigs) != 0 {
-		for _, infoDig := range infoDigs {
-			if aRecord, ok := infoDig.(*dns.A); ok {
-				ip := aRecord.A.String()
-				checkIntermediaryIp, nameOrganisation := CheckIntermediaryIp(ip, cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS)
-				if checkIntermediaryIp {
-					infoSubDomain.Ips = append(infoSubDomain.Ips, ip+":"+nameOrganisation)
-				} else {
-					infoSubDomain.Ips = append(infoSubDomain.Ips, ip)
-					flagScanPort = true //If domain have ip is not intermediary ip
-				}
-			} else if cNameRecord, ok := infoDig.(*dns.CNAME); ok {
-				infoSubDomain.CName = append(infoSubDomain.CName, cNameRecord.Target)
-			}
-		}
-	}
-
-	if flagScanPort {
-		port.ScanPortAndService(countWorker, subDomain, infoSubDomain, workDirectory)
-	}
 }
 
 func DNS(RootDomain string, infoDomain *data.InfoDomain) {

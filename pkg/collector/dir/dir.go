@@ -3,7 +3,7 @@ package dir
 import (
 	"context"
 	"recon/pkg/utils"
-	"recon/pkg/utils/output"
+	output "recon/pkg/utils/output_ffuf"
 	"strconv"
 )
 

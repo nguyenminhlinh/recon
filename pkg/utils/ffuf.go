@@ -7,7 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
-	"recon/pkg/utils/output"
+	output "recon/pkg/utils/output_ffuf"
 	"strings"
 	"sync"
 	"time"
