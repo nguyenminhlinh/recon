@@ -12,10 +12,9 @@ import (
 	"recon/pkg/collector/dns"
 	"recon/pkg/collector/domain"
 	"recon/pkg/collector/link"
+	"recon/pkg/collector/port"
 	"recon/pkg/collector/tech"
-	"recon/pkg/collector/vuln"
 	data "recon/pkg/data/type"
-	"recon/pkg/utils"
 	"sync"
 	"time"
 
@@ -49,7 +48,7 @@ const (
 	BANNER_SEP = "__________________________________________________________________________________"
 )
 
-func Core(ctx context.Context, cancel context.CancelFunc, mu *sync.Mutex, wg *sync.WaitGroup, domainName string, workDirectory string, nameFunc string, chanSingle chan string, chanResults chan string, typeScanInt int, flag *[5]int, elapsed *[5]time.Duration, stt int) {
+func Core(infoSubDomainChan *chan data.InfoSubDomain, ctx context.Context, cancel context.CancelFunc, mu *sync.Mutex, wg *sync.WaitGroup, domainName string, workDirectory string, nameFunc string, chanSingle chan string, chanResults chan string, typeScanInt int, flag *[5]int, elapsed *[5]time.Duration, stt int) {
 	(*flag)[stt] = 0
 	wg.Add(1)
 	go func(flag *[5]int, elapsed *[5]time.Duration, stt int) {
@@ -72,6 +71,7 @@ func Core(ctx context.Context, cancel context.CancelFunc, mu *sync.Mutex, wg *sy
 		default:
 			(*flag)[stt] = 2 // If there is no cancel signal, take another action
 		}
+		*infoSubDomainChan <- data.InfoSubDomain{}
 		wg.Done()
 	}(flag, elapsed, stt)
 
@@ -172,13 +172,13 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 	const maxGoroutines = 30
 	subDomainChanToVuln := make(chan string, 100)
 	var CountClosesubDomainChanToVuln int
-	listScanVuln := make(map[string]bool)
+	//listScanVuln := make(map[string]bool)
 
 	cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS := dns.GetIntermediaryIpRange()
 
 	wg.Add(1)
 	go func() {
-		vuln.ScanVulnerability(listScanVuln, ctx, subDomainChanToVuln, infoAllVulnerability, typeScanInt)
+		//vuln.ScanVulnerability(listScanVuln, ctx, subDomainChanToVuln, infoAllVulnerability, typeScanInt)
 		wg.Done()
 	}()
 
@@ -214,18 +214,18 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 
 				wgsubDomain.Wait()
 
-				if flagScanVuln {
-					for {
-						time.Sleep(2 * time.Second)
-						_, exit := listScanVuln[subDomain]
-						if exit {
-							if len(infoAllVulnerability[subDomain]) > 0 {
-								infoSubDomain.FlagVulnerability = true
-							}
-							break
-						}
-					}
-				}
+				// if flagScanVuln {
+				// 	for {
+				// 		time.Sleep(2 * time.Second)
+				// 		_, exit := listScanVuln[subDomain]
+				// 		if exit {
+				// 			if len(infoAllVulnerability[subDomain]) > 0 {
+				// 				infoSubDomain.FlagVulnerability = true
+				// 			}
+				// 			break
+				// 		}
+				// 	}
+				// }
 
 				mu.Lock() // Lock map before updating it
 				infoAllSubDomain[subDomain] = infoSubDomain
@@ -248,7 +248,11 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 func ScanSubDomain(flagScanVuln *bool, subDomainChanToVuln chan string, countWorker int, ctx context.Context, wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, googleIPS *[]string, workDirectory string, typeScanInt int) {
 	defer wgDomain.Done()
 
-	infoDigs := dns.Dig(subDomain, dnsmiekg.TypeA)
+	infoDigs := dns.Dig(subDomain, dnsmiekg.TypeA, "8.8.4.4")
+	if len(infoDigs) == 0 {
+		infoDigs = dns.Dig(subDomain, dnsmiekg.TypeA, "8.8.8.8") //scan 2 times
+	}
+
 	flagScanPort := false
 	if len(infoDigs) != 0 {
 		for _, infoDig := range infoDigs {
@@ -267,14 +271,13 @@ func ScanSubDomain(flagScanVuln *bool, subDomainChanToVuln chan string, countWor
 			}
 		}
 	}
-
 	if flagScanPort {
-		//port.ScanPortAndService(countWorker, subDomain, infoSubDomain, workDirectory)
+		port.ScanPortAndService(countWorker, subDomain, infoSubDomain, workDirectory)
 	}
+
 	if *flagScanVuln {
-		subDomainChanToVuln <- subDomain
+		//subDomainChanToVuln <- subDomain
 	}
-	utils.WriteFile("ScanSubDomain.txt", subDomain+"\n")
 }
 
 func ScanWeb(ctx context.Context, wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, typeScan int) {
@@ -455,6 +458,7 @@ func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, fla
 		}
 	}
 	fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s\n", "Data server run on", green("http://localhost:8080/data"))
+	fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s\n", "Grafana server run on", green("http://localhost:3000"))
 }
 
 func splitIntoChunks(s string, chunkSize int) []string {

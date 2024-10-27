@@ -80,12 +80,12 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 				return
 			} else {
 				if domain != "" { //DomainBruteForceDNS with subdomain don't have domain
-					responseAnswer := dnsrecon.Dig(subdomain+"."+domain, dns.TypeA)
+					responseAnswer := dnsrecon.Dig(subdomain+"."+domain, dns.TypeA, "8.8.4.4")
 					if len(responseAnswer) != 0 {
 						results <- subdomain + "." + domain
 					}
 				} else { //DomainOSINTSubfinder with subdomain had domain
-					responseAnswer := dnsrecon.Dig(subdomain, dns.TypeA)
+					responseAnswer := dnsrecon.Dig(subdomain, dns.TypeA, "8.8.4.4")
 					if len(responseAnswer) != 0 {
 						results <- subdomain
 					}
@@ -163,7 +163,7 @@ func NewOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, filter
 	return output
 }
 
-func processOutput(ctx context.Context, ctxTimeout context.Context, g *netmap.Graph, e *enum.Enumeration, outputs chan string, wg *sync.WaitGroup, domain string) {
+func processOutput(ctx context.Context, ctxTimeout *context.Context, g *netmap.Graph, e *enum.Enumeration, outputs chan string, wg *sync.WaitGroup, domain string) {
 	defer wg.Done()
 	defer close(outputs)
 
@@ -183,7 +183,7 @@ func processOutput(ctx context.Context, ctxTimeout context.Context, g *netmap.Gr
 	last := e.Config.CollectionStartTime
 	for {
 		select {
-		case <-ctxTimeout.Done():
+		case <-(*ctxTimeout).Done():
 			extract(last)
 			return
 		case <-ctx.Done():
@@ -199,7 +199,6 @@ func processOutput(ctx context.Context, ctxTimeout context.Context, g *netmap.Gr
 }
 
 func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain string, workDirectory string, chanResults chan string, typeScan int) {
-	// Create configuration for Amass
 	cfg := config.NewConfig()
 
 	// Check if a configuration file was provided, and if so, load the settings
@@ -241,7 +240,7 @@ func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain str
 
 	// Run the enumeration process and send the results to the channel
 	wg.Add(1)
-	go processOutput(ctx, ctxTimeout, sys.GraphDatabases()[0], e, chanResults, &wg, domain)
+	go processOutput(ctx, &ctxTimeout, sys.GraphDatabases()[0], e, chanResults, &wg, domain)
 
 	// Monitor for cancellation by the user
 	go func(c context.Context, f context.CancelFunc) {

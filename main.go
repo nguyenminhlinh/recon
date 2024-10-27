@@ -92,10 +92,10 @@ func main() {
 	infoSubDomainChan := make(chan data.InfoSubDomain)
 	var flag [5]int
 	var elapsed [5]time.Duration
-	core.Core(ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain BruteForce Over Http", chanResultsHttp, chanResults, typeScan, &flag, &elapsed, 0)
-	core.Core(ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain BruteForce Over DNS", chanResultsDNS, chanResults, typeScan, &flag, &elapsed, 1)
-	core.Core(ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain OSINT Amass", chanResultsAmass, chanResults, typeScan, &flag, &elapsed, 2)
-	core.Core(ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain OSINT Subfinder", chanResultsSubfinder, chanResults, typeScan, &flag, &elapsed, 3)
+	core.Core(&infoSubDomainChan, ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain BruteForce Over Http", chanResultsHttp, chanResults, typeScan, &flag, &elapsed, 0)
+	core.Core(&infoSubDomainChan, ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain BruteForce Over DNS", chanResultsDNS, chanResults, typeScan, &flag, &elapsed, 1)
+	core.Core(&infoSubDomainChan, ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain OSINT Amass", chanResultsAmass, chanResults, typeScan, &flag, &elapsed, 2)
+	core.Core(&infoSubDomainChan, ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain OSINT Subfinder", chanResultsSubfinder, chanResults, typeScan, &flag, &elapsed, 3)
 
 	wg.Add(1)
 	go core.ScanInfoDomain(ctx, &wg, workDirectory, domainName, chanResults, typeScan, &infoSubDomainChan, &flag, &elapsed, 4)

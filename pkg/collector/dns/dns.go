@@ -14,14 +14,14 @@ import (
 	"github.com/miekg/dns"
 )
 
-func Dig(domain string, qtype uint16) []dns.RR {
+func Dig(domain string, qtype uint16, server string) []dns.RR {
 	// Create a DNS message
 	msg := new(dns.Msg)
 	msg.SetQuestion(dns.Fqdn(domain), qtype)
 	msg.RecursionDesired = true
 
 	// Select the DNS server to query
-	dnsServer := "8.8.4.4:53" //Use Google DNS
+	dnsServer := server + ":53" //Use Google DNS
 
 	// Create a client to send DNS requests
 	client := new(dns.Client)
@@ -37,9 +37,9 @@ func Dig(domain string, qtype uint16) []dns.RR {
 
 func DNS(RootDomain string, infoDomain *data.InfoDomain) {
 
-	infoDigsMX := Dig(RootDomain, dns.TypeMX)
-	infoDigsNS := Dig(RootDomain, dns.TypeNS)
-	infoDigsSOA := Dig(RootDomain, dns.TypeSOA)
+	infoDigsMX := Dig(RootDomain, dns.TypeMX, "8.8.4.4")
+	infoDigsNS := Dig(RootDomain, dns.TypeNS, "8.8.4.4")
+	infoDigsSOA := Dig(RootDomain, dns.TypeSOA, "8.8.4.4")
 
 	if len(infoDigsMX) != 0 {
 		for _, infoDigMX := range infoDigsMX {
