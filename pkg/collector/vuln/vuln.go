@@ -21,13 +21,12 @@ func ScanVulnerability(listScanVuln map[string]bool, ctx context.Context, subDom
 	} else if typeScan == 3 {
 		timeOut = 20 * time.Minute // Set the timeout by configuring the time for the context
 	}
-	ctxTimeout, cancelTimeout := context.WithTimeout(ctx, timeOut)
-	defer cancelTimeout()
+
 	// create nuclei engine with options
 	// setup sizedWaitgroup to handle concurrency
 	// here we are using sizedWaitgroup to limit concurrency to 1
 	// but can be anything in general
-	ne, err := nuclei.NewThreadSafeNucleiEngineCtx(ctxTimeout)
+	ne, err := nuclei.NewThreadSafeNucleiEngineCtx(ctx)
 	if err != nil {
 		fmt.Println("NewThreadSafeNucleiEngineCtx", err)
 		return
@@ -36,12 +35,13 @@ func ScanVulnerability(listScanVuln map[string]bool, ctx context.Context, subDom
 	ne.GlobalLoadAllTemplates()
 	var wg sync.WaitGroup
 
-	for i := 0; i < 10; i++ {
-		for subDomain := range subDomainChan {
-			wg.Add(1)
-			go func() {
-				defer wg.Done()
-				err = ne.ExecuteNucleiWithOptsCtx(ctx, []string{subDomain},
+	for i := 0; i < 5; i++ {
+		wg.Add(1)
+		go func() {
+			for subDomain := range subDomainChan {
+				ctxTimeout, cancelTimeout := context.WithTimeout(ctx, timeOut)
+				defer cancelTimeout()
+				err = ne.ExecuteNucleiWithOptsCtx(ctxTimeout, []string{subDomain},
 					nuclei.WithTemplateFilters(nuclei.TemplateFilters{}),
 				)
 				if err != nil {
@@ -49,8 +49,9 @@ func ScanVulnerability(listScanVuln map[string]bool, ctx context.Context, subDom
 					return
 				}
 				listScanVuln[subDomain] = true
-			}()
-		}
+			}
+			defer wg.Done()
+		}()
 	}
 
 	ne.GlobalResultCallback(func(event *output.ResultEvent) {

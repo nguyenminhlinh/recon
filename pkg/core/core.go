@@ -14,6 +14,7 @@ import (
 	"recon/pkg/collector/link"
 	"recon/pkg/collector/port"
 	"recon/pkg/collector/tech"
+	"recon/pkg/collector/vuln"
 	data "recon/pkg/data/type"
 	"sync"
 	"time"
@@ -97,11 +98,14 @@ func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirec
 	if infoDomain.SubDomain == nil {
 		infoDomain.SubDomain = make(map[string]data.InfoSubDomain)
 	}
+
 	if infoDomain.Vulnerability == nil {
 		infoDomain.Vulnerability = make(map[string][]data.InforVulnerability)
 	}
+
 	dns.DNS(rootDomain, &infoDomain) //Get information dns of rootdomain
 	data.ListDomain[rootDomain] = infoDomain
+
 	wg.Add(1)
 	go func() {
 		for subDomain := range chanResults {
@@ -156,6 +160,7 @@ func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirec
 	}
 
 	for {
+		time.Sleep(10 * time.Second)
 		if flag[0] == 2 && flag[1] == 2 && flag[2] == 2 && flag[3] == 2 {
 			*infoSubDomainChan <- data.InfoSubDomain{}
 			close(*infoSubDomainChan)
@@ -172,13 +177,13 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 	const maxGoroutines = 30
 	subDomainChanToVuln := make(chan string, 100)
 	var CountClosesubDomainChanToVuln int
-	//listScanVuln := make(map[string]bool)
+	listScanVuln := make(map[string]bool)
 
 	cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS := dns.GetIntermediaryIpRange()
 
 	wg.Add(1)
 	go func() {
-		//vuln.ScanVulnerability(listScanVuln, ctx, subDomainChanToVuln, infoAllVulnerability, typeScanInt)
+		vuln.ScanVulnerability(listScanVuln, ctx, subDomainChanToVuln, infoAllVulnerability, typeScanInt)
 		wg.Done()
 	}()
 
@@ -187,7 +192,7 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 		go func(countWorker int) {
 			for subDomain := range subDomainChan {
 				var wgsubDomain sync.WaitGroup
-
+				//fmt.Println("\r", subDomain)
 				mu.Lock() // Lock map before accessing it
 				infoSubDomain, exists := infoAllSubDomain[subDomain]
 				mu.Unlock()
@@ -207,30 +212,31 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 				flagScanVuln := false
 
 				wgsubDomain.Add(1)
-				go ScanSubDomain(&flagScanVuln, subDomainChanToVuln, countWorker, ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, &googleIPS, workDirectory, typeScanInt)
+				go ScanSubDomain(countWorker, ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, &googleIPS, workDirectory, typeScanInt)
 
 				wgsubDomain.Add(1)
-				go ScanWeb(ctx, &wgsubDomain, subDomain, &infoSubDomain, typeScanInt)
+				go ScanWeb(&flagScanVuln, subDomainChanToVuln, ctx, &wgsubDomain, subDomain, &infoSubDomain, typeScanInt)
 
 				wgsubDomain.Wait()
 
-				// if flagScanVuln {
-				// 	for {
-				// 		time.Sleep(2 * time.Second)
-				// 		_, exit := listScanVuln[subDomain]
-				// 		if exit {
-				// 			if len(infoAllVulnerability[subDomain]) > 0 {
-				// 				infoSubDomain.FlagVulnerability = true
-				// 			}
-				// 			break
-				// 		}
-				// 	}
-				// }
+				if flagScanVuln {
+					for {
+						time.Sleep(10 * time.Second)
+						_, exit := listScanVuln[subDomain]
+						if exit {
+							if len(infoAllVulnerability[subDomain]) > 0 {
+								infoSubDomain.FlagVulnerability = true
+							}
+							break
+						}
+					}
+				}
 
 				mu.Lock() // Lock map before updating it
 				infoAllSubDomain[subDomain] = infoSubDomain
 				*infoSubDomainChan <- infoSubDomain
 				mu.Unlock()
+				//fmt.Println("\rDone", subDomain)
 			}
 
 			CountClosesubDomainChanToVuln++
@@ -245,7 +251,7 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 	wg.Wait()
 }
 
-func ScanSubDomain(flagScanVuln *bool, subDomainChanToVuln chan string, countWorker int, ctx context.Context, wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, googleIPS *[]string, workDirectory string, typeScanInt int) {
+func ScanSubDomain(countWorker int, ctx context.Context, wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, googleIPS *[]string, workDirectory string, typeScanInt int) {
 	defer wgDomain.Done()
 
 	infoDigs := dns.Dig(subDomain, dnsmiekg.TypeA, "8.8.4.4")
@@ -257,7 +263,6 @@ func ScanSubDomain(flagScanVuln *bool, subDomainChanToVuln chan string, countWor
 	if len(infoDigs) != 0 {
 		for _, infoDig := range infoDigs {
 			if aRecord, ok := infoDig.(*dnsmiekg.A); ok {
-				*flagScanVuln = true
 				ip := aRecord.A.String()
 				checkIntermediaryIp, nameOrganisation := dns.CheckIntermediaryIp(ip, cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS)
 				if checkIntermediaryIp {
@@ -271,21 +276,20 @@ func ScanSubDomain(flagScanVuln *bool, subDomainChanToVuln chan string, countWor
 			}
 		}
 	}
+
 	if flagScanPort {
 		port.ScanPortAndService(countWorker, subDomain, infoSubDomain, workDirectory)
 	}
-
-	if *flagScanVuln {
-		//subDomainChanToVuln <- subDomain
-	}
 }
 
-func ScanWeb(ctx context.Context, wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, typeScan int) {
+func ScanWeb(flagScanVuln *bool, subDomainChanToVuln chan string, ctx context.Context, wgSubDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, typeScan int) {
 	defer wgSubDomain.Done()
 
 	url, status, title, tech, flagGetURL := tech.HttpAndHttps(subDomain)
 	var allLink []string
 	if flagGetURL { //Only getURL if subdomain have type http or https
+		*flagScanVuln = true
+		subDomainChanToVuln <- subDomain
 		allLink = link.GetURL(ctx, subDomain, typeScan)
 	}
 
@@ -341,6 +345,23 @@ func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, fla
 	// Add rows
 	for infoSubDomain := range *infoSubDomainChan {
 		if infoSubDomain.NameSubDomain == "" {
+			fmt.Print("\r+------+--------------------------+--------------------------+--------+------+--------+--------+----------+---------+---------+---------------+\n")
+
+			for i := 0; i < 5; i++ {
+				if (*flag)[i] == 1 {
+					fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s%v\n", nameFunc[i], red("Finished due to cancellation in "), (*elapsed)[i])
+				}
+				if (*flag)[i] == 2 {
+					fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s%v\n", nameFunc[i], green("Finished successfully in "), (*elapsed)[i])
+				}
+			}
+
+			for i := 0; i < 5; i++ {
+				if (*flag)[i] == 1 || (*flag)[i] == 2 {
+					fmt.Print("\033[F")
+				}
+			}
+			fmt.Print("\033[F")
 			continue
 		}
 		numberOrder++

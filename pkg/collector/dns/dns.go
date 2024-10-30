@@ -229,32 +229,38 @@ func isIPInRange(ip string, ranges []string) bool {
 func GetIntermediaryIpRange() ([]string, []string, []string, []string, []string, []string) {
 	cloudflareIPs, err := getCloudflareIPs()
 	if err != nil {
-		fmt.Println("Error getting Cloudflare IPs:", err)
+		//fmt.Println("Error getting Cloudflare IPs:", err)
+		cloudflareIPs, _ = getCloudflareIPs()
 	}
 
 	incapsulaIPs, err := getIncapsulaIPs()
 	if err != nil {
-		fmt.Println("Error getting Cloudflare IPs:", err)
+		//fmt.Println("Error getting Cloudflare IPs:", err)
+		incapsulaIPs, _ = getIncapsulaIPs()
 	}
 
 	awsCloudFrontIPs, err := getAWSCloudFrontIPs()
 	if err != nil {
-		fmt.Println("Error getting AWSCloudFront IPs:", err)
+		//fmt.Println("Error getting AWSCloudFront IPs:", err)
+		awsCloudFrontIPs, _ = getAWSCloudFrontIPs()
 	}
 
 	gcoreIPs, err := getGcoreIPs()
 	if err != nil {
-		fmt.Println("Error getting AWSCloudFront IPs:", err)
+		//fmt.Println("Error getting AWSCloudFront IPs:", err)
+		gcoreIPs, _ = getGcoreIPs()
 	}
 
 	fastlyIPs, err := getFastlyIPs()
 	if err != nil {
-		fmt.Println("Error getting Fastly IPs:", err)
+		//fmt.Println("Error getting Fastly IPs:", err)
+		fastlyIPs, _ = getFastlyIPs()
 	}
 
 	googleIPS, err := getGoogleIPs()
 	if err != nil {
-		fmt.Println("Error getting Fastly IPs:", err)
+		//fmt.Println("Error getting Fastly IPs:", err)
+		googleIPS, _ = getGoogleIPs()
 	}
 
 	return cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS

@@ -112,10 +112,8 @@ func ScanPortAndService(countWorker int, subDomain string, infoSubDomain *data.I
 	if infoSubDomain.PortAndService == nil {
 		infoSubDomain.PortAndService = make(map[string]string)
 	}
-
 	if nmap(nmapCLI) { //If have nmap on device and complete run
 		output := utils.ReadFilesSimple(workDirectory + "/pkg/data/output/scanPortAndService" + strconv.Itoa(countWorker) + ".txt")
-
 		instances := strings.TrimSpace(output)
 
 		if instances != "" {
@@ -164,7 +162,6 @@ func ScanPortAndService(countWorker int, subDomain string, infoSubDomain *data.I
 				}
 			}
 		}
-
 	} else { //Use Naabu to scan port
 		options := runner.Options{
 			Host:     goflags.StringSlice{subDomain},

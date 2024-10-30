@@ -182,7 +182,7 @@ func WriteFiles(ctx context.Context, wg *sync.WaitGroup, results <-chan string, 
 func Getwd() string {
 	cwd, err := os.Getwd()
 	if err != nil {
-		fmt.Println("Error getting current working directory:", err)
+		fmt.Println("\rError getting current working directory:", err)
 		return ""
 	}
 
@@ -194,7 +194,7 @@ func CancelRun(cancel context.CancelFunc) bool {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		fmt.Println("[WARN] Caught keyboard interrupt (Ctrl-C)")
+		fmt.Println("\r[WARN] Caught keyboard interrupt (Ctrl-C)")
 		cancel() // Cancel all running goroutines
 	}()
 
@@ -210,7 +210,7 @@ func StopRun() {
 	// Capture signal Ctrl+C
 	go func() {
 		<-stopChan
-		fmt.Println(color.New(color.FgRed).SprintFunc()("Received an interrupt, stopping..."))
+		fmt.Println(color.New(color.FgRed).SprintFunc()("\rReceived an interrupt, stopping..."))
 		os.Exit(1) // Exit the program immediately
 	}()
 }
