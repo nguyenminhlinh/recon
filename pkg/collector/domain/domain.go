@@ -32,32 +32,13 @@ import (
 	"github.com/projectdiscovery/subfinder/v2/pkg/runner"
 )
 
-func DomainBruteForceHttp(domain string, wordList string, results chan string) {
-	//Using the wrong host to get length web content "C:/Users/minhl/recon/src/data/common.txt"
-	var url string
-
-	lengthResponse, flaghttp := utils.LengthResponse(domain, "abcdefghiklm."+domain)
-
-	if flaghttp {
-		url = "http://" + domain
-	} else {
-		url = "https://" + domain
-	}
-
-	utils.Ffuf(url, domain, strconv.Itoa(lengthResponse), "DomainBruteForceHttp", "domain", true, 0, wordList)
-	for _, output := range output.OutputDomain {
-		results <- output
-	}
-	close(results)
-}
-
 func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string, results chan<- string, domain string, count *int, mu *sync.Mutex, maxGoroutines int) {
 	defer wg.Done()
 	for {
 		select {
 		case <-ctx.Done(): //If a cancel signal is received from context
 			mu.Lock()
-			(*count)++
+			(*count) += 1
 			if *count == maxGoroutines {
 				for len(semaphore) > 0 {
 					<-semaphore // Read and skip data until the channel is empty
@@ -69,7 +50,8 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 		default:
 			subdomain, ok := <-semaphore
 			if !ok {
-				(*count)++
+				mu.Lock()
+				(*count) += 1
 				if *count == maxGoroutines {
 					for len(semaphore) > 0 {
 						<-semaphore // Read and skip data until the channel is empty
@@ -77,6 +59,7 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 					results <- domain
 					close(results) //Close the results channel after the goroutines complete
 				}
+				mu.Unlock()
 				return
 			} else {
 				if domain != "" { //DomainBruteForceDNS with subdomain don't have domain
@@ -97,7 +80,7 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 
 func DomainBruteForceDNS(ctx context.Context, cancel context.CancelFunc, domain string, wordList string, results chan string) {
 	var wg sync.WaitGroup
-	var count int
+	var count = 0
 	var mu sync.Mutex
 
 	var countReadFiles int
@@ -120,144 +103,6 @@ func DomainBruteForceDNS(ctx context.Context, cancel context.CancelFunc, domain 
 
 	// Wait for all goroutines to complete
 	wg.Wait()
-}
-
-func NewOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, filter *stringset.Set, since time.Time, domain string) []string {
-	var output []string
-
-	// Make sure a filter has been created
-	if filter == nil {
-		filter = stringset.New()
-		defer filter.Close()
-	}
-
-	var assets []*types.Asset
-	for _, atype := range []oam.AssetType{oam.FQDN, oam.IPAddress, oam.Netblock, oam.ASN} {
-		if a, err := g.DB.FindByType(atype, since.UTC()); err == nil {
-			assets = append(assets, a...)
-		}
-	}
-	start := e.Config.CollectionStartTime.UTC()
-	for _, from := range assets {
-		fromstr := fmt.Sprintf("%v", from.Asset)
-		if strings.Contains(fromstr, domain) {
-			output = append(output, fromstr[2:len(fromstr)-1])
-		}
-		if rels, err := g.DB.OutgoingRelations(from, start); err == nil {
-			for _, rel := range rels {
-				lineid := from.ID + rel.ID + rel.ToAsset.ID
-				if filter.Has(lineid) {
-					continue
-				}
-				if to, err := g.DB.FindById(rel.ToAsset.ID, start); err == nil {
-					tostr := fmt.Sprintf("%v", to.Asset)
-					if strings.Contains(tostr, domain) {
-						output = append(output, tostr[2:len(tostr)-1])
-					}
-					filter.Insert(lineid)
-				}
-			}
-		}
-	}
-
-	return output
-}
-
-func processOutput(ctx context.Context, ctxTimeout *context.Context, g *netmap.Graph, e *enum.Enumeration, outputs chan string, wg *sync.WaitGroup, domain string) {
-	defer wg.Done()
-	defer close(outputs)
-
-	// This filter ensures that we only get new names
-	known := stringset.New()
-	defer known.Close()
-
-	// The function that obtains output from the enum and puts it on the channel
-	extract := func(since time.Time) {
-		for _, output := range NewOutput(ctx, g, e, known, since, domain) {
-			outputs <- output
-		}
-	}
-
-	t := time.NewTimer(10 * time.Second)
-	defer t.Stop()
-	last := e.Config.CollectionStartTime
-	for {
-		select {
-		case <-(*ctxTimeout).Done():
-			extract(last)
-			return
-		case <-ctx.Done():
-			extract(last)
-			return
-		case <-t.C:
-			next := time.Now()
-			extract(last)
-			t.Reset(10 * time.Second)
-			last = next
-		}
-	}
-}
-
-func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain string, workDirectory string, chanResults chan string, typeScan int) {
-	cfg := config.NewConfig()
-
-	// Check if a configuration file was provided, and if so, load the settings
-	if err := config.AcquireConfig(workDirectory+"/pkg/data/output", workDirectory+"/pkg/data/input/DomainOSINTAmass.yaml", cfg); err != nil {
-		log.Fatalf("Failed to configuration file: %v", err)
-	}
-	cfg.AddDomain(domain) // Add domains to check
-
-	sys, err := systems.NewLocalSystem(cfg)
-	if err != nil {
-		log.Fatalf("Failed to create system: %v", err)
-	}
-	defer func() { _ = sys.Shutdown() }()
-
-	if err := sys.SetDataSources(datasrcs.GetAllSources(sys)); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	var timeOut time.Duration
-	if typeScan == 1 {
-		timeOut = 5 * time.Minute // Set the timeout by configuring the time for the context
-	} else if typeScan == 2 {
-		timeOut = 10 * time.Minute // Set the timeout by configuring the time for the context
-	} else if typeScan == 3 {
-		timeOut = 20 * time.Minute // Set the timeout by configuring the time for the context
-	}
-	ctxTimeout, cancelTimeout := context.WithTimeout(ctx, timeOut)
-	defer cancelTimeout()
-
-	// Setup the new enumeration
-	e := enum.NewEnumeration(cfg, sys, sys.GraphDatabases()[0])
-	if e == nil {
-		fmt.Println("Failed to setup the enumeration")
-		os.Exit(1)
-	}
-
-	var wg sync.WaitGroup
-
-	// Run the enumeration process and send the results to the channel
-	wg.Add(1)
-	go processOutput(ctx, &ctxTimeout, sys.GraphDatabases()[0], e, chanResults, &wg, domain)
-
-	// Monitor for cancellation by the user
-	go func(c context.Context, f context.CancelFunc) {
-		quit := make(chan os.Signal, 1)
-		signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
-		defer signal.Stop(quit)
-		select {
-		case <-quit:
-			f()
-		case <-c.Done():
-		}
-	}(ctx, cancel)
-
-	// Start the enumeration process
-	if err := e.Start(ctxTimeout); err != nil {
-		log.Fatalf("Failed to start Amass enumeration: %v", err)
-	}
 }
 
 func DomainOSINTSubfinder(ctx context.Context, cancel context.CancelFunc, domain string, workDirectory string, chanResults chan string) {
@@ -320,4 +165,160 @@ func DomainOSINTSubfinder(ctx context.Context, cancel context.CancelFunc, domain
 		go checkDomain(ctx, &wg, inputChans, chanResults, "", &count, &mu, maxGoroutines)
 	}
 	wg.Wait()
+}
+
+func NewOutput(ctx context.Context, g *netmap.Graph, e *enum.Enumeration, filter *stringset.Set, since time.Time, domain string) []string {
+	var output []string
+
+	// Make sure a filter has been created
+	if filter == nil {
+		filter = stringset.New()
+		defer filter.Close()
+	}
+
+	var assets []*types.Asset
+	for _, atype := range []oam.AssetType{oam.FQDN, oam.IPAddress, oam.Netblock, oam.ASN} {
+		if a, err := g.DB.FindByType(atype, since.UTC()); err == nil {
+			assets = append(assets, a...)
+		}
+	}
+	start := e.Config.CollectionStartTime.UTC()
+	for _, from := range assets {
+		fromstr := fmt.Sprintf("%v", from.Asset)
+		if strings.Contains(fromstr, domain) {
+			output = append(output, fromstr[2:len(fromstr)-1])
+		}
+		if rels, err := g.DB.OutgoingRelations(from, start); err == nil {
+			for _, rel := range rels {
+				lineid := from.ID + rel.ID + rel.ToAsset.ID
+				if filter.Has(lineid) {
+					continue
+				}
+				if to, err := g.DB.FindById(rel.ToAsset.ID, start); err == nil {
+					tostr := fmt.Sprintf("%v", to.Asset)
+					if strings.Contains(tostr, domain) {
+						output = append(output, tostr[2:len(tostr)-1])
+					}
+					filter.Insert(lineid)
+				}
+			}
+		}
+	}
+
+	return output
+}
+
+func processOutput(ctx context.Context, ctxTimeout *context.Context, g *netmap.Graph, e *enum.Enumeration, outputs chan string, wg *sync.WaitGroup, domain string) {
+	defer wg.Done()
+	defer close(outputs)
+	// This filter ensures that we only get new names
+	known := stringset.New()
+	defer known.Close()
+
+	// The function that obtains output from the enum and puts it on the channel
+	extract := func(since time.Time) {
+		for _, output := range NewOutput(ctx, g, e, known, since, domain) {
+			outputs <- output
+		}
+	}
+
+	t := time.NewTimer(10 * time.Second)
+	defer t.Stop()
+	last := e.Config.CollectionStartTime
+	for {
+		select {
+		case <-(*ctxTimeout).Done():
+			extract(last)
+			return
+		case <-ctx.Done():
+			extract(last)
+			return
+		case <-t.C:
+			next := time.Now()
+			extract(last)
+			t.Reset(10 * time.Second)
+			last = next
+		}
+	}
+}
+
+func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain string, workDirectory string, chanResults chan string, typeScan int) {
+	cfg := config.NewConfig()
+
+	// Check if a configuration file was provided, and if so, load the settings
+	if err := config.AcquireConfig(workDirectory+"/pkg/data/output", workDirectory+"/pkg/data/input/DomainOSINTAmass.yaml", cfg); err != nil {
+		log.Fatalf("Failed to configuration file: %v", err)
+	}
+	cfg.AddDomain(domain) // Add domains to check
+
+	sys, err := systems.NewLocalSystem(cfg)
+	if err != nil {
+		log.Fatalf("Failed to create system: %v", err)
+	}
+	defer func() { _ = sys.Shutdown() }()
+
+	if err := sys.SetDataSources(datasrcs.GetAllSources(sys)); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	var timeOut time.Duration
+	if typeScan == 1 {
+		timeOut = 10 * time.Minute // Set the timeout by configuring the time for the context
+	} else if typeScan == 2 {
+		timeOut = 20 * time.Minute // Set the timeout by configuring the time for the context
+	} else if typeScan == 3 {
+		timeOut = 30 * time.Minute // Set the timeout by configuring the time for the context
+	}
+	ctxTimeout, cancelTimeout := context.WithTimeout(ctx, timeOut)
+	defer cancelTimeout()
+
+	// Setup the new enumeration
+	e := enum.NewEnumeration(cfg, sys, sys.GraphDatabases()[0])
+	if e == nil {
+		fmt.Println("Failed to setup the enumeration")
+		os.Exit(1)
+	}
+
+	var wg sync.WaitGroup
+
+	// Run the enumeration process and send the results to the channel
+	wg.Add(1)
+	go processOutput(ctx, &ctxTimeout, sys.GraphDatabases()[0], e, chanResults, &wg, domain)
+
+	// Monitor for cancellation by the user
+	go func(c context.Context, f context.CancelFunc) {
+		quit := make(chan os.Signal, 1)
+		signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+		defer signal.Stop(quit)
+		select {
+		case <-quit:
+			f()
+		case <-c.Done():
+		}
+	}(ctx, cancel)
+
+	// Start the enumeration process
+	if err := e.Start(ctxTimeout); err != nil {
+		log.Fatalf("Failed to start Amass enumeration: %v", err)
+	}
+}
+
+func DomainBruteForceHttp(domain string, wordList string, results chan string) {
+	//Using the wrong host to get length web content "C:/Users/minhl/recon/src/data/common.txt"
+	var url string
+
+	lengthResponse, flaghttp := utils.LengthResponse(domain, "abcdefghiklm."+domain)
+
+	if flaghttp {
+		url = "http://" + domain
+	} else {
+		url = "https://" + domain
+	}
+
+	utils.Ffuf(url, domain, strconv.Itoa(lengthResponse), "DomainBruteForceHttp", "domain", true, 0, wordList)
+	for _, output := range output.OutputDomain {
+		results <- output
+	}
+	close(results)
 }
