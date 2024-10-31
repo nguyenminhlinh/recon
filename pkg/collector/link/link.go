@@ -71,11 +71,11 @@ type fetchFn func(string, bool, int) ([]wurl, error)
 func getWaybackURLs(domain string, noSubs bool, typeScan int) ([]wurl, error) {
 	var timeOut time.Duration
 	if typeScan == 1 {
-		timeOut = 5 * time.Minute
-	} else if typeScan == 2 {
 		timeOut = 10 * time.Minute
-	} else if typeScan == 3 {
+	} else if typeScan == 2 {
 		timeOut = 20 * time.Minute
+	} else if typeScan == 3 {
+		timeOut = 30 * time.Minute
 	}
 	ctxTimeout, cancelTimeout := context.WithTimeout(context.Background(), timeOut)
 	defer cancelTimeout()

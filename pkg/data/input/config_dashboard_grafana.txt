@@ -30,6 +30,177 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Extractor Name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 130
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 85
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Severity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "info": {
+                        "color": "#4bff00",
+                        "index": 0,
+                        "text": "Info"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "11.2.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "your_uid"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].namesubdomain",
+              "name": "Sub Domain"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].type",
+              "language": "jsonpath",
+              "name": "Type"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].templateid",
+              "language": "jsonpath",
+              "name": "Template ID"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].severity",
+              "language": "jsonpath",
+              "name": "Severity"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].extractorname",
+              "language": "jsonpath",
+              "name": "Extractor Name"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].matchername",
+              "language": "jsonpath",
+              "name": "Matcher Name"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].matched",
+              "language": "jsonpath",
+              "name": "Matched"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].templatename",
+              "language": "jsonpath",
+              "name": "Template Name"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].templatedescription",
+              "language": "jsonpath",
+              "name": "Description"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].classification",
+              "language": "jsonpath",
+              "name": "Classification"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "Vulnerability Information",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "marcusolsson-json-datasource",
+        "uid": "your_uid"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "shades"
           },
           "custom": {
@@ -113,7 +284,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 8
       },
       "id": 2,
       "options": {
@@ -238,7 +409,7 @@
         "h": 7,
         "w": 9,
         "x": 0,
-        "y": 6
+        "y": 14
       },
       "id": 5,
       "options": {
@@ -330,7 +501,7 @@
         "h": 7,
         "w": 8,
         "x": 9,
-        "y": 6
+        "y": 14
       },
       "id": 3,
       "options": {
@@ -485,7 +656,7 @@
         "h": 7,
         "w": 7,
         "x": 17,
-        "y": 6
+        "y": 14
       },
       "id": 4,
       "options": {
@@ -521,6 +692,18 @@
         }
       ],
       "title": "Link & Directory & File",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "STT",
+            "mode": "index",
+            "reduce": {
+              "reducer": "count"
+            }
+          }
+        }
+      ],
       "type": "table"
     },
     {
@@ -603,7 +786,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "STATUS"
+              "options": "Status"
             },
             "properties": [
               {
@@ -623,55 +806,68 @@
                       },
                       "202 Accepted": {
                         "color": "#5794F2",
-                        "index": 2
+                        "index": 2,
+                        "text": "202 Accepted"
                       },
                       "204 No Content": {
                         "color": "#808080",
-                        "index": 3
+                        "index": 3,
+                        "text": "204 No Content"
                       },
                       "400 Bad Request": {
                         "color": "#ff001e",
-                        "index": 4
+                        "index": 4,
+                        "text": "400 Bad Request"
                       },
                       "401 Unauthorized": {
                         "color": "#ff001e",
-                        "index": 5
+                        "index": 5,
+                        "text": "401 Unauthorized"
                       },
                       "403 Forbidden": {
                         "color": "#ff001e",
-                        "index": 6
+                        "index": 6,
+                        "text": "403 Forbidden"
                       },
                       "404 Not Found": {
                         "color": "#ff001e",
-                        "index": 7
+                        "index": 7,
+                        "text": "404 Not Found"
                       },
                       "405 Method Not Allowed": {
                         "color": "#ff001e",
-                        "index": 8
+                        "index": 8,
+                        "text": "405 Method Not Allowed"
                       },
                       "409 Conflict": {
                         "color": "#ffcc00",
-                        "index": 9
+                        "index": 9,
+                        "text": "409 Conflict"
                       },
                       "500 Internal Server Error": {
                         "color": "#7b000e",
-                        "index": 10
+                        "index": 10,
+                        "text": "500 Internal Server Error"
                       },
                       "501 Not Implemented": {
                         "color": "#7b000e",
-                        "index": 11
+                        "index": 11,
+                        "text": "501 Not Implemented"
                       },
                       "502 Bad Gateway": {
                         "color": "#7b000e",
-                        "index": 12
+                        "index": 12,
+                        "text": "502 Bad Gateway"
                       },
                       "503 Service Unavailable": {
                         "color": "#7b000e",
-                        "index": 13
+                        "index": 13,
+                        "text": "503 Service Unavailable"
                       },
                       "504 Gateway Timeout": {
                         "color": "#7b000e",
-                        "index": 14
+                        "index": 14,
+                        "text": "504 Gateway Timeout"
                       }
                     },
                     "type": "value"
@@ -700,7 +896,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 21
       },
       "id": 1,
       "options": {
@@ -769,14 +965,9 @@
               "name": "Title"
             },
             {
-              "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].vulnerability",
-              "language": "jsonpath",
-              "name": "Vulnerabilities"
-            },
-            {
               "jsonPath": "$[*].$[\"subdomain\"][*].cname",
               "language": "jsonpath",
-              "name": "Cname"
+              "name": "CName"
             }
           ],
           "method": "GET",
@@ -789,6 +980,7 @@
       "type": "table"
     }
   ],
+  "refresh": "",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
@@ -802,6 +994,6 @@
   "timezone": "browser",
   "title": "Recon",
   "uid": "cdzj1y7b5rqiod12",
-  "version": 11,
+  "version": 29,
   "weekStart": ""
 }

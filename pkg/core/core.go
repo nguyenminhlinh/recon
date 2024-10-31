@@ -49,6 +49,24 @@ const (
 	BANNER_SEP = "__________________________________________________________________________________"
 )
 
+func Transmit4into1chan(mu *sync.Mutex, wg *sync.WaitGroup, inputChan chan string, chanResults chan string, count *int, maxGoroutines int) {
+	defer wg.Done()
+
+	for input := range inputChan {
+		chanResults <- input
+	}
+
+	mu.Lock()
+	(*count) += 1
+	if *count == maxGoroutines {
+		for len(inputChan) > 0 {
+			<-inputChan // Read and skip data until the channel is empty
+		}
+		close(chanResults) //Close the results channel after stop context
+	}
+	mu.Unlock()
+}
+
 func Core(infoSubDomainChan *chan data.InfoSubDomain, ctx context.Context, cancel context.CancelFunc, mu *sync.Mutex, wg *sync.WaitGroup, domainName string, workDirectory string, nameFunc string, chanSingle chan string, chanResults chan string, typeScanInt int, flag *[5]int, elapsed *[5]time.Duration, stt int) {
 	(*flag)[stt] = 0
 	wg.Add(1)
@@ -79,176 +97,6 @@ func Core(infoSubDomainChan *chan data.InfoSubDomain, ctx context.Context, cance
 	wg.Add(1)
 	go Transmit4into1chan(mu, wg, chanSingle, chanResults, &countToCloseChan, maxGoroutines)
 
-}
-
-func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory string, rootDomain string, chanResults chan string, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain, flag *[5]int, elapsed *[5]time.Duration, stt int) {
-	(*flag)[stt] = 0
-	defer wgScanDomain.Done()
-
-	start := time.Now()
-
-	var wg sync.WaitGroup
-	var mu sync.Mutex
-	var subDomainsMap sync.Map // Create map to store unique line
-
-	subDomainChan := make(chan string, 200)
-	var buffer []string
-	infoDomain := data.ListDomain[rootDomain]
-
-	if infoDomain.SubDomain == nil {
-		infoDomain.SubDomain = make(map[string]data.InfoSubDomain)
-	}
-
-	if infoDomain.Vulnerability == nil {
-		infoDomain.Vulnerability = make(map[string][]data.InforVulnerability)
-	}
-
-	dns.DNS(rootDomain, &infoDomain) //Get information dns of rootdomain
-	data.ListDomain[rootDomain] = infoDomain
-
-	wg.Add(1)
-	go func() {
-		for subDomain := range chanResults {
-			line := strings.TrimSpace(subDomain)
-			line = strings.ToLower(line)
-			if line != "" {
-				if _, exists := subDomainsMap.Load(line); !exists { //Add new line if don"t have
-					subDomainsMap.Store(line, true)
-					select {
-					case subDomainChan <- line: //Add if subDomainChan have place
-					default: // If subDomainChan then add to buffer
-						buffer = append(buffer, line)
-					}
-				}
-			}
-		}
-
-		for len(buffer) > 0 { //If buffer not empty then push element to subDomainChan
-			subDomainChan <- buffer[0] // Push from slice to chan
-			buffer = buffer[1:]        // Delete element has pushed to chan
-		}
-		close(subDomainChan)
-		wg.Done()
-	}()
-
-	wg.Add(1)
-	go InformationOfAllSubDomain(ctx, &wg, subDomainChan, infoDomain.SubDomain, infoDomain.Vulnerability, workDirectory, &mu, typeScanInt, infoSubDomainChan)
-
-	wg.Wait()
-	// Convert ListDomain to JSON and write to file
-	file, err := os.Create("list_domain.json")
-	if err != nil {
-		fmt.Println("Error creating file:", err)
-		return
-	}
-	defer file.Close()
-
-	encoder := json.NewEncoder(file)
-	encoder.SetIndent("", "  ") // Set indentation for readability
-	err = encoder.Encode(data.ListDomain)
-	if err != nil {
-		fmt.Println("Error encoding JSON:", err)
-	}
-
-	(*elapsed)[stt] = time.Since(start)
-
-	select {
-	case <-ctx.Done():
-		(*flag)[stt] = 1 // If a signal is received from the context
-	default:
-		(*flag)[stt] = 2 // If there is no cancel signal, take another action
-	}
-
-	for {
-		time.Sleep(10 * time.Second)
-		if flag[0] == 2 && flag[1] == 2 && flag[2] == 2 && flag[3] == 2 {
-			*infoSubDomainChan <- data.InfoSubDomain{}
-			close(*infoSubDomainChan)
-			break
-		}
-	}
-
-}
-
-func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, infoAllVulnerability map[string][]data.InforVulnerability, workDirectory string, mu *sync.Mutex, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain) {
-	defer wg1.Done()
-
-	var wg sync.WaitGroup
-	const maxGoroutines = 30
-	subDomainChanToVuln := make(chan string, 100)
-	var CountClosesubDomainChanToVuln int
-	listScanVuln := make(map[string]bool)
-
-	cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS := dns.GetIntermediaryIpRange()
-
-	wg.Add(1)
-	go func() {
-		vuln.ScanVulnerability(listScanVuln, ctx, subDomainChanToVuln, infoAllVulnerability, typeScanInt)
-		wg.Done()
-	}()
-
-	for i := 0; i < maxGoroutines; i++ {
-		wg.Add(1)
-		go func(countWorker int) {
-			for subDomain := range subDomainChan {
-				var wgsubDomain sync.WaitGroup
-				//fmt.Println("\r", subDomain)
-				mu.Lock() // Lock map before accessing it
-				infoSubDomain, exists := infoAllSubDomain[subDomain]
-				mu.Unlock()
-
-				if !exists {
-					infoSubDomain = data.InfoSubDomain{
-						NameSubDomain:  "",
-						Ips:            []string{},
-						PortAndService: make(map[string]string),
-						Os:             []string{},
-						Web:            make(map[string]data.InfoWeb),
-						CName:          []string{},
-					}
-				}
-
-				infoSubDomain.NameSubDomain = subDomain
-				flagScanVuln := false
-
-				wgsubDomain.Add(1)
-				go ScanSubDomain(countWorker, ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, &googleIPS, workDirectory, typeScanInt)
-
-				wgsubDomain.Add(1)
-				go ScanWeb(&flagScanVuln, subDomainChanToVuln, ctx, &wgsubDomain, subDomain, &infoSubDomain, typeScanInt)
-
-				wgsubDomain.Wait()
-
-				if flagScanVuln {
-					for {
-						time.Sleep(10 * time.Second)
-						_, exit := listScanVuln[subDomain]
-						if exit {
-							if len(infoAllVulnerability[subDomain]) > 0 {
-								infoSubDomain.FlagVulnerability = true
-							}
-							break
-						}
-					}
-				}
-
-				mu.Lock() // Lock map before updating it
-				infoAllSubDomain[subDomain] = infoSubDomain
-				*infoSubDomainChan <- infoSubDomain
-				mu.Unlock()
-				//fmt.Println("\rDone", subDomain)
-			}
-
-			CountClosesubDomainChanToVuln++
-			if CountClosesubDomainChanToVuln == maxGoroutines {
-				close(subDomainChanToVuln)
-			}
-
-			wg.Done()
-		}(i)
-	}
-
-	wg.Wait()
 }
 
 func ScanSubDomain(countWorker int, ctx context.Context, wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, googleIPS *[]string, workDirectory string, typeScanInt int) {
@@ -313,6 +161,185 @@ func ScanWeb(flagScanVuln *bool, subDomainChanToVuln chan string, ctx context.Co
 	infoSubDomain.Web[url] = infoWeb
 }
 
+func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, infoAllVulnerability map[string][]data.InforVulnerability, workDirectory string, mu *sync.Mutex, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain) {
+	defer wg1.Done()
+
+	var wg sync.WaitGroup
+	const maxGoroutines = 30
+	subDomainChanToVuln := make(chan string, 100)
+	var CountClosesubDomainChanToVuln int
+	listScanVuln := make(map[string]bool)
+
+	cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS := dns.GetIntermediaryIpRange()
+
+	wg.Add(1)
+	go func() {
+		vuln.ScanVulnerability(listScanVuln, ctx, subDomainChanToVuln, infoAllVulnerability, typeScanInt)
+		wg.Done()
+	}()
+
+	for i := 0; i < maxGoroutines; i++ {
+		wg.Add(1)
+		go func(countWorker int) {
+			for subDomain := range subDomainChan {
+				//fmt.Println("\r", subDomain)
+				var wgsubDomain sync.WaitGroup
+				mu.Lock() // Lock map before accessing it
+				infoSubDomain, exists := infoAllSubDomain[subDomain]
+				mu.Unlock()
+
+				if !exists {
+					infoSubDomain = data.InfoSubDomain{
+						NameSubDomain:  "",
+						Ips:            []string{},
+						PortAndService: make(map[string]string),
+						Os:             []string{},
+						Web:            make(map[string]data.InfoWeb),
+						CName:          []string{},
+					}
+				}
+
+				infoSubDomain.NameSubDomain = subDomain
+				flagScanVuln := false
+
+				wgsubDomain.Add(1)
+				go ScanSubDomain(countWorker, ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, &googleIPS, workDirectory, typeScanInt)
+
+				wgsubDomain.Add(1)
+				go ScanWeb(&flagScanVuln, subDomainChanToVuln, ctx, &wgsubDomain, subDomain, &infoSubDomain, typeScanInt)
+
+				wgsubDomain.Wait()
+				if flagScanVuln {
+					for {
+						time.Sleep(10 * time.Second)
+						_, exit := listScanVuln[subDomain]
+						if exit {
+							if len(infoAllVulnerability[subDomain]) > 0 {
+								infoSubDomain.FlagVulnerability = true
+							}
+							break
+						}
+					}
+				}
+
+				mu.Lock() // Lock map before updating it
+				infoAllSubDomain[subDomain] = infoSubDomain
+				*infoSubDomainChan <- infoSubDomain
+				mu.Unlock()
+			}
+			CountClosesubDomainChanToVuln++
+			if CountClosesubDomainChanToVuln == maxGoroutines {
+				close(subDomainChanToVuln)
+			}
+
+			wg.Done()
+		}(i)
+	}
+	wg.Wait()
+}
+
+func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory string, rootDomain string, chanResults chan string, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain, flag *[5]int, elapsed *[5]time.Duration, stt int) {
+	start := time.Now()
+
+	(*flag)[stt] = 0
+	defer wgScanDomain.Done()
+
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	var subDomainsMap sync.Map // Create map to store unique line
+
+	subDomainChan := make(chan string, 200)
+	var buffer []string
+	infoDomain := data.ListDomain[rootDomain]
+
+	if infoDomain.SubDomain == nil {
+		infoDomain.SubDomain = make(map[string]data.InfoSubDomain)
+	}
+
+	if infoDomain.Vulnerability == nil {
+		infoDomain.Vulnerability = make(map[string][]data.InforVulnerability)
+	}
+
+	dns.DNS(rootDomain, &infoDomain) //Get information dns of rootdomain
+	data.ListDomain[rootDomain] = infoDomain
+
+	wg.Add(1)
+	go func() {
+		for subDomain := range chanResults {
+			line := strings.TrimSpace(subDomain)
+			line = strings.ToLower(line)
+			if line != "" {
+				if _, exists := subDomainsMap.Load(line); !exists { //Add new line if don"t have
+					subDomainsMap.Store(line, true)
+					select {
+					case subDomainChan <- line: //Add if subDomainChan have place
+					default: // If subDomainChan then add to buffer
+						buffer = append(buffer, line)
+					}
+				}
+			}
+		}
+
+		for len(buffer) > 0 { //If buffer not empty then push element to subDomainChan
+			subDomainChan <- buffer[0] // Push from slice to chan
+			buffer = buffer[1:]        // Delete element has pushed to chan
+		}
+		close(subDomainChan)
+		wg.Done()
+	}()
+
+	wg.Add(1)
+	go InformationOfAllSubDomain(ctx, &wg, subDomainChan, infoDomain.SubDomain, infoDomain.Vulnerability, workDirectory, &mu, typeScanInt, infoSubDomainChan)
+
+	wg.Wait()
+
+	// Convert ListDomain to JSON and write to file
+	file, err := os.Create("list_domain.json")
+	if err != nil {
+		fmt.Println("Error creating file:", err)
+		return
+	}
+	defer file.Close()
+
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ") // Set indentation for readability
+	err = encoder.Encode(data.ListDomain)
+	if err != nil {
+		fmt.Println("Error encoding JSON:", err)
+	}
+
+	select {
+	case <-ctx.Done():
+		(*flag)[stt] = 1 // If a signal is received from the context
+	default:
+		(*flag)[stt] = 2 // If there is no cancel signal, take another action
+	}
+
+	for {
+		time.Sleep(10 * time.Second)
+		if flag[0] == 2 && flag[1] == 2 && flag[2] == 2 && flag[3] == 2 {
+			*infoSubDomainChan <- data.InfoSubDomain{}
+			close(*infoSubDomainChan)
+			(*elapsed)[stt] = time.Since(start)
+			break
+		}
+	}
+
+}
+
+func splitIntoChunks(s string, chunkSize int) []string {
+	var chunks []string
+	for i := 0; i < len(s); i += chunkSize {
+		// Tính toán chiều dài cho chunk hiện tại
+		end := i + chunkSize
+		if end > len(s) {
+			end = len(s)
+		}
+		chunks = append(chunks, s[i:end]) // Thêm chunk vào danh sách
+	}
+	return chunks
+}
+
 func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, flag *[5]int, elapsed *[5]time.Duration, domainName string, dashBoard bool, report bool, typeScanInt int) {
 	defer wg.Done()
 
@@ -337,15 +364,15 @@ func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, fla
 	for i := 0; i < 5; i++ {
 		fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s%s\n", nameFunc[i], "Start", yellow("..."))
 	}
-	head := "\r+------+--------------------------+--------------------------+--------+------+--------+--------+----------+---------+---------+---------------+\n"
-	head += "\r|  NO. |        Sub Domain        |             IP           |  PORT  |  OS  |  TECH  |  LINK  |  STATUS  |  TITLE  |  CNAME  | VULNERABILITY |\n"
-	head += "\r+------+--------------------------+--------------------------+--------+------+--------+--------+----------+---------+---------+---------------+\n"
+	head := "\r+------+--------------------------+----------------------------+------+----+------+------+--------+-------+-------+---------------+\n"
+	head += "\r|  NO. |        Sub Domain        |              IP            | PORT | OS | TECH | LINK | STATUS | TITLE | CNAME | VULNERABILITY |\n"
+	head += "\r+------+--------------------------+----------------------------+------+----+------+------+--------+-------+-------+---------------+\n"
 	fmt.Print(head)
 
 	// Add rows
 	for infoSubDomain := range *infoSubDomainChan {
 		if infoSubDomain.NameSubDomain == "" {
-			fmt.Print("\r+------+--------------------------+--------------------------+--------+------+--------+--------+----------+---------+---------+---------------+\n")
+			fmt.Print("\r+------+--------------------------+----------------------------+------+----+------+------+--------+-------+-------+---------------+\n")
 
 			for i := 0; i < 5; i++ {
 				if (*flag)[i] == 1 {
@@ -425,32 +452,32 @@ func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, fla
 		lengthNameSubDomain := len(nameSubDomain)
 		if len(ips) != 0 {
 			ip = strings.Split(ips[:len(ips)-1], ",")
-			fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-24s | %-15s | %-13s | %-15s | %-15s | %-17s | %-16s | %-16s | %-22s |\n", numberOrder, nameSubDomain[0], ip[0], ports, oss, tech, link, status, title, cname, vulnerability)
+			fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-26s | %-13s | %-11s | %-13s | %-13s | %-15s | %-14s | %-14s | %-22s |\n", numberOrder, nameSubDomain[0], ip[0], ports, oss, tech, link, status, title, cname, vulnerability)
 		} else {
-			fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-24s | %-15s | %-13s | %-15s | %-15s | %-17s | %-16s | %-16s | %-22s |\n", numberOrder, nameSubDomain[0], " ", ports, oss, tech, link, status, title, cname, vulnerability)
+			fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-26s | %-13s | %-11s | %-13s | %-13s | %-15s | %-14s | %-14s | %-22s |\n", numberOrder, nameSubDomain[0], " ", ports, oss, tech, link, status, title, cname, vulnerability)
 		}
 		lengthIp := len(ip)
 		if lengthNameSubDomain > lengthIp {
 			for i := 1; i < lengthIp; i++ {
-				fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-24s | %-6s | %-4s | %-6s | %-6s | %-8s | %-7s | %-7s | %-13s |\n", " ", nameSubDomain[i], ip[i], " ", " ", " ", " ", " ", " ", " ", " ")
+				fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-26s | %-4s | %-2s | %-4s | %-4s | %-6s | %-5s | %-5s | %-13s |\n", " ", nameSubDomain[i], ip[i], " ", " ", " ", " ", " ", " ", " ", " ")
 			}
 			if lengthIp == 0 {
 				lengthIp = 1
 			}
 			for i := lengthIp; i < lengthNameSubDomain; i++ {
-				fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-24s | %-6s | %-4s | %-6s | %-6s | %-8s | %-7s | %-7s | %-13s |\n", " ", nameSubDomain[i], " ", " ", " ", " ", " ", " ", " ", " ", " ")
+				fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-26s | %-4s | %-2s | %-4s | %-4s | %-6s | %-5s | %-5s | %-13s |\n", " ", nameSubDomain[i], " ", " ", " ", " ", " ", " ", " ", " ", " ")
 			}
 		} else if lengthNameSubDomain <= lengthIp {
 			for i := 1; i < lengthNameSubDomain; i++ {
-				fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-24s | %-6s | %-4s | %-6s | %-6s | %-8s | %-7s | %-7s | %-13s |\n", " ", nameSubDomain[i], ip[i], " ", " ", " ", " ", " ", " ", " ", " ")
+				fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-26s | %-4s | %-2s | %-4s | %-4s | %-6s | %-5s | %-5s | %-13s |\n", " ", nameSubDomain[i], ip[i], " ", " ", " ", " ", " ", " ", " ", " ")
 			}
 
 			for i := lengthNameSubDomain; i < lengthIp; i++ {
-				fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-24s | %-6s | %-4s | %-6s | %-6s | %-8s | %-7s | %-7s | %-13s |\n", " ", " ", ip[i], " ", " ", " ", " ", " ", " ", " ", " ")
+				fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-26s | %-4s | %-2s | %-4s | %-4s | %-6s | %-5s | %-5s | %-13s |\n", " ", " ", ip[i], " ", " ", " ", " ", " ", " ", " ", " ")
 			}
 		}
-		fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-24s | %-6s | %-4s | %-6s | %-6s | %-8s | %-7s | %-7s | %-13s |\n", " ", "", " ", " ", " ", " ", " ", " ", " ", " ", " ")
-		fmt.Print("\r+------+--------------------------+--------------------------+--------+------+--------+--------+----------+---------+---------+---------------+\n")
+		fmt.Fprintf(os.Stderr, "\r| %-4v | %-24s | %-26s | %-4s | %-2s | %-4s | %-4s | %-6s | %-5s | %-5s | %-13s |\n", " ", "", " ", " ", " ", " ", " ", " ", " ", " ", " ")
+		fmt.Print("\r+------+--------------------------+----------------------------+------+----+------+------+--------+-------+-------+---------------+\n")
 		// Add each row to the table
 
 		for i := 0; i < 5; i++ {
@@ -479,38 +506,7 @@ func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, fla
 		}
 	}
 	fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s\n", "Data server run on", green("http://localhost:8080/data"))
-	fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s\n", "Grafana server run on", green("http://localhost:3000"))
-}
-
-func splitIntoChunks(s string, chunkSize int) []string {
-	var chunks []string
-	for i := 0; i < len(s); i += chunkSize {
-		// Tính toán chiều dài cho chunk hiện tại
-		end := i + chunkSize
-		if end > len(s) {
-			end = len(s)
-		}
-		chunks = append(chunks, s[i:end]) // Thêm chunk vào danh sách
-	}
-	return chunks
-}
-
-func Transmit4into1chan(mu *sync.Mutex, wg *sync.WaitGroup, inputChan chan string, chanResults chan string, count *int, maxGoroutines int) {
-	defer wg.Done()
-
-	for input := range inputChan {
-		chanResults <- input
-	}
-
-	mu.Lock()
-	(*count)++
-	if *count == maxGoroutines {
-		for len(inputChan) > 0 {
-			<-inputChan // Read and skip data until the channel is empty
-		}
-		close(chanResults) //Close the results channel after stop context
-	}
-	mu.Unlock()
+	fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s\n", "Grafana server run on", green("http://localhost:3000/dashboards"))
 }
 
 // Function to read JSON file
@@ -535,17 +531,6 @@ func loadJSONFile(fileName string) {
 	}
 }
 
-func DashBoard(workDirectory string, ctx context.Context) {
-	loadJSONFile(workDirectory + "/list_domain.json")
-
-	// Initialize HTTP server on port 8080
-	http.HandleFunc("/data", jsonHandler)
-
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		fmt.Println("Not run server: ", err)
-	}
-}
-
 // Handler for endpoint returns JSON data
 func jsonHandler(w http.ResponseWriter, r *http.Request) {
 	// Set headers for response
@@ -560,6 +545,17 @@ func jsonHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Sen data JSON to client
 	w.Write(jsonData)
+}
+
+func DashBoard(workDirectory string, ctx context.Context) {
+	loadJSONFile(workDirectory + "/list_domain.json")
+
+	// Initialize HTTP server on port 8080
+	http.HandleFunc("/data", jsonHandler)
+
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		fmt.Println("Not run server: ", err)
+	}
 }
 
 func Report(workDirectory string) {

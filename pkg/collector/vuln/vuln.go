@@ -15,11 +15,11 @@ func ScanVulnerability(listScanVuln map[string]bool, ctx context.Context, subDom
 	var timeOut time.Duration
 	var mu sync.Mutex
 	if typeScan == 1 {
-		timeOut = 5 * time.Minute // Set the timeout by configuring the time for the context
-	} else if typeScan == 2 {
 		timeOut = 10 * time.Minute // Set the timeout by configuring the time for the context
-	} else if typeScan == 3 {
+	} else if typeScan == 2 {
 		timeOut = 20 * time.Minute // Set the timeout by configuring the time for the context
+	} else if typeScan == 3 {
+		timeOut = 30 * time.Minute // Set the timeout by configuring the time for the context
 	}
 
 	// create nuclei engine with options
@@ -35,7 +35,7 @@ func ScanVulnerability(listScanVuln map[string]bool, ctx context.Context, subDom
 	ne.GlobalLoadAllTemplates()
 	var wg sync.WaitGroup
 
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 10; i++ {
 		wg.Add(1)
 		go func() {
 			for subDomain := range subDomainChan {

@@ -35,6 +35,10 @@ func HttpAndHttps(domain string) (string, string, string, map[string]wappalyzer.
 	// Check HTTPS
 	url := "https://" + domain
 	Resp, err := http.Get(url)
+	if err != nil {
+		Resp, err = http.Get(url)
+	}
+
 	if err == nil {
 		status := Resp.Status
 		title := extractTitle(Resp)
@@ -46,6 +50,10 @@ func HttpAndHttps(domain string) (string, string, string, map[string]wappalyzer.
 	// Check HTTP
 	url = "http://" + domain
 	Resp, err = http.Get(url)
+	if err != nil {
+		Resp, err = http.Get(url)
+	}
+
 	if err == nil {
 		status := Resp.Status
 		title := extractTitle(Resp)
