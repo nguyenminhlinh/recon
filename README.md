@@ -112,3 +112,7 @@ $ go run . -dash-board domain
 ![auto-recon ex2](_img/ex3.png)
 
 ---
+
+![auto-recon ex2](_img/ex6.png)
+
+---
