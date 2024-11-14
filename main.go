@@ -98,7 +98,7 @@ func main() {
 	core.Core(&infoSubDomainChan, ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain OSINT Subfinder", chanResultsSubfinder, chanResults, typeScan, &flag, &elapsed, 3)
 
 	wg.Add(1)
-	go core.ScanInfoDomain(ctx, &wg, workDirectory, domainName, chanResults, typeScan, &infoSubDomainChan, &flag, &elapsed, 4)
+	go core.ScanInfoDomain(ctx, &wg, workDirectory, domainName, chanResults, typeScan, &infoSubDomainChan, &flag, &elapsed, 4, report)
 
 	wg.Add(1)
 	go core.Display(&wg, &infoSubDomainChan, &flag, &elapsed, domainName, dashBoard, report, typeScan)
@@ -107,9 +107,5 @@ func main() {
 
 	if dashBoard {
 		core.DashBoard(workDirectory, ctx)
-	}
-
-	if report {
-		core.Report(workDirectory)
 	}
 }

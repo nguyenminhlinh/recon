@@ -28,7 +28,7 @@ type InfoSubDomain struct {
 	Ips               []string           `json:"ips"`
 	PortAndService    map[string]string  `json:"portsandservice"`
 	Os                []string           `json:"os"`
-	Web               map[string]InfoWeb `json:"httporhttps"`
+	Web               map[string]InfoWeb `json:"web"`
 	CName             []string           `json:"cname"`
 	FlagVulnerability bool               `json:"flagvulnerability"`
 }

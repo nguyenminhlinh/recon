@@ -1,5 +1,7 @@
 ![auto-recon mascot](_img/autorecon_pic2.png)
 
+# He walked past, and she turned back and gave me one star ⭐
+
 ## 🎯 Overview
 
 Scanning and information gathering tool for penetration testing. Information collected about

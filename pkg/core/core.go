@@ -15,6 +15,7 @@ import (
 	"recon/pkg/collector/port"
 	"recon/pkg/collector/tech"
 	"recon/pkg/collector/vuln"
+	"recon/pkg/data/output"
 	data "recon/pkg/data/type"
 	"sync"
 	"time"
@@ -182,7 +183,6 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 		wg.Add(1)
 		go func(countWorker int) {
 			for subDomain := range subDomainChan {
-				//fmt.Println("\r", subDomain)
 				var wgsubDomain sync.WaitGroup
 				mu.Lock() // Lock map before accessing it
 				infoSubDomain, exists := infoAllSubDomain[subDomain]
@@ -227,18 +227,19 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 				*infoSubDomainChan <- infoSubDomain
 				mu.Unlock()
 			}
+			mu.Lock()
 			CountClosesubDomainChanToVuln++
 			if CountClosesubDomainChanToVuln == maxGoroutines {
 				close(subDomainChanToVuln)
 			}
-
+			mu.Unlock()
 			wg.Done()
 		}(i)
 	}
 	wg.Wait()
 }
 
-func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory string, rootDomain string, chanResults chan string, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain, flag *[5]int, elapsed *[5]time.Duration, stt int) {
+func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory string, rootDomain string, chanResults chan string, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain, flag *[5]int, elapsed *[5]time.Duration, stt int, report bool) {
 	start := time.Now()
 
 	(*flag)[stt] = 0
@@ -293,19 +294,10 @@ func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirec
 
 	wg.Wait()
 
-	// Convert ListDomain to JSON and write to file
-	file, err := os.Create("list_domain.json")
-	if err != nil {
-		fmt.Println("Error creating file:", err)
-		return
-	}
-	defer file.Close()
+	output.FileJson()
 
-	encoder := json.NewEncoder(file)
-	encoder.SetIndent("", "  ") // Set indentation for readability
-	err = encoder.Encode(data.ListDomain)
-	if err != nil {
-		fmt.Println("Error encoding JSON:", err)
+	if report {
+		output.ReportLatex(workDirectory, infoDomain)
 	}
 
 	select {
@@ -556,8 +548,4 @@ func DashBoard(workDirectory string, ctx context.Context) {
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		fmt.Println("Not run server: ", err)
 	}
-}
-
-func Report(workDirectory string) {
-
 }

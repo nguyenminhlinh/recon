@@ -25,178 +25,7 @@
       "datasource": {
         "default": true,
         "type": "marcusolsson-json-datasource",
-        "uid": "your_uid"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "inspect": true
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Extractor Name"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 130
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Type"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 85
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Severity"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 100
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "options": {
-                      "info": {
-                        "color": "#4bff00",
-                        "index": 0,
-                        "text": "Info"
-                      }
-                    },
-                    "type": "value"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "id": 6,
-      "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true,
-        "sortBy": []
-      },
-      "pluginVersion": "11.2.1",
-      "targets": [
-        {
-          "cacheDurationSeconds": 300,
-          "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "your_uid"
-          },
-          "fields": [
-            {
-              "jsonPath": "$[*].$[\"vulnerability\"][*][*].namesubdomain",
-              "name": "Sub Domain"
-            },
-            {
-              "jsonPath": "$[*].$[\"vulnerability\"][*][*].type",
-              "language": "jsonpath",
-              "name": "Type"
-            },
-            {
-              "jsonPath": "$[*].$[\"vulnerability\"][*][*].templateid",
-              "language": "jsonpath",
-              "name": "Template ID"
-            },
-            {
-              "jsonPath": "$[*].$[\"vulnerability\"][*][*].severity",
-              "language": "jsonpath",
-              "name": "Severity"
-            },
-            {
-              "jsonPath": "$[*].$[\"vulnerability\"][*][*].extractorname",
-              "language": "jsonpath",
-              "name": "Extractor Name"
-            },
-            {
-              "jsonPath": "$[*].$[\"vulnerability\"][*][*].matchername",
-              "language": "jsonpath",
-              "name": "Matcher Name"
-            },
-            {
-              "jsonPath": "$[*].$[\"vulnerability\"][*][*].matched",
-              "language": "jsonpath",
-              "name": "Matched"
-            },
-            {
-              "jsonPath": "$[*].$[\"vulnerability\"][*][*].templatename",
-              "language": "jsonpath",
-              "name": "Template Name"
-            },
-            {
-              "jsonPath": "$[*].$[\"vulnerability\"][*][*].templatedescription",
-              "language": "jsonpath",
-              "name": "Description"
-            },
-            {
-              "jsonPath": "$[*].$[\"vulnerability\"][*][*].classification",
-              "language": "jsonpath",
-              "name": "Classification"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": ""
-        }
-      ],
-      "title": "Vulnerability Information",
-      "type": "table"
-    },
-    {
-      "datasource": {
-        "default": true,
-        "type": "marcusolsson-json-datasource",
-        "uid": "your_uid"
+        "uid": " your_id"
       },
       "fieldConfig": {
         "defaults": {
@@ -284,7 +113,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 8
+        "y": 0
       },
       "id": 2,
       "options": {
@@ -312,26 +141,26 @@
           "cacheDurationSeconds": 300,
           "datasource": {
             "type": "marcusolsson-json-datasource",
-            "uid": "your_uid"
+            "uid": " your_id"
           },
           "fields": [
             {
-              "jsonPath": "$[*].[\"subdomain\"][*].[\"httporhttps\"][*].[\"technologydetails\"][*].Categories",
+              "jsonPath": "$[*].[\"subdomain\"][*].[\"web\"][*].[\"technologydetails\"][*].Categories",
               "language": "jsonpath",
               "name": ""
             },
             {
-              "jsonPath": "$[*].[\"subdomain\"][*].[\"httporhttps\"][*].[\"technologydetails\"][*].Description",
+              "jsonPath": "$[*].[\"subdomain\"][*].[\"web\"][*].[\"technologydetails\"][*].Description",
               "language": "jsonpath",
               "name": ""
             },
             {
-              "jsonPath": "$[*].[\"subdomain\"][*].[\"httporhttps\"][*].[\"technologydetails\"][*].CPE",
+              "jsonPath": "$[*].[\"subdomain\"][*].[\"web\"][*].[\"technologydetails\"][*].CPE",
               "language": "jsonpath",
               "name": ""
             },
             {
-              "jsonPath": "$[*].[\"subdomain\"][*].[\"httporhttps\"][*].[\"technologydetails\"][*].Website",
+              "jsonPath": "$[*].[\"subdomain\"][*].[\"web\"][*].[\"technologydetails\"][*].Website",
               "language": "jsonpath",
               "name": ""
             }
@@ -342,7 +171,7 @@
           "urlPath": ""
         }
       ],
-      "title": "Info Technology",
+      "title": "Technology Info",
       "transformations": [
         {
           "id": "groupBy",
@@ -374,7 +203,259 @@
       "datasource": {
         "default": true,
         "type": "marcusolsson-json-datasource",
-        "uid": "your_uid"
+        "uid": " your_id"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "color-text",
+              "wrapText": false
+            },
+            "filterable": true,
+            "inspect": true
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "[]": {
+                  "index": 4,
+                  "text": "N/A"
+                },
+                "{}": {
+                  "index": 3,
+                  "text": "N/A"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "match": "empty",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "index": 1,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "match": "nan",
+                "result": {
+                  "index": 2,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Severity"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "critical": {
+                        "color": "#ae00ff",
+                        "index": 4,
+                        "text": "critical"
+                      },
+                      "high": {
+                        "color": "#ff0000",
+                        "index": 3,
+                        "text": "high"
+                      },
+                      "info": {
+                        "color": "#0066ff",
+                        "index": 0,
+                        "text": "info"
+                      },
+                      "low": {
+                        "color": "#1eff00",
+                        "index": 1,
+                        "text": "low"
+                      },
+                      "medium": {
+                        "color": "#ffcc00",
+                        "index": 2,
+                        "text": "medium"
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "match": "empty",
+                      "result": {
+                        "index": 5,
+                        "text": "N/A"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 69
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TemplateID"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 7,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "11.2.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": " your_id"
+          },
+          "fields": [
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].namesubdomain",
+              "language": "jsonpath",
+              "name": "Sub Domain"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].type",
+              "language": "jsonpath",
+              "name": "Type"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].templateid",
+              "language": "jsonpath",
+              "name": "TemplateID"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].severity",
+              "language": "jsonpath",
+              "name": "Severity"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].extractorname",
+              "language": "jsonpath",
+              "name": "ExtractorName"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].matchername",
+              "language": "jsonpath",
+              "name": "MatcherName"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].matched",
+              "language": "jsonpath",
+              "name": "Matched"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].templatename",
+              "language": "jsonpath",
+              "name": "TemplateName"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].templatedescription",
+              "language": "jsonpath",
+              "name": "Description"
+            },
+            {
+              "jsonPath": "$[*].$[\"vulnerability\"][*][*].classification",
+              "language": "jsonpath",
+              "name": "Classification"
+            }
+          ],
+          "hide": false,
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "Vulnerability Information",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "marcusolsson-json-datasource",
+        "uid": " your_id"
       },
       "fieldConfig": {
         "defaults": {
@@ -409,7 +490,7 @@
         "h": 7,
         "w": 9,
         "x": 0,
-        "y": 14
+        "y": 15
       },
       "id": 5,
       "options": {
@@ -430,7 +511,7 @@
           "cacheDurationSeconds": 300,
           "datasource": {
             "type": "marcusolsson-json-datasource",
-            "uid": "your_uid"
+            "uid": " your_id"
           },
           "fields": [
             {
@@ -466,7 +547,7 @@
       "datasource": {
         "default": true,
         "type": "marcusolsson-json-datasource",
-        "uid": "your_uid"
+        "uid": " your_id"
       },
       "fieldConfig": {
         "defaults": {
@@ -501,7 +582,7 @@
         "h": 7,
         "w": 8,
         "x": 9,
-        "y": 14
+        "y": 15
       },
       "id": 3,
       "options": {
@@ -523,7 +604,7 @@
           "cacheDurationSeconds": 300,
           "datasource": {
             "type": "marcusolsson-json-datasource",
-            "uid": "your_uid"
+            "uid": " your_id"
           },
           "fields": [
             {
@@ -545,7 +626,7 @@
           "cacheDurationSeconds": 300,
           "datasource": {
             "type": "marcusolsson-json-datasource",
-            "uid": "your_uid"
+            "uid": " your_id"
           },
           "fields": [
             {
@@ -566,7 +647,7 @@
           "urlPath": ""
         }
       ],
-      "title": "Type Domain",
+      "title": " Domain Type",
       "transformations": [
         {
           "filter": {
@@ -620,7 +701,7 @@
       "datasource": {
         "default": true,
         "type": "marcusolsson-json-datasource",
-        "uid": "your_uid"
+        "uid": " your_id"
       },
       "description": "",
       "fieldConfig": {
@@ -650,13 +731,26 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "URL"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 261
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 7,
         "w": 7,
         "x": 17,
-        "y": 14
+        "y": 15
       },
       "id": 4,
       "options": {
@@ -669,7 +763,8 @@
           ],
           "show": false
         },
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": []
       },
       "pluginVersion": "11.2.1",
       "targets": [
@@ -677,11 +772,11 @@
           "cacheDurationSeconds": 300,
           "datasource": {
             "type": "marcusolsson-json-datasource",
-            "uid": "your_uid"
+            "uid": " your_id"
           },
           "fields": [
             {
-              "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].link[*]",
+              "jsonPath": "$[*].$[\"subdomain\"][*].web[*].link[*]",
               "name": "URL"
             }
           ],
@@ -697,10 +792,14 @@
           "id": "calculateField",
           "options": {
             "alias": "STT",
+            "index": {
+              "asPercentile": false
+            },
             "mode": "index",
             "reduce": {
               "reducer": "count"
-            }
+            },
+            "replaceFields": false
           }
         }
       ],
@@ -710,7 +809,7 @@
       "datasource": {
         "default": true,
         "type": "marcusolsson-json-datasource",
-        "uid": "your_uid"
+        "uid": " your_id"
       },
       "fieldConfig": {
         "defaults": {
@@ -896,7 +995,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 22
       },
       "id": 1,
       "options": {
@@ -925,7 +1024,7 @@
           "cacheDurationSeconds": 300,
           "datasource": {
             "type": "marcusolsson-json-datasource",
-            "uid": "your_uid"
+            "uid": " your_id"
           },
           "fields": [
             {
@@ -950,17 +1049,17 @@
               "name": "Os"
             },
             {
-              "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].technologydetails",
+              "jsonPath": "$[*].$[\"subdomain\"][*].web[*].technologydetails",
               "language": "jsonpath",
               "name": "Tech"
             },
             {
-              "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].status",
+              "jsonPath": "$[*].$[\"subdomain\"][*].web[*].status",
               "language": "jsonpath",
               "name": "Status"
             },
             {
-              "jsonPath": "$[*].$[\"subdomain\"][*].httporhttps[*].title",
+              "jsonPath": "$[*].$[\"subdomain\"][*].web[*].title",
               "language": "jsonpath",
               "name": "Title"
             },
@@ -980,20 +1079,19 @@
       "type": "table"
     }
   ],
-  "refresh": "",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-6h",
-    "to": "now"
+    "from": "2024-11-14T07:58:13.306Z",
+    "to": "2024-11-14T19:58:13.306Z"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Recon",
   "uid": "cdzj1y7b5rqiod12",
-  "version": 29,
+  "version": 38,
   "weekStart": ""
 }
