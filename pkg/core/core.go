@@ -162,7 +162,7 @@ func ScanWeb(flagScanVuln *bool, subDomainChanToVuln chan string, ctx context.Co
 	infoSubDomain.Web[url] = infoWeb
 }
 
-func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, infoAllVulnerability map[string][]data.InforVulnerability, workDirectory string, mu *sync.Mutex, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain) {
+func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, infoAllVulnerability map[string][]data.InfoVulnerability, workDirectory string, mu *sync.Mutex, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain) {
 	defer wg1.Done()
 
 	var wg sync.WaitGroup
@@ -239,7 +239,7 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 	wg.Wait()
 }
 
-func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory string, rootDomain string, chanResults chan string, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain, flag *[5]int, elapsed *[5]time.Duration, stt int, report bool) {
+func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirectory string, rootDomain string, chanResults chan string, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain, flag *[5]int, elapsed *[5]time.Duration, stt int, report bool, fileName string) {
 	start := time.Now()
 
 	(*flag)[stt] = 0
@@ -258,7 +258,7 @@ func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirec
 	}
 
 	if infoDomain.Vulnerability == nil {
-		infoDomain.Vulnerability = make(map[string][]data.InforVulnerability)
+		infoDomain.Vulnerability = make(map[string][]data.InfoVulnerability)
 	}
 
 	dns.DNS(rootDomain, &infoDomain) //Get information dns of rootdomain
@@ -294,10 +294,10 @@ func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirec
 
 	wg.Wait()
 
-	output.FileJson()
+	output.FileJson(fileName)
 
 	if report {
-		output.ReportLatex(workDirectory, infoDomain)
+		output.FileLatex(workDirectory, infoDomain, fileName)
 	}
 
 	select {
@@ -539,8 +539,8 @@ func jsonHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
-func DashBoard(workDirectory string, ctx context.Context) {
-	loadJSONFile(workDirectory + "/list_domain.json")
+func DashBoard(workDirectory string, ctx context.Context, fileName string) {
+	loadJSONFile(workDirectory + "/" + fileName + ".json")
 
 	// Initialize HTTP server on port 8080
 	http.HandleFunc("/data", jsonHandler)

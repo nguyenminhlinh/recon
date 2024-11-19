@@ -19,12 +19,14 @@ func main() {
 	}
 
 	var domainName string
-
+	var defaultFileName = "result"
 	//options scan
 	var dashBoard bool
 	flag.BoolVar(&dashBoard, "dash-board", false, "show dashboard Grafana")
 	var report bool
 	flag.BoolVar(&report, "report", false, "show report Latex")
+	var fileName string
+	flag.StringVar(&fileName, "filename", "", "Report file name")
 
 	//type scan
 	var typeScan int
@@ -40,8 +42,13 @@ func main() {
 	if flag.NArg() > 0 {
 		// fetch for a single domain
 		domainName = flag.Arg(0)
+		defaultFileName += "_" + domainName
 	} else {
 		fmt.Println("Please run with command: go run . [type scan] [option] <domain> ")
+	}
+
+	if fileName == "" {
+		fileName = defaultFileName
 	}
 
 	// Check if the user has selected more than 1 flag
@@ -98,7 +105,7 @@ func main() {
 	core.Core(&infoSubDomainChan, ctx, cancel, &mu, &wg, domainName, workDirectory, "Domain OSINT Subfinder", chanResultsSubfinder, chanResults, typeScan, &flag, &elapsed, 3)
 
 	wg.Add(1)
-	go core.ScanInfoDomain(ctx, &wg, workDirectory, domainName, chanResults, typeScan, &infoSubDomainChan, &flag, &elapsed, 4, report)
+	go core.ScanInfoDomain(ctx, &wg, workDirectory, domainName, chanResults, typeScan, &infoSubDomainChan, &flag, &elapsed, 4, report, fileName)
 
 	wg.Add(1)
 	go core.Display(&wg, &infoSubDomainChan, &flag, &elapsed, domainName, dashBoard, report, typeScan)
@@ -106,6 +113,6 @@ func main() {
 	wg.Wait()
 
 	if dashBoard {
-		core.DashBoard(workDirectory, ctx)
+		core.DashBoard(workDirectory, ctx, fileName)
 	}
 }

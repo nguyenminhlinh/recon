@@ -9,9 +9,9 @@ import (
 	"strings"
 )
 
-func FileJson() {
+func FileJson(fileName string) {
 	// Convert ListDomain to JSON and write to file
-	file, err := os.Create("list_domain.json")
+	file, err := os.Create(fileName + ".json")
 	if err != nil {
 		fmt.Println("Error creating file:", err)
 		return
@@ -41,7 +41,7 @@ func escapeSpecialCharacters(text string) string {
 	return text
 }
 
-func ReportLatex(workDirectory string, infoDomain data.InfoDomain) {
+func FileLatex(workDirectory string, infoDomain data.InfoDomain, fileName string) {
 	header :=
 		`\documentclass[a4paper,12pt]{article}
 \usepackage{float}
@@ -276,7 +276,7 @@ hoạch bảo mật nội bộ.
 	\end{document}`
 
 	FileReport := header + DNSRecordInformation + SubdomainInformation + TechnologyInformation + VulnerabilityInformation + footer
-	file, err := os.Create("report.tex")
+	file, err := os.Create(fileName + ".tex")
 	if err != nil {
 		fmt.Println("Error creating file:", err)
 		return

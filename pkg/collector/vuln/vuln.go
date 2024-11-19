@@ -11,7 +11,7 @@ import (
 	"github.com/projectdiscovery/nuclei/v3/pkg/output"
 )
 
-func ScanVulnerability(listScanVuln map[string]bool, ctx context.Context, subDomainChan chan string, infoAllVulnerability map[string][]data.InforVulnerability, typeScan int) {
+func ScanVulnerability(listScanVuln map[string]bool, ctx context.Context, subDomainChan chan string, infoAllVulnerability map[string][]data.InfoVulnerability, typeScan int) {
 	var timeOut time.Duration
 	var mu sync.Mutex
 	if typeScan == 1 {
@@ -55,31 +55,31 @@ func ScanVulnerability(listScanVuln map[string]bool, ctx context.Context, subDom
 	}
 
 	ne.GlobalResultCallback(func(event *output.ResultEvent) {
-		var inforVulnerability data.InforVulnerability
-		inforVulnerability.NameSubDomain = event.Host
-		inforVulnerability.TemplateID = event.TemplateID
-		inforVulnerability.ExtractorName = event.ExtractorName
-		inforVulnerability.Matched = event.Matched
-		inforVulnerability.MatcherName = event.MatcherName
-		inforVulnerability.Type = event.Type
-		inforVulnerability.TemplateName = event.Info.Name
-		inforVulnerability.Classification = fmt.Sprintf("%v", event.Info.Classification)
+		var infoVulnerability data.InfoVulnerability
+		infoVulnerability.NameSubDomain = event.Host
+		infoVulnerability.TemplateID = event.TemplateID
+		infoVulnerability.ExtractorName = event.ExtractorName
+		infoVulnerability.Matched = event.Matched
+		infoVulnerability.MatcherName = event.MatcherName
+		infoVulnerability.Type = event.Type
+		infoVulnerability.TemplateName = event.Info.Name
+		infoVulnerability.Classification = fmt.Sprintf("%v", event.Info.Classification)
 
 		if len(event.Info.Description) > 0 {
-			inforVulnerability.TemplateDescription = event.Info.Description
+			infoVulnerability.TemplateDescription = event.Info.Description
 		}
 
 		if len(event.Info.SeverityHolder.Severity.String()) > 0 {
-			inforVulnerability.Severity = event.Info.SeverityHolder.Severity.String()
+			infoVulnerability.Severity = event.Info.SeverityHolder.Severity.String()
 		}
 
 		if len(event.ExtractedResults) > 0 {
-			inforVulnerability.ExtractedResults = event.ExtractedResults
+			infoVulnerability.ExtractedResults = event.ExtractedResults
 		}
 
 		mu.Lock() // Lock map before accessing it
 		infoVulnerabilitySlice := infoAllVulnerability[event.Host]
-		infoVulnerabilitySlice = append(infoVulnerabilitySlice, inforVulnerability)
+		infoVulnerabilitySlice = append(infoVulnerabilitySlice, infoVulnerability)
 		infoAllVulnerability[event.Host] = infoVulnerabilitySlice
 		mu.Unlock()
 	})

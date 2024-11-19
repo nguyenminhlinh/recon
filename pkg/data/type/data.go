@@ -2,7 +2,7 @@ package data
 
 import wappalyzer "github.com/projectdiscovery/wappalyzergo"
 
-type InforVulnerability struct {
+type InfoVulnerability struct {
 	NameSubDomain       string   `json:"namesubdomain"`
 	Type                string   `json:"type"`
 	TemplateID          string   `json:"templateid"`
@@ -34,12 +34,12 @@ type InfoSubDomain struct {
 }
 
 type InfoDomain struct {
-	MXRecords     []string                        `json:"mxrecords"`
-	NSRecords     []string                        `json:"nsrecords"`
-	SOARecords    []string                        `json:"soarecords"`
-	TXTRecords    []string                        `json:"txtrecords"`
-	Vulnerability map[string][]InforVulnerability `json:"vulnerability"`
-	SubDomain     map[string]InfoSubDomain        `json:"subdomain"`
+	MXRecords     []string                       `json:"mxrecords"`
+	NSRecords     []string                       `json:"nsrecords"`
+	SOARecords    []string                       `json:"soarecords"`
+	TXTRecords    []string                       `json:"txtrecords"`
+	Vulnerability map[string][]InfoVulnerability `json:"vulnerability"`
+	SubDomain     map[string]InfoSubDomain       `json:"subdomain"`
 }
 
 var ListDomain = make(map[string]InfoDomain)
