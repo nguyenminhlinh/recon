@@ -43,6 +43,15 @@ func main() {
 		// fetch for a single domain
 		domainName = flag.Arg(0)
 		defaultFileName += "_" + domainName
+		if basic {
+			defaultFileName += "_basic"
+		}
+		if moderate {
+			defaultFileName += "_moderate"
+		}
+		if comprehensive {
+			defaultFileName += "_comprehensive"
+		}
 	} else {
 		fmt.Println("Please run with command: go run . [type scan] [option] <domain> ")
 	}

@@ -75,7 +75,7 @@ func Core(infoSubDomainChan *chan data.InfoSubDomain, ctx context.Context, cance
 		start := time.Now()
 
 		if nameFunc == "Domain BruteForce Over Http" {
-			domain.DomainBruteForceHttp(domainName, workDirectory+wordList[typeScanInt-1], chanSingle)
+			domain.DomainBruteForceHttp(domainName, workDirectory+wordList[typeScanInt-1], typeScanInt, chanSingle)
 		} else if nameFunc == "Domain BruteForce Over DNS" {
 			domain.DomainBruteForceDNS(ctx, cancel, domainName, workDirectory+wordList[typeScanInt-1], chanSingle)
 		} else if nameFunc == "Domain OSINT Amass" {
@@ -181,7 +181,7 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
-		go func(countWorker int) {
+		go func(countWorker *int) {
 			for subDomain := range subDomainChan {
 				var wgsubDomain sync.WaitGroup
 				mu.Lock() // Lock map before accessing it
@@ -203,7 +203,7 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 				flagScanVuln := false
 
 				wgsubDomain.Add(1)
-				go ScanSubDomain(countWorker, ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, &googleIPS, workDirectory, typeScanInt)
+				go ScanSubDomain(*countWorker, ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, &googleIPS, workDirectory, typeScanInt)
 
 				wgsubDomain.Add(1)
 				go ScanWeb(&flagScanVuln, subDomainChanToVuln, ctx, &wgsubDomain, subDomain, &infoSubDomain, typeScanInt)
@@ -234,7 +234,7 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 			}
 			mu.Unlock()
 			wg.Done()
-		}(i)
+		}(&i)
 	}
 	wg.Wait()
 }
@@ -497,8 +497,10 @@ func Display(wg *sync.WaitGroup, infoSubDomainChan *chan data.InfoSubDomain, fla
 			fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s%v\n", nameFunc[i], green("Finished successfully in "), (*elapsed)[i])
 		}
 	}
-	fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s\n", "Data server run on", green("http://localhost:8080/data"))
-	fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s\n", "Grafana server run on", green("http://localhost:3000/dashboards"))
+	if dashBoard {
+		fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s\n", "Data server run on", green("http://localhost:8080/data"))
+		fmt.Fprintf(os.Stderr, "\r[*] %-30s : %s\n", "Grafana server run on", green("http://localhost:3000/dashboards"))
+	}
 }
 
 // Function to read JSON file

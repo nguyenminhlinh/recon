@@ -304,8 +304,7 @@ func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain str
 	}
 }
 
-func DomainBruteForceHttp(domain string, wordList string, results chan string) {
-	//Using the wrong host to get length web content "C:/Users/minhl/recon/src/data/common.txt"
+func DomainBruteForceHttp(domain string, wordList string, typeScan int, results chan string) {
 	var url string
 
 	lengthResponse, flaghttp := utils.LengthResponse(domain, "abcdefghiklm."+domain)
