@@ -21,7 +21,6 @@ import (
 
 	"github.com/caffix/netmap"
 	"github.com/caffix/stringset"
-	"github.com/miekg/dns"
 	"github.com/owasp-amass/amass/v4/datasrcs"
 	"github.com/owasp-amass/amass/v4/enum"
 	"github.com/owasp-amass/amass/v4/systems"
@@ -32,7 +31,7 @@ import (
 	"github.com/projectdiscovery/subfinder/v2/pkg/runner"
 )
 
-func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string, results chan<- string, domain string, count *int, mu *sync.Mutex, maxGoroutines int) {
+func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string, results chan<- string, domain string, count *int, mu *sync.Mutex, maxGoroutines int, ipError string) {
 	defer wg.Done()
 	for {
 		select {
@@ -63,13 +62,13 @@ func checkDomain(ctx context.Context, wg *sync.WaitGroup, semaphore chan string,
 				return
 			} else {
 				if domain != "" { //DomainBruteForceDNS with subdomain don't have domain
-					responseAnswer := dnsrecon.Dig(subdomain+"."+domain, dns.TypeA, "8.8.4.4")
-					if len(responseAnswer) != 0 {
+					ip := dnsrecon.GetIP(subdomain + "." + domain)
+					if ip != "" && ip != ipError {
 						results <- subdomain + "." + domain
 					}
 				} else { //DomainOSINTSubfinder with subdomain had domain
-					responseAnswer := dnsrecon.Dig(subdomain, dns.TypeA, "8.8.4.4")
-					if len(responseAnswer) != 0 {
+					ip := dnsrecon.GetIP(subdomain)
+					if ip != "" && ip != ipError {
 						results <- subdomain
 					}
 				}
@@ -91,6 +90,8 @@ func DomainBruteForceDNS(ctx context.Context, cancel context.CancelFunc, domain 
 	// Create semaphore channel to receive info from file and sen to checkDomain
 	semaphore := make(chan string, maxChanSemaphore)
 
+	var ipError = dnsrecon.GetIP("abcdefghiklm." + domain)
+
 	// Start the goroutine to read the file into chan
 	wg.Add(1)
 	go utils.ReadFiles(ctx, &wg, wordList, semaphore, &countReadFiles, &muReadFiles, 1)
@@ -98,7 +99,7 @@ func DomainBruteForceDNS(ctx context.Context, cancel context.CancelFunc, domain 
 	// Start goroutines to check the domain
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
-		go checkDomain(ctx, &wg, semaphore, results, domain, &count, &mu, maxGoroutines)
+		go checkDomain(ctx, &wg, semaphore, results, domain, &count, &mu, maxGoroutines, ipError)
 	}
 
 	// Wait for all goroutines to complete
@@ -160,9 +161,11 @@ func DomainOSINTSubfinder(ctx context.Context, cancel context.CancelFunc, domain
 		close(inputChans)
 	}()
 
+	var ipError = dnsrecon.GetIP("abcdefghiklm." + domain)
+
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
-		go checkDomain(ctx, &wg, inputChans, chanResults, "", &count, &mu, maxGoroutines)
+		go checkDomain(ctx, &wg, inputChans, chanResults, "", &count, &mu, maxGoroutines, ipError)
 	}
 	wg.Wait()
 }
@@ -306,16 +309,28 @@ func DomainOSINTAmass(ctx context.Context, cancel context.CancelFunc, domain str
 
 func DomainBruteForceHttp(domain string, wordList string, typeScan int, results chan string) {
 	var url string
-
-	lengthResponse, flaghttp := utils.LengthResponse(domain, "abcdefghiklm."+domain)
-
-	if flaghttp {
-		url = "http://" + domain
-	} else {
+	var threads int
+	var timeout = 5
+	var maxtime = 0
+	lengthResponse, flaghttps := utils.LengthResponse(domain, "abcdefghiklm."+domain)
+	if flaghttps {
 		url = "https://" + domain
+	} else {
+		url = "http://" + domain
 	}
 
-	utils.Ffuf(url, domain, strconv.Itoa(lengthResponse), "DomainBruteForceHttp", "domain", true, 0, wordList)
+	if typeScan == 1 {
+		threads = 80
+		maxtime = 600
+	} else if typeScan == 2 {
+		threads = 100
+		maxtime = 1200
+	} else {
+		threads = 120
+		maxtime = 1800
+	}
+
+	utils.Ffuf(url, domain, strconv.Itoa(lengthResponse), "DomainBruteForceHttp", "domain", true, maxtime, timeout, wordList, threads)
 	for _, output := range output.OutputDomain {
 		results <- output
 	}

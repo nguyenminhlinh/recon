@@ -55,6 +55,11 @@ func (s *Stdoutput) SetCurrentResults(results []ffuf.Result) {
 }
 
 func (s *Stdoutput) Progress(status ffuf.Progress) {
+	// if s.config.Quiet {
+	// 	// No progress for quiet mode
+	// 	return
+	// }
+	// fmt.Fprintf(os.Stderr, "Progress: [%d/%d] ", status.ReqCount, status.ReqTotal)
 }
 
 func (s *Stdoutput) Info(infostring string) {

@@ -100,7 +100,7 @@ func Core(infoSubDomainChan *chan data.InfoSubDomain, ctx context.Context, cance
 
 }
 
-func ScanSubDomain(countWorker int, ctx context.Context, wgDomain *sync.WaitGroup, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, googleIPS *[]string, workDirectory string, typeScanInt int) {
+func ScanSubDomain(countWorker int, ctx context.Context, wgDomain *sync.WaitGroup, rootDomain string, subDomain string, infoSubDomain *data.InfoSubDomain, cloudflareIPs *[]string, incapsulaIPs *[]string, awsCloudFrontIPs *[]string, gcoreIPs *[]string, fastlyIPs *[]string, googleIPS *[]string, workDirectory string, typeScanInt int, ipError string) {
 	defer wgDomain.Done()
 
 	infoDigs := dns.Dig(subDomain, dnsmiekg.TypeA, "8.8.4.4")
@@ -113,6 +113,9 @@ func ScanSubDomain(countWorker int, ctx context.Context, wgDomain *sync.WaitGrou
 		for _, infoDig := range infoDigs {
 			if aRecord, ok := infoDig.(*dnsmiekg.A); ok {
 				ip := aRecord.A.String()
+				if ipError == ip {
+					continue
+				}
 				checkIntermediaryIp, nameOrganisation := dns.CheckIntermediaryIp(ip, cloudflareIPs, incapsulaIPs, awsCloudFrontIPs, gcoreIPs, fastlyIPs, googleIPS)
 				if checkIntermediaryIp {
 					infoSubDomain.Ips = append(infoSubDomain.Ips, ip+":"+nameOrganisation)
@@ -162,11 +165,11 @@ func ScanWeb(flagScanVuln *bool, subDomainChanToVuln chan string, ctx context.Co
 	infoSubDomain.Web[url] = infoWeb
 }
 
-func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, infoAllSubDomain map[string]data.InfoSubDomain, infoAllVulnerability map[string][]data.InfoVulnerability, workDirectory string, mu *sync.Mutex, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain) {
+func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDomainChan chan string, rootDomain string, infoAllSubDomain map[string]data.InfoSubDomain, infoAllVulnerability map[string][]data.InfoVulnerability, workDirectory string, mu *sync.Mutex, typeScanInt int, infoSubDomainChan *chan data.InfoSubDomain) {
 	defer wg1.Done()
 
 	var wg sync.WaitGroup
-	const maxGoroutines = 30
+	const maxGoroutines = 10
 	subDomainChanToVuln := make(chan string, 100)
 	var CountClosesubDomainChanToVuln int
 	listScanVuln := make(map[string]bool)
@@ -178,6 +181,8 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 		vuln.ScanVulnerability(listScanVuln, ctx, subDomainChanToVuln, infoAllVulnerability, typeScanInt)
 		wg.Done()
 	}()
+
+	var ipError = dns.GetIP("abcdefghiklm." + rootDomain)
 
 	for i := 0; i < maxGoroutines; i++ {
 		wg.Add(1)
@@ -203,7 +208,7 @@ func InformationOfAllSubDomain(ctx context.Context, wg1 *sync.WaitGroup, subDoma
 				flagScanVuln := false
 
 				wgsubDomain.Add(1)
-				go ScanSubDomain(*countWorker, ctx, &wgsubDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, &googleIPS, workDirectory, typeScanInt)
+				go ScanSubDomain(*countWorker, ctx, &wgsubDomain, rootDomain, subDomain, &infoSubDomain, &cloudflareIPs, &incapsulaIPs, &awsCloudFrontIPs, &gcoreIPs, &fastlyIPs, &googleIPS, workDirectory, typeScanInt, ipError)
 
 				wgsubDomain.Add(1)
 				go ScanWeb(&flagScanVuln, subDomainChanToVuln, ctx, &wgsubDomain, subDomain, &infoSubDomain, typeScanInt)
@@ -290,7 +295,7 @@ func ScanInfoDomain(ctx context.Context, wgScanDomain *sync.WaitGroup, workDirec
 	}()
 
 	wg.Add(1)
-	go InformationOfAllSubDomain(ctx, &wg, subDomainChan, infoDomain.SubDomain, infoDomain.Vulnerability, workDirectory, &mu, typeScanInt, infoSubDomainChan)
+	go InformationOfAllSubDomain(ctx, &wg, subDomainChan, rootDomain, infoDomain.SubDomain, infoDomain.Vulnerability, workDirectory, &mu, typeScanInt, infoSubDomainChan)
 
 	wg.Wait()
 

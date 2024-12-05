@@ -19,7 +19,7 @@ func DirAndFileBruteForce(ctx context.Context, domain string, wordList string) m
 	}
 
 	var outputMap map[string]int64
-	utils.Ffuf(url, domain, "", "DirAndFileBruteForce", "dir", false, 1, wordList)
+	utils.Ffuf(url, domain, "", "DirAndFileBruteForce", "dir", false, 1, 0, wordList, 40)
 	outputMap = output.OutputDirAndFile
 	var lengths []int64
 
@@ -29,7 +29,7 @@ func DirAndFileBruteForce(ctx context.Context, domain string, wordList string) m
 
 	length := FindMostFrequentElement(lengths) //get length most frequent to remove result have this length for the sencond run
 	// Get the length of the first 10 entries to check the most repeated length of the wrong domain then filter by length
-	utils.Ffuf(url, domain, length, "DirAndFileBruteForce", "dir", false, 0, wordList)
+	utils.Ffuf(url, domain, length, "DirAndFileBruteForce", "dir", false, 0, 0, wordList, 40)
 	return output.OutputDirAndFile
 }
 

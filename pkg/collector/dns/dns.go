@@ -35,6 +35,19 @@ func Dig(domain string, qtype uint16, server string) []dns.RR {
 	return response.Answer
 }
 
+func GetIP(subDomain string) string {
+	var ip string
+	infoDigs := Dig(subDomain, dns.TypeA, "8.8.4.4")
+	if len(infoDigs) != 0 {
+		for _, infoDig := range infoDigs {
+			if aRecord, ok := infoDig.(*dns.A); ok {
+				ip = aRecord.A.String()
+			}
+		}
+	}
+	return ip
+}
+
 func DNS(RootDomain string, infoDomain *data.InfoDomain) {
 
 	infoDigsMX := Dig(RootDomain, dns.TypeMX, "8.8.4.4")

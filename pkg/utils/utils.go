@@ -18,54 +18,43 @@ import (
 )
 
 func LengthResponse(domain string, host string) (int, bool) {
-	var flaghttp = false
-
-	// Create request for HTTPS
-	reqhttps, err := http.NewRequest("GET", "https://"+domain, nil)
-	if err != nil {
-		return 0, false
-	}
-	reqhttps.Host = host
-
-	// Create request for HTTP
-	reqhttp, err := http.NewRequest("GET", "http://"+domain, nil)
-	if err != nil {
-		return 0, false
-	}
-	reqhttp.Host = host
-
 	client := &http.Client{}
 
-	// Send request for HTTPS
-	resp, err := client.Do(reqhttps)
-	if err == nil {
-		defer resp.Body.Close()
-		body, err := io.ReadAll(resp.Body)
+	// Create request for HTTP
+	reqhttp, errhttp := http.NewRequest("GET", "http://"+domain, nil)
+	if errhttp == nil {
+		reqhttp.Host = host
+		resp, err := client.Do(reqhttp)
 		if err != nil {
-			return 0, false
+			resp, err = client.Do(reqhttp)
 		}
-		return len(body), false // No need to send HTTP if HTTPS is successful
-	} else {
-		flaghttp = true
+		if err == nil {
+			defer resp.Body.Close()
+			body, err := io.ReadAll(resp.Body)
+			if err == nil {
+				return len(body), false // No need to send HTTPS if HTTP is successful
+			}
+		}
 	}
 
-	// Send HTTP request if HTTPS fails
-	if flaghttp {
-		resp, err = client.Do(reqhttp)
+	// Create request for HTTPS
+	reqhttps, errhttps := http.NewRequest("GET", "https://"+domain, nil)
+	if errhttps == nil {
+		reqhttps.Host = host
+		resp, err := client.Do(reqhttps)
 		if err != nil {
-			return 0, true
+			resp, err = client.Do(reqhttp)
 		}
-		defer resp.Body.Close()
-
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return 0, true
+		if err == nil {
+			defer resp.Body.Close()
+			body, err := io.ReadAll(resp.Body)
+			if err == nil {
+				return len(body), true
+			}
 		}
-
-		return len(body), true
 	}
 
-	return 0, false // Returns 0 if both requests fail
+	return 0, true // Returns 0 if both requests fail
 }
 
 func ReadFilesSimple(file string) string {
