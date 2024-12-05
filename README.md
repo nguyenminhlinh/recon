@@ -46,27 +46,32 @@ This tool helps you collect data about:
 
 ## 📖 Usage
 
-### Run basic:
+### Run:
 
 Run with cmd or powershell:
 
 ```bash
 $ cd recon
-$ go run . domain
+$ go build .
+$ ./recon.exe -<scantype> -<options> <domain>
+
+OPTIONS:
+ -dash-board:       Display dashboard over Grafana
+ -report:           Create file report LateX
+ -filename:         Write output to file name that you choose 
+
+SCAN TYPE (Must have):
+  -basic            Scan with basic type
+  -moderate         Scan with moderate type
+  -comprehensive    Scan with comprehensive type
+
 ```
 
 Wait and check result in `list_domain.json`
 
 ---
 
-### Run and display DashBoard Grafana:
-
-Run with cmd or powershell:
-
-```bash
-$ cd recon
-$ go run . -dash-board domain
-```
+### Install Grafana
 
 1. Install Grafana Windows Open Source
 
