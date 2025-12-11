@@ -7,7 +7,7 @@
 Scanning and information gathering tool for penetration testing. Information collected about
 a domain such as: subdomain, ip, port and service, operating system, link, directory, files, and tech available on
 the website.
-
+![auto-recon ex3](_img/autorecon_pic3.png)
 ![auto-recon ex2](_img/overview.png)
 
 All descriptions and reports are included in the documentation
